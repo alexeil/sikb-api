@@ -1,0 +1,35 @@
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee">
+
+    <display-name>sikb</display-name>
+
+    <listener>
+        <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
+    </listener>
+
+    <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>file://E:/dev/src/sikb-api/configuration/src/main/resources/log4j2.xml</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>Init Servlet</servlet-name>
+        <servlet-class>com.boschat.sikb.servlet.InitServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet>
+        <servlet-name>sikb api</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>
+                com.boschat.sikb.servlet
+            </param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>sikb api</servlet-name>
+        <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+</web-app>
