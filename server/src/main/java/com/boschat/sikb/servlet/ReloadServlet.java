@@ -9,9 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-/**
- * The Class ErableServlet.
- */
 @Path("/")
 @Produces({"application/json"})
 public class ReloadServlet {

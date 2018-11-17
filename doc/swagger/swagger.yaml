@@ -1,0 +1,96 @@
+openapi: 3.0.0
+info:
+  title: SIKB-API
+  description: |+
+
+  contact:
+    name: Fédération Kin-ball France
+    url: 'http://kin-ball.fr'
+    email: fkbf@kin-ball.fr
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0'
+  version: v1
+paths:
+  /affiliations:
+    summary: tes
+    description: test
+    get:
+      summary: get all affiliations
+      description: ''
+      operationId: findAffiliations
+      responses:
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+      - affiliations
+    post:
+      summary: Create an affiliation
+      description: ''
+      operationId: createAffiliation
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+      - affiliations
+  '/affiliations/:affiliationId':
+    get:
+      summary: get an affiliation
+      description: ''
+      operationId: getAffiliation
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+      - affiliations
+    put:
+      summary: Update an affiliation
+      description: ''
+      operationId: UpdateAffiliation
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+      - affiliations
+    delete:
+      summary: Delete an affiliation
+      description: ''
+      operationId: deleteAffiliation
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+      - affiliations
+components:
+  schemas:
+    Affiliation:
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Affiliations:
+      type: array
+      items:
+        $ref: "#/components/schemas/Affiliation"
+    ZError:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+

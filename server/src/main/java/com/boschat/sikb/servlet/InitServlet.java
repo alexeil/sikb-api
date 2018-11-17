@@ -5,9 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
 
-/**
- * The Class InitServlet.
- */
 public class InitServlet extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(InitServlet.class);

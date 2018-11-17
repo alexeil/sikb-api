@@ -23,7 +23,8 @@
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>
-                com.boschat.sikb.servlet
+                com.boschat.sikb.servlet,
+                com.boschat.sikb.api
             </param-value>
         </init-param>
     </servlet>
