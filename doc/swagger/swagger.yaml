@@ -32,6 +32,14 @@ paths:
       summary: Create an affiliation
       description: ''
       operationId: createAffiliation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AffiliationForCreation'
+        required:
+          true
+        description: body
       responses:
         default:
           description: Default error sample response
@@ -93,4 +101,40 @@ components:
           format: int32
         message:
           type: string
+    AffiliationForCreation:
+      properties:
+        associationName:
+          type: string
+        prefectureNumber:
+          type: string
+        siretNumber:
+          type: string
+        adress:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        webSite:
+          type: string
+        board:
+          $ref: "#/components/schemas/BoardForCreation"
 
+    BoardForCreation:
+      properties:
+        presidentName:
+          type: string
+        presidentGender:
+          type: string
+        TreasurerName:
+          type: string
+        TreasurerGender:
+          type: string
+        SecretaryName:
+          type: string
+        SecretaryGender:
+          type: string
