@@ -1,0 +1,1 @@
+web: java -cp server/target/dependency/jetty-runner.jar org.eclipse.jetty.runner.Runner server/target/server-1.0.0-SNAPSHOT.war
