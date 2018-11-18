@@ -38,7 +38,7 @@ public class ReloadServlet {
     @Path("reload")
     public Response reloadConfiguration() {
         LOGGER.trace("reload");
-        return Response.status(HttpServletResponse.SC_OK).build();
+        return Response.status(HttpServletResponse.SC_OK).entity("Hey beau gosse ! Je commence mon API BackEnd").build();
       /* try {
             reloadFamilyApp();
             return Response.status(HttpServletResponse.SC_OK).build();
