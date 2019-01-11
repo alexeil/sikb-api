@@ -48,12 +48,38 @@
         <openapi-generator-maven-plugin-version>3.3.4</openapi-generator-maven-plugin-version>
         <swagger-core-version>1.5.21</swagger-core-version>
         <log4j.version>2.11.1</log4j.version>
-
         <migbase64.version>2.2</migbase64.version>
+        <jooq.version>3.11.9</jooq.version>
+        <postgresql.version>42.2.5</postgresql.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${postgresql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-meta</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq-codegen</artifactId>
+                <version>${jooq.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.glassfish.jersey.inject</groupId>
@@ -141,6 +167,13 @@
     <build>
         <pluginManagement>
             <plugins>
+
+                <plugin>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq-codegen-maven</artifactId>
+                    <version>${jooq.version}</version>
+                </plugin>
+
                 <plugin>
                     <groupId>org.openapitools</groupId>
                     <artifactId>openapi-generator-maven-plugin</artifactId>
