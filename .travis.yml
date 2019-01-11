@@ -1,5 +1,21 @@
 language: java
 
+services:
+  - postgresql
+
+addons:
+  postgresql: "11"
+  apt:
+    packages:
+      - postgresql-11
+      - postgresql-client-11
+env:
+  global:
+    - PGPORT=5433
+
+before_script:
+  - psql -c 'create database sikb;' -U postgres
+
 script:
 - mvn clean install
 
