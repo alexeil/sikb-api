@@ -22,10 +22,9 @@ before_install:
   - sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
   - sudo service postgresql restart 10
-  - psql --version
-  - sudo service postgresql status
   - psql -c 'create database sikb;' -U postgres
   - psql -l
+  - psql -U postgres -d sikb -a -f /home/travis/build/alexeil/sikb-api/persistence/src/main/resources/initdb.sql
 
 script:
 - mvn clean install
