@@ -17,7 +17,7 @@ env:
     - PGPASSWORD=postgres
     - PGDATABASE=sikb
 
-before_script:
+before_install:
   - psql --version
   - psql -c 'create database sikb;' -U postgres
   - psql -l
