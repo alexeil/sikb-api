@@ -1,4 +1,5 @@
 language: java
+dist: trusty
 
 services:
   - postgresql
@@ -19,6 +20,7 @@ env:
 
 before_install:
   - psql --version
+  - sudo service postgresql status
   - psql -c 'create database sikb;' -U postgres
   - psql -l
 
