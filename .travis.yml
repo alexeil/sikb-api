@@ -18,7 +18,9 @@ env:
     - PGDATABASE=sikb
 
 before_script:
+  - psql --version
   - psql -c 'create database sikb;' -U postgres
+  - psql -l
 
 script:
 - mvn clean install
