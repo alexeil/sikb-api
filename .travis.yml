@@ -19,12 +19,16 @@ env:
     # - PGDATABASE=sikb
 
 before_install:
+  # Fix install Postgres 10
   - sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
   - sudo sed -i 's/port = 5433/port = 5432/' /etc/postgresql/10/main/postgresql.conf
   - sudo service postgresql restart 10
+  # Create database
   - psql -c 'create database sikb;' -U postgres
-  - psql -l
+  # init database with structure
   - psql -U postgres -d sikb -a -f /home/travis/build/alexeil/sikb-api/persistence/src/main/resources/initdb.sql
+  # list all databases
+  - psql -l
 
 script:
 - mvn clean install
