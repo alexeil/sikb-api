@@ -13,10 +13,10 @@ addons:
 
 env:
   global:
-    - PGPORT=5432
-    - PGUSER=postgres
-    - PGPASSWORD=postgres
-    - PGDATABASE=sikb
+    - PGPORT=5433
+    # - PGUSER=postgres
+    # - PGPASSWORD=postgres
+    # - PGDATABASE=sikb
 
 before_install:
   - psql --version
