@@ -1,31 +1,14 @@
 language: java
 
 addons:
-  postgresql: "11"
-
-services:
-  - postgresql
-
-#addons:
-#  postgresql: "11"
-#  apt:
-#    packages:
-#      - postgresql-11
-#      - postgresql-client-11
-#env:
-#  global:
-#    - PGPORT=5466
-
-sudo: true
-
-before_install:
-  - curl 'https://www.postgresql.org/media/keys/ACCC4CF8.asc' | sudo apt-key add
-  - echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg 11" | sudo tee -a /etc/apt/sources.list.d/postgres-11.list
-  - sudo apt-get update
-  # we need to purge the common as it has weird stuff?
-  - sudo apt-get remove --purge -y postgresql-common postgresql-client-common postgresql-9.2 postgresql-client-9.2 postgresql-9.3 postgresql-client-9.3 postgresql-9.4 postgresql-client-9.4 postgresql-9.5 postgresql-client-9.5 postgresql-9.6 postgresql-client-9.6
-  - sudo apt-get install -y postgresql-11 postgresql-client-11
-  - sudo -u postgres psql -c "grant ALL on DATABASE postgres to travis WITH GRANT OPTION;"
+  postgresql: "10"
+  apt:
+    packages:
+      - postgresql-10
+      - postgresql-client-10
+env:
+  global:
+    - PGPORT=5433
 
 before_script:
   - psql -c 'create database sikb;' -U postgres
