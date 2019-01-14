@@ -8,7 +8,7 @@ addons:
       - postgresql-client-11
 env:
   global:
-    - PGPORT=5433
+    - PGPORT=5466
 
 before_script:
   - psql -c 'create database sikb;' -U postgres
