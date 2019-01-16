@@ -1,10 +1,8 @@
-USE sikb;
-
 DROP SCHEMA IF EXISTS sikb;
 CREATE SCHEMA sikb;
 
 DROP TABLE IF EXISTS sikb.sikb;
-CREATE TABLE sikb.affiliation ( "id" integer PRIMARY KEY,
+CREATE TABLE sikb.affiliation ( "id" serial PRIMARY KEY,
                                 "associationName" varchar(255),
                                 "prefectureNumber" varchar(255),
                                 "siretNumber" varchar(255),

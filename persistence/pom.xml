@@ -82,6 +82,12 @@
                               -->
                             <inputSchema>sikb</inputSchema>
                         </database>
+
+                        <generate>
+                            <pojos>true</pojos>
+                            <daos>true</daos>
+                        </generate>
+
                         <target>
                             <packageName>com.boschat.sikb</packageName>
                             <directory>target/generated-sources/jooq</directory>

@@ -16,7 +16,7 @@ public class AffiliationsApiServiceImpl extends AffiliationsApiService {
 
     @Override
     public Response createAffiliation(AffiliationForCreation affiliationForCreation, SecurityContext securityContext) throws NotFoundException {
-        return runService(AFFILIATION_CREATE);
+        return runService(AFFILIATION_CREATE, affiliationForCreation);
     }
 
     @Override

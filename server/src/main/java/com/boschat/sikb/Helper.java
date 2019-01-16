@@ -5,6 +5,8 @@ import com.boschat.sikb.api.ResponseCode;
 import com.boschat.sikb.exceptions.FunctionalException;
 import com.boschat.sikb.exceptions.TechnicalException;
 import com.boschat.sikb.model.ZError;
+import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.tables.pojos.Affiliation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,12 +15,14 @@ import javax.ws.rs.core.Response;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
 
 public class Helper {
+
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
 
     public static Response runService(CallType callType, Object... params) {
         Response response = null;
         try {
-            // set specific params to FamilyContext
+            MyThreadLocal.init();
+
             callType.fillContext(params);
             response = buildResponse(callType.getResponseCode(), callType.call());
 
@@ -61,5 +65,21 @@ public class Helper {
             responseBuilder.entity(entity);
         }
         return responseBuilder.build();
+    }
+
+    public static Affiliation createAffiliation() {
+        CreateOrUpdateContext createContext = MyThreadLocal.get().getCreateOrUpdateContext();
+
+        Affiliation affiliationBean = new Affiliation();
+        affiliationBean.setAssociationname(createContext.getAssociationName());
+        DAOFactory.getInstance().getAffiliationDAO().insert(affiliationBean);
+        return affiliationBean;
+    }
+
+    public static com.boschat.sikb.model.Affiliation convertBeanToModel(Affiliation affiliationBean) {
+        com.boschat.sikb.model.Affiliation affiliation = new com.boschat.sikb.model.Affiliation();
+        affiliation.setId(affiliationBean.getId());
+        affiliation.setAssociationName(affiliationBean.getAssociationname());
+        return affiliation;
     }
 }

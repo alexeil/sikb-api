@@ -1,0 +1,11 @@
+**/*Factory.java
+**/*ServiceImpl.java
+**/Bootstrap.java
+**/web.xml
+**/pom.xml
+**/*.md
+**/.openapi-generator
+**/JacksonJsonProvider.java
+**/LocalDateProvider.java
+**/RFC3339DateFormat.java
+**/OffsetDateTimeProvider.java

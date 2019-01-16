@@ -19,6 +19,21 @@
     <dependencies>
 
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>persistence</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.jersey.test-framework.providers</groupId>
+            <artifactId>jersey-test-framework-provider-jdk-http</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.glassfish.jersey.inject</groupId>
             <artifactId>jersey-hk2</artifactId>
         </dependency>
@@ -28,6 +43,7 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
 
+
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jersey2-jaxrs</artifactId>
@@ -36,7 +52,6 @@
         <dependency>
             <groupId>javax.ws.rs</groupId>
             <artifactId>javax.ws.rs-api</artifactId>
-            <version>${javax.ws.rs-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -108,33 +123,88 @@
                             <apiPackage>com.boschat.sikb.api</apiPackage>
                             <modelPackage>com.boschat.sikb.model</modelPackage>
                             <invokerPackage>com.boschat.sikb.api</invokerPackage>
-                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <ignoreFileOverride>C:\Projets\perso\sikb-api\server\src\main\resources\.openapi-generator-ignore</ignoreFileOverride>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
+            <!--     <plugin>
+                     <artifactId>maven-clean-plugin</artifactId>
+                     <executions>
+                         <execution>
+                             <id>clean swagger directory</id>
+                             <phase>generate-sources</phase>
+                             <goals>
+                                 <goal>clean</goal>
+                             </goals>
+                             <configuration>
+                                 <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                                 <filesets>
+                                     <fileset>
+                                         <directory>target/generated-sources/src/main</directory>
+                                         <followSymlinks>false</followSymlinks>
+                                         <excludes>
+                                             <exclude>*</exclude>
+                                         </excludes>
+                                     </fileset>
+                                 </filesets>
+                                 <verbose>true</verbose>
+                             </configuration>
+                         </execution>
+                     </executions>
+                 </plugin>-->
+
             <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
                 <executions>
                     <execution>
-                        <id>clean swagger directory</id>
+                        <id>Inclusion.NON_NULL</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>clean</goal>
+                            <goal>replace</goal>
                         </goals>
                         <configuration>
-                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                            <filesets>
-                                <fileset>
-                                    <directory>target/generated-sources/src/main</directory>
-                                    <followSymlinks>false</followSymlinks>
-                                    <excludes>
-                                        <exclude>*</exclude>
-                                    </excludes>
-                                </fileset>
-                            </filesets>
-                            <verbose>true</verbose>
+                            <ignoreMissingFile>false</ignoreMissingFile>
+                            <basedir>
+                                ${project.build.directory}/generated-sources/src/gen/java/com/boschat/sikb/model
+                            </basedir>
+                            <includes>
+                                <include>*.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <token>public class</token>
+                                    <value>@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)
+                                        public class
+                                    </value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>add version</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <ignoreMissingFile>false</ignoreMissingFile>
+                            <basedir>
+                                ${project.build.directory}/generated-sources/src/gen/java/com/boschat/sikb/api
+                            </basedir>
+                            <includes>
+                                <include>AffiliationsApi.java</include>
+                            </includes>
+                            <replacements>
+                                <replacement>
+                                    <token>/affiliations</token>
+                                    <value>/v1/affiliations</value>
+                                </replacement>
+                            </replacements>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,17 +1,23 @@
 package com.boschat.sikb.api;
 
+import com.boschat.sikb.CreateOrUpdateContext;
+import com.boschat.sikb.MyThreadLocal;
+import com.boschat.sikb.model.AffiliationForCreation;
+
+import static com.boschat.sikb.Helper.convertBeanToModel;
+import static com.boschat.sikb.Helper.createAffiliation;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 
 public enum CallType {
     AFFILIATION_CREATE("Create an affiliation", CREATED) {
         @Override
         public Object call() {
-            return null;
+            return convertBeanToModel(createAffiliation());
         }
 
         @Override
         public void fillContext(Object... params) {
-
+            MyThreadLocal.get().setCreateOrUpdateContext(CreateOrUpdateContext.create((AffiliationForCreation) params[0]));
         }
     };
 
