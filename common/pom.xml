@@ -11,5 +11,7 @@
 
     <artifactId>common</artifactId>
 
-
+    <properties>
+        <root.basedir>${basedir}/..</root.basedir>
+    </properties>
 </project>

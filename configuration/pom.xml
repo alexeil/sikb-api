@@ -11,5 +11,7 @@
 
     <artifactId>configuration</artifactId>
 
-
+    <properties>
+        <root.basedir>${basedir}/..</root.basedir>
+    </properties>
 </project>

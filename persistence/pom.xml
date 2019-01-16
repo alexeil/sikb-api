@@ -11,6 +11,10 @@
 
     <artifactId>persistence</artifactId>
 
+    <properties>
+        <root.basedir>${basedir}/..</root.basedir>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.postgresql</groupId>
