@@ -124,7 +124,7 @@
                             <modelPackage>com.boschat.sikb.model</modelPackage>
                             <invokerPackage>com.boschat.sikb.api</invokerPackage>
                             <addCompileSourceRoot>true</addCompileSourceRoot>
-                            <ignoreFileOverride>${basedir}\src\main\resources\.openapi-generator-ignore</ignoreFileOverride>
+                            <ignoreFileOverride>${basedir}/src/main/resources/.openapi-generator-ignore</ignoreFileOverride>
                         </configuration>
                     </execution>
                 </executions>
