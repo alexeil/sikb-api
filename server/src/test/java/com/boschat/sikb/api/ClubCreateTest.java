@@ -15,14 +15,8 @@ import static com.boschat.sikb.api.ResponseCode.CREATED;
 @DisplayName(" Create a club ")
 class ClubCreateTest extends AbstractTest {
 
-    private static final String DEFAULT_CLUB_NAME = "Kin-ball Association Rennes";
-
-    private static final String DEFAULT_CLUB_SHORT_NAME = "KBAR";
-
-    private static final String DEFAULT_CLUB_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
-
     @BeforeEach
-    void loadDataSuite() throws Exception {
+    void loadDataSuite() {
         truncateData();
     }
 

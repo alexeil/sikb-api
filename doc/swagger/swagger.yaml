@@ -20,6 +20,27 @@ servers:
 
 paths:
   '/clubs':
+    get:
+      summary: Find all club
+      description: ''
+      operationId: findClubs
+      responses:
+        200:
+          description: find all clubs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/club'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - clubs
     post:
       summary: Create a club
       description: ''
@@ -47,11 +68,34 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - clubs
-  '/clubs/:clubId':
+  '/clubs/{clubId}':
+    get:
+      summary: get a club
+      description: ''
+      operationId: getClubById
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+      responses:
+        200:
+          description: get back a club
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/club'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - clubs
     put:
       summary: Update a club
       description: ''
       operationId: updateClub
+      parameters:
+        - $ref: '#/components/parameters/clubId'
       requestBody:
         content:
           application/json:
@@ -146,7 +190,16 @@ paths:
           description: Default error sample response
       tags:
         - affiliations
+
 components:
+  parameters:
+    clubId:
+      name: "clubId"
+      schema:
+        type: integer
+      required: true
+      in: path
+      description: "Id of a club"
   schemas:
     club:
       required:

@@ -8,10 +8,12 @@ public class TechnicalException extends RuntimeException {
 
     public TechnicalException(ResponseCode errorCode, Object... paramsMessage) {
         super(String.format(errorCode.getErrorMessage(), paramsMessage));
+        this.errorCode = errorCode;
     }
 
     public TechnicalException(ResponseCode errorCode, Throwable cause, Object... paramsMessage) {
         super(String.format(errorCode.getErrorMessage(), paramsMessage), cause);
+        this.errorCode = errorCode;
     }
 
     public ResponseCode getErrorCode() {

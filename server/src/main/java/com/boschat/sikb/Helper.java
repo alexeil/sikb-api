@@ -12,7 +12,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
 
 public class Helper {
@@ -45,7 +48,7 @@ public class Helper {
     }
 
     private static Response logAndBuildFunctionalErrorResponse(FunctionalException e) {
-        LOGGER.error(e);
+        LOGGER.error(e.getMessage());
         ZError error = new ZError();
         error.setCode(e.getErrorCode().getCode());
         error.setMessage(e.getMessage());
@@ -53,7 +56,7 @@ public class Helper {
     }
 
     private static Response logAndBuildTechnicalExceptionErrorResponse(Throwable e, ResponseCode errorCode) {
-        LOGGER.error(e);
+        LOGGER.error(e.getMessage(), e);
         ZError error = new ZError();
         error.setCode(errorCode.getCode());
         error.setMessage(e.getMessage());
@@ -77,6 +80,19 @@ public class Helper {
         return affiliationBean;
     }
 
+    public static Club getClub(Integer clubId) {
+        Club club = DAOFactory.getInstance().getClubDAO().fetchOneById(clubId);
+
+        if (club == null) {
+            throw new FunctionalException(CLUB_NOT_FOUND, clubId);
+        }
+        return club;
+    }
+
+    public static List<Club> findClubs() {
+        return DAOFactory.getInstance().getClubDAO().findAll();
+    }
+
     public static Club createClub() {
         CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
 
@@ -95,6 +111,9 @@ public class Helper {
         return affiliation;
     }
 
+    public static List<com.boschat.sikb.model.Club> convertBeansToModels(List<Club> clubBeans) {
+        return clubBeans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
     public static com.boschat.sikb.model.Club convertBeanToModel(Club clubBean) {
         com.boschat.sikb.model.Club club = new com.boschat.sikb.model.Club();
         club.setId(clubBean.getId());

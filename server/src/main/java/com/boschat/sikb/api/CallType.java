@@ -7,9 +7,13 @@ import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.ClubForCreation;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
+import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.createAffiliation;
 import static com.boschat.sikb.Helper.createClub;
+import static com.boschat.sikb.Helper.findClubs;
+import static com.boschat.sikb.Helper.getClub;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
+import static com.boschat.sikb.api.ResponseCode.OK;
 
 public enum CallType {
     CLUB_CREATE("Create a club", CREATED) {
@@ -21,6 +25,27 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
+        }
+    },
+    CLUB_GET("get a club", OK) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(getClub(MyThreadLocal.get().getClubId()));
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+        }
+    },
+    CLUB_FIND("find all clubs", OK) {
+        @Override
+        public Object call() {
+            return convertBeansToModels(findClubs());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
         }
     },
     AFFILIATION_CREATE("Create an affiliation", CREATED) {

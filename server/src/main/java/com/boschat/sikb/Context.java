@@ -10,6 +10,8 @@ public class Context {
 
     private CallType callType;
 
+    private Integer clubId;
+
     public Context(CallType callType) {
         this.callType = callType;
     }
@@ -32,5 +34,13 @@ public class Context {
 
     public CallType getCallType() {
         return callType;
+    }
+
+    public Integer getClubId() {
+        return clubId;
+    }
+
+    public void setClubId(Integer clubId) {
+        this.clubId = clubId;
     }
 }

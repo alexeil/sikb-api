@@ -8,8 +8,11 @@ import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.jooq.Loader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,10 +25,13 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.tables.Club.CLUB;
 import static org.glassfish.jersey.test.TestProperties.CONTAINER_PORT;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,9 +40,17 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest extends JerseyTest {
 
-    private static String proffamPort;
+    protected static final Integer DEFAULT_CLUB_ID = 1;
 
-    private boolean jerseyBooted = false;
+    protected static final String DEFAULT_CLUB_NAME = "Kin-ball Association Rennes";
+
+    protected static final String DEFAULT_CLUB_SHORT_NAME = "KBAR";
+
+    protected static final String DEFAULT_CLUB_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
+
+    private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
+
+    private static String proffamPort;
 
     /**
      * find a random free port to assign to mock server
@@ -50,8 +64,24 @@ public abstract class AbstractTest extends JerseyTest {
         }
     }
 
-    protected static void loadDataSuite(String resourcePath) throws Exception {
-        executeScript(resourcePath);
+    protected static void loadDataSuite(String resourcePath) throws IOException {
+        URL url = AbstractTest.class.getClassLoader().getResource(resourcePath);
+        if (url == null) {
+            LOGGER.error("resourcePath notFound : " + resourcePath);
+        } else {
+            Loader loader = DAOFactory.getInstance().getDslContext()
+                                      .loadInto(CLUB)
+                                      .loadCSV(url.openStream())
+                                      .fields(CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO)
+                                      .separator(';')
+                                      .execute();
+
+            int processed = loader.processed();
+            int stored = loader.stored();
+            int ignored = loader.ignored();
+
+            LOGGER.info(" processed {} - stored {} - ignored {}", processed, stored, ignored);
+        }
     }
 
     protected static void truncateData() {
@@ -79,6 +109,10 @@ public abstract class AbstractTest extends JerseyTest {
 
     protected static Club getClub(Response result) throws IOException {
         return getBody(result, Club.class);
+    }
+
+    protected static List<Club> getClubs(Response result) throws IOException {
+        return Arrays.asList(getBody(result, Club[].class));
     }
 
     private static <T> T getBody(Response result, Class<T> clazz) throws IOException {
@@ -163,14 +197,24 @@ public abstract class AbstractTest extends JerseyTest {
 
     protected Response affiliationCreate(ApiVersion version, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
-        String path = buildPath(version);
+        String path = buildPath(version, null);
         return createRequest(path).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPath(version);
+        String path = buildPath(version, null);
         return createRequest(path).post(entity);
+    }
+
+    protected Response clubGetById(ApiVersion version, Integer clubId) {
+        String path = buildPath(version, clubId);
+        return createRequest(path).get();
+    }
+
+    protected Response clubFind(ApiVersion version) {
+        String path = buildPath(version, null);
+        return createRequest(path).get();
     }
 
     private Invocation.Builder createRequest(String path) {
@@ -213,8 +257,13 @@ public abstract class AbstractTest extends JerseyTest {
         return builder;
     }
 
-    private String buildPath(ApiVersion version) {
-        return "/" + version.getName() + "/clubs";
+    private String buildPath(ApiVersion version, Integer clubId) {
+        StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
+        if (clubId != null) {
+            path.append("/");
+            path.append(clubId);
+        }
+        return path.toString();
     }
 
     protected void checkAffiliation(Affiliation affiliation, String name) {

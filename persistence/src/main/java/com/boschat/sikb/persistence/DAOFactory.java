@@ -1,7 +1,9 @@
 package com.boschat.sikb.persistence;
 
 import org.jooq.Configuration;
+import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
+import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
 import java.sql.Connection;
@@ -24,6 +26,8 @@ public class DAOFactory {
     private Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
     private Configuration configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
+
+    private DSLContext dslContext = DSL.using(connection, SQLDialect.POSTGRES);
 
     private DAOFactory() throws SQLException {
     }
@@ -59,5 +63,9 @@ public class DAOFactory {
             clubDAO = new ClubDAOExtended(configuration);
         }
         return clubDAO;
+    }
+
+    public DSLContext getDslContext() {
+        return dslContext;
     }
 }
