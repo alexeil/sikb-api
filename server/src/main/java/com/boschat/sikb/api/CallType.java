@@ -1,14 +1,28 @@
 package com.boschat.sikb.api;
 
-import com.boschat.sikb.CreateOrUpdateContext;
+import com.boschat.sikb.CreateOrUpdateAffiliationContext;
+import com.boschat.sikb.CreateOrUpdateClubContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.model.AffiliationForCreation;
+import com.boschat.sikb.model.ClubForCreation;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.createAffiliation;
+import static com.boschat.sikb.Helper.createClub;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 
 public enum CallType {
+    CLUB_CREATE("Create a club", CREATED) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createClub());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
+        }
+    },
     AFFILIATION_CREATE("Create an affiliation", CREATED) {
         @Override
         public Object call() {
@@ -17,7 +31,7 @@ public enum CallType {
 
         @Override
         public void fillContext(Object... params) {
-            MyThreadLocal.get().setCreateOrUpdateContext(CreateOrUpdateContext.create((AffiliationForCreation) params[0]));
+            MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[0]));
         }
     };
 

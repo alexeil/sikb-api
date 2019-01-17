@@ -131,32 +131,6 @@
                 </executions>
             </plugin>
 
-            <!--     <plugin>
-                     <artifactId>maven-clean-plugin</artifactId>
-                     <executions>
-                         <execution>
-                             <id>clean swagger directory</id>
-                             <phase>generate-sources</phase>
-                             <goals>
-                                 <goal>clean</goal>
-                             </goals>
-                             <configuration>
-                                 <excludeDefaultDirectories>true</excludeDefaultDirectories>
-                                 <filesets>
-                                     <fileset>
-                                         <directory>target/generated-sources/src/main</directory>
-                                         <followSymlinks>false</followSymlinks>
-                                         <excludes>
-                                             <exclude>*</exclude>
-                                         </excludes>
-                                     </fileset>
-                                 </filesets>
-                                 <verbose>true</verbose>
-                             </configuration>
-                         </execution>
-                     </executions>
-                 </plugin>-->
-
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
@@ -198,12 +172,17 @@
                                 ${project.build.directory}/generated-sources/src/gen/java/com/boschat/sikb/api
                             </basedir>
                             <includes>
-                                <include>AffiliationsApi.java</include>
+                                <include>*Api.java</include>
                             </includes>
                             <replacements>
                                 <replacement>
                                     <token>/affiliations</token>
                                     <value>/v1/affiliations</value>
+                                </replacement>
+
+                                <replacement>
+                                    <token>/clubs</token>
+                                    <value>/v1/clubs</value>
                                 </replacement>
                             </replacements>
                         </configuration>

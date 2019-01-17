@@ -2,7 +2,7 @@ package com.boschat.sikb;
 
 import com.boschat.sikb.model.AffiliationForCreation;
 
-public class CreateOrUpdateContext {
+public class CreateOrUpdateAffiliationContext {
 
     private String associationName;
 
@@ -22,8 +22,8 @@ public class CreateOrUpdateContext {
 
     private String webSite;
 
-    public static CreateOrUpdateContext create(AffiliationForCreation affiliationForCreation) {
-        CreateOrUpdateContext createOrUpdateContext = new CreateOrUpdateContext();
+    public static CreateOrUpdateAffiliationContext create(AffiliationForCreation affiliationForCreation) {
+        CreateOrUpdateAffiliationContext createOrUpdateContext = new CreateOrUpdateAffiliationContext();
         createOrUpdateContext.setAssociationName(affiliationForCreation.getAssociationName());
 
         return createOrUpdateContext;

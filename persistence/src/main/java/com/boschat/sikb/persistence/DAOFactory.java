@@ -18,6 +18,7 @@ public class DAOFactory {
 
     private static AffiliationDAOExtended affiliationDAO = null;
 
+    private static ClubDAOExtended clubDAO = null;
     private static DAOFactory daoFactory = null;
 
     private Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -51,5 +52,12 @@ public class DAOFactory {
             affiliationDAO = new AffiliationDAOExtended(configuration);
         }
         return affiliationDAO;
+    }
+
+    public ClubDAOExtended getClubDAO() {
+        if (clubDAO == null) {
+            clubDAO = new ClubDAOExtended(configuration);
+        }
+        return clubDAO;
     }
 }

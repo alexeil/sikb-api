@@ -3,6 +3,8 @@ package com.boschat.sikb;
 import com.boschat.sikb.api.ResponseCode;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
+import com.boschat.sikb.model.Club;
+import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
@@ -34,6 +36,8 @@ public abstract class AbstractTest extends JerseyTest {
 
     private static String proffamPort;
 
+    private boolean jerseyBooted = false;
+
     /**
      * find a random free port to assign to mock server
      *
@@ -50,11 +54,13 @@ public abstract class AbstractTest extends JerseyTest {
         executeScript(resourcePath);
     }
 
-    protected static void truncateData() throws Exception {
-        executeScript("sql/truncate.sql");
+    protected static void truncateData() {
+        DAOFactory.getInstance().getAffiliationDAO().truncate();
+        DAOFactory.getInstance().getClubDAO().truncate();
     }
 
     private static void executeScript(String path) throws Exception {
+        //FIXME Doesn't execute script so far
         URL url = AbstractTest.class.getClassLoader().getResource(path);
         if (url == null) {
             //LOGGER.error(new LogMetadata("resourcePath notFound : " + resourcePath));
@@ -69,6 +75,10 @@ public abstract class AbstractTest extends JerseyTest {
 
     protected static Affiliation getAffiliation(Response result) throws IOException {
         return getBody(result, Affiliation.class);
+    }
+
+    protected static Club getClub(Response result) throws IOException {
+        return getBody(result, Club.class);
     }
 
     private static <T> T getBody(Response result, Class<T> clazz) throws IOException {
@@ -153,7 +163,12 @@ public abstract class AbstractTest extends JerseyTest {
 
     protected Response affiliationCreate(ApiVersion version, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
+        String path = buildPath(version);
+        return createRequest(path).post(entity);
+    }
 
+    protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
+        Entity<ClubForCreation> entity = Entity.json(clubForCreation);
         String path = buildPath(version);
         return createRequest(path).post(entity);
     }
@@ -199,7 +214,7 @@ public abstract class AbstractTest extends JerseyTest {
     }
 
     private String buildPath(ApiVersion version) {
-        return "/" + version.getName() + "/affiliations";
+        return "/" + version.getName() + "/clubs";
     }
 
     protected void checkAffiliation(Affiliation affiliation, String name) {
@@ -210,4 +225,13 @@ public abstract class AbstractTest extends JerseyTest {
         );
     }
 
+    protected void checkClub(Club club, String name, String shortName, String logo) {
+        assertAll("Check profile " + club.getName(),
+                () -> assertNotNull(club, " Affiliation shouldn't be null"),
+                () -> assertNotNull(club.getId(), "Id shouldn't be null"),
+                () -> assertEquals(name, club.getName(), " name incorrect"),
+                () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
+                () -> assertEquals(logo, club.getLogo(), " logo incorrect")
+        );
+    }
 }

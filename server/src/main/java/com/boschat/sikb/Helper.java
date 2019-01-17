@@ -7,6 +7,7 @@ import com.boschat.sikb.exceptions.TechnicalException;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
+import com.boschat.sikb.tables.pojos.Club;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,7 +22,7 @@ public class Helper {
     public static Response runService(CallType callType, Object... params) {
         Response response = null;
         try {
-            MyThreadLocal.init();
+            MyThreadLocal.init(callType);
 
             callType.fillContext(params);
             response = buildResponse(callType.getResponseCode(), callType.call());
@@ -40,7 +41,7 @@ public class Helper {
     }
 
     private static void finallyLog(Response response) {
-        LOGGER.info("Call finished", response.getStatus());
+        LOGGER.info("Call \"{}\". with response code {}", MyThreadLocal.get().getCallType().getInfoLogMessage(), response.getStatus());
     }
 
     private static Response logAndBuildFunctionalErrorResponse(FunctionalException e) {
@@ -68,7 +69,7 @@ public class Helper {
     }
 
     public static Affiliation createAffiliation() {
-        CreateOrUpdateContext createContext = MyThreadLocal.get().getCreateOrUpdateContext();
+        CreateOrUpdateAffiliationContext createContext = MyThreadLocal.get().getCreateOrUpdateAffiliationContext();
 
         Affiliation affiliationBean = new Affiliation();
         affiliationBean.setAssociationname(createContext.getAssociationName());
@@ -76,10 +77,30 @@ public class Helper {
         return affiliationBean;
     }
 
+    public static Club createClub() {
+        CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
+
+        Club clubBean = new Club();
+        clubBean.setName(createContext.getName());
+        clubBean.setShortname(createContext.getShortName());
+        clubBean.setLogo(createContext.getLogo());
+        DAOFactory.getInstance().getClubDAO().insert(clubBean);
+        return clubBean;
+    }
+
     public static com.boschat.sikb.model.Affiliation convertBeanToModel(Affiliation affiliationBean) {
         com.boschat.sikb.model.Affiliation affiliation = new com.boschat.sikb.model.Affiliation();
         affiliation.setId(affiliationBean.getId());
         affiliation.setAssociationName(affiliationBean.getAssociationname());
         return affiliation;
+    }
+
+    public static com.boschat.sikb.model.Club convertBeanToModel(Club clubBean) {
+        com.boschat.sikb.model.Club club = new com.boschat.sikb.model.Club();
+        club.setId(clubBean.getId());
+        club.setName(clubBean.getName());
+        club.setShortName(clubBean.getShortname());
+        club.setLogo(clubBean.getLogo());
+        return club;
     }
 }
