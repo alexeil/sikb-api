@@ -56,7 +56,7 @@ public class Helper {
     }
 
     private static Response logAndBuildFunctionalErrorResponse(FunctionalException e) {
-        LOGGER.error(e.getMessage());
+        LOGGER.log(e.getErrorCode().getLevel(), e.getMessage());
         ZError error = new ZError();
         error.setCode(e.getErrorCode().getCode());
         error.setMessage(e.getMessage());
@@ -64,7 +64,7 @@ public class Helper {
     }
 
     private static Response logAndBuildTechnicalExceptionErrorResponse(Throwable e, ResponseCode errorCode) {
-        LOGGER.error(e.getMessage(), e);
+        LOGGER.log(errorCode.getLevel(), e.getMessage(), e);
         ZError error = new ZError();
         error.setCode(errorCode.getCode());
         error.setMessage(e.getMessage());
