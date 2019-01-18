@@ -8,7 +8,7 @@ CREATE TABLE sikb.club (
                         "name" varchar(255),
                         "shortName" varchar(255),
                         "logo" varchar(255)
-                        )
+                        );
 
 CREATE TABLE sikb.affiliation (
                                 "id" serial PRIMARY KEY,
@@ -21,4 +21,4 @@ CREATE TABLE sikb.affiliation (
                                 "phoneNumber" varchar(255),
                                 "email" varchar(255),
                                 "webSite" varchar(255)
-                              )
+                              );
