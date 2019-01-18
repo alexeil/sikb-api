@@ -46,6 +46,7 @@ public class Helper {
         } finally {
             // always log an info log for each service called
             finallyLog(response);
+            MyThreadLocal.unset();
         }
         return response;
     }
