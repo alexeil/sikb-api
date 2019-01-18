@@ -114,6 +114,10 @@ public class Helper {
         return clubToUpdate;
     }
 
+    public static void deleteClub() {
+        DAOFactory.getInstance().getClubDAO().delete(getClub());
+    }
+
     public static Club createClub() {
         CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
 

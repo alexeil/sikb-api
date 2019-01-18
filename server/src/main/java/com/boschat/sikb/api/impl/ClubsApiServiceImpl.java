@@ -1,6 +1,5 @@
 package com.boschat.sikb.api.impl;
 
-import com.boschat.sikb.api.ApiResponseMessage;
 import com.boschat.sikb.api.ClubsApiService;
 import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.model.AffiliationForCreation;
@@ -11,7 +10,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
+import static com.boschat.sikb.api.CallType.AFFILIATION_CREATE;
 import static com.boschat.sikb.api.CallType.CLUB_CREATE;
+import static com.boschat.sikb.api.CallType.CLUB_DELETE;
 import static com.boschat.sikb.api.CallType.CLUB_FIND;
 import static com.boschat.sikb.api.CallType.CLUB_GET;
 import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
@@ -20,9 +21,9 @@ import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
 public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
-    public Response createAffiliation(AffiliationForCreation affiliationForCreation, SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+    public Response createAffiliation(Integer clubId, String season, AffiliationForCreation affiliationForCreation, SecurityContext securityContext)
+            throws NotFoundException {
+        return runService(AFFILIATION_CREATE, affiliationForCreation);
     }
 
     @Override
@@ -31,9 +32,18 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
-    public Response findAffiliations(SecurityContext securityContext) throws NotFoundException {
-        // do some magic!
-        return Response.ok().entity(new ApiResponseMessage(ApiResponseMessage.OK, "magic!")).build();
+    public Response deleteAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public Response deleteClub(Integer clubId, SecurityContext securityContext) throws NotFoundException {
+        return runService(CLUB_DELETE, clubId);
+    }
+
+    @Override
+    public Response findAffiliations(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
+        return null;
     }
 
     @Override
@@ -42,8 +52,18 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
+    public Response getAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
     public Response getClubById(Integer clubId, SecurityContext securityContext) throws NotFoundException {
         return runService(CLUB_GET, clubId);
+    }
+
+    @Override
+    public Response updateAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
+        return null;
     }
 
     @Override

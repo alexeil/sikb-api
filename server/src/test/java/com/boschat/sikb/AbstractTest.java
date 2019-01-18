@@ -224,6 +224,11 @@ public abstract class AbstractTest extends JerseyTest {
         return createRequest(path).put(entity);
     }
 
+    protected Response clubDelete(ApiVersion version, Integer clubId) {
+        String path = buildPath(version, clubId);
+        return createRequest(path).delete();
+    }
+
     private Invocation.Builder createRequest(String path) {
 
         WebTarget target = target(path)

@@ -119,13 +119,33 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - clubs
-  '/clubs/:clubId/:season/affiliations':
+    delete:
+      summary: Delete a club
+      description: ''
+      operationId: deleteClub
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+      responses:
+        204:
+          description: The club is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - clubs
+  '/clubs/{clubId}/{season}/affiliations':
     summary: tes
     description: test
     get:
       summary: get all affiliations
       description: ''
       operationId: findAffiliations
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
       responses:
         default:
           description: unexpected error
@@ -139,6 +159,9 @@ paths:
       summary: Create an affiliation
       description: ''
       operationId: createAffiliation
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
       requestBody:
         content:
           application/json:
@@ -162,11 +185,14 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - affiliations
-  '/affiliations/:affiliationId':
+  '/clubs/{clubId}/affiliations/:affiliationId':
     get:
       summary: get an affiliation
       description: ''
       operationId: getAffiliation
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
       responses:
         default:
           description: Default error sample response
@@ -176,6 +202,9 @@ paths:
       summary: Update an affiliation
       description: ''
       operationId: UpdateAffiliation
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
       responses:
         default:
           description: Default error sample response
@@ -185,6 +214,9 @@ paths:
       summary: Delete an affiliation
       description: ''
       operationId: deleteAffiliation
+      parameters:
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
       responses:
         default:
           description: Default error sample response
@@ -200,6 +232,20 @@ components:
       required: true
       in: path
       description: "Id of a club"
+    season:
+      name: "season"
+      schema:
+        type: string
+        minLength: 8
+        maxLength: 8
+        pattern: "^([0-9]){8}$"
+      required: true
+      in: path
+      description: "Name of the season"
+
+
+
+
   schemas:
     club:
       required:

@@ -12,9 +12,11 @@ import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.createAffiliation;
 import static com.boschat.sikb.Helper.createClub;
+import static com.boschat.sikb.Helper.deleteClub;
 import static com.boschat.sikb.Helper.findClubs;
 import static com.boschat.sikb.Helper.getClub;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
+import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
 
 public enum CallType {
@@ -27,6 +29,18 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
+        }
+    },
+    CLUB_DELETE("Delete a club", DELETED) {
+        @Override
+        public Object call() {
+            deleteClub();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
     CLUB_UPDATE("Update a club", OK) {
