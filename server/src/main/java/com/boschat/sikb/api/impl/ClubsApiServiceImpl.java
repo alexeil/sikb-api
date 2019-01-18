@@ -14,6 +14,7 @@ import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.CLUB_CREATE;
 import static com.boschat.sikb.api.CallType.CLUB_FIND;
 import static com.boschat.sikb.api.CallType.CLUB_GET;
+import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-17T10:05:39.503+01:00[Europe/Paris]")
 public class ClubsApiServiceImpl extends ClubsApiService {
@@ -47,7 +48,8 @@ public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
     public Response updateClub(Integer clubId, ClubForUpdate clubForUpdate, SecurityContext securityContext) throws NotFoundException {
-        return null;
+        return runService(CLUB_UPDATE, clubId, clubForUpdate);
+
     }
 
 }

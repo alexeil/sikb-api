@@ -80,7 +80,8 @@ public class Helper {
         return affiliationBean;
     }
 
-    public static Club getClub(Integer clubId) {
+    public static Club getClub() {
+        Integer clubId = MyThreadLocal.get().getClubId();
         Club club = DAOFactory.getInstance().getClubDAO().fetchOneById(clubId);
 
         if (club == null) {
@@ -91,6 +92,26 @@ public class Helper {
 
     public static List<Club> findClubs() {
         return DAOFactory.getInstance().getClubDAO().findAll();
+    }
+
+    public static Club UpdateClub() {
+        CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
+
+        Club clubToUpdate = getClub();
+
+        if (createContext.getName() != null) {
+            clubToUpdate.setName(createContext.getName());
+        }
+        if (createContext.getShortName() != null) {
+            clubToUpdate.setShortname(createContext.getShortName());
+        }
+        if (createContext.getLogo() != null) {
+            clubToUpdate.setLogo(createContext.getLogo());
+        }
+
+        DAOFactory.getInstance().getClubDAO().update(clubToUpdate);
+
+        return clubToUpdate;
     }
 
     public static Club createClub() {
@@ -114,6 +135,7 @@ public class Helper {
     public static List<com.boschat.sikb.model.Club> convertBeansToModels(List<Club> clubBeans) {
         return clubBeans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
+
     public static com.boschat.sikb.model.Club convertBeanToModel(Club clubBean) {
         com.boschat.sikb.model.Club club = new com.boschat.sikb.model.Club();
         club.setId(clubBean.getId());

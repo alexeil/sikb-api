@@ -5,6 +5,7 @@ import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
+import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
@@ -215,6 +216,12 @@ public abstract class AbstractTest extends JerseyTest {
     protected Response clubFind(ApiVersion version) {
         String path = buildPath(version, null);
         return createRequest(path).get();
+    }
+
+    protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
+        Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
+        String path = buildPath(version, clubId);
+        return createRequest(path).put(entity);
     }
 
     private Invocation.Builder createRequest(String path) {

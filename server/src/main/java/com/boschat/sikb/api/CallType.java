@@ -5,7 +5,9 @@ import com.boschat.sikb.CreateOrUpdateClubContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.ClubForCreation;
+import com.boschat.sikb.model.ClubForUpdate;
 
+import static com.boschat.sikb.Helper.UpdateClub;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.createAffiliation;
@@ -27,10 +29,22 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
         }
     },
+    CLUB_UPDATE("Update a club", OK) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(UpdateClub());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForUpdate) params[1]));
+        }
+    },
     CLUB_GET("get a club", OK) {
         @Override
         public Object call() {
-            return convertBeanToModel(getClub(MyThreadLocal.get().getClubId()));
+            return convertBeanToModel(getClub());
         }
 
         @Override
