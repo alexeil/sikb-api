@@ -310,6 +310,8 @@ components:
           format: int32
         prefectureNumber:
           type: string
+        prefectureCity:
+          type: string
         siretNumber:
           type: string
         address:
@@ -337,6 +339,8 @@ components:
     affiliationForCreation:
       properties:
         prefectureNumber:
+          type: string
+        prefectureCity:
           type: string
         siretNumber:
           type: string
