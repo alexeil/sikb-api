@@ -11,6 +11,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.AFFILIATION_CREATE;
+import static com.boschat.sikb.api.CallType.AFFILIATION_GET;
 import static com.boschat.sikb.api.CallType.CLUB_CREATE;
 import static com.boschat.sikb.api.CallType.CLUB_DELETE;
 import static com.boschat.sikb.api.CallType.CLUB_FIND;
@@ -48,7 +49,7 @@ public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
     public Response getAffiliation(Integer clubId, String season, Integer affiliationId, SecurityContext securityContext) throws NotFoundException {
-        return null;
+        return runService(AFFILIATION_GET, clubId, season, affiliationId);
     }
 
     @Override

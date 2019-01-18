@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.boschat.sikb.api.ResponseCode.AFFILIATION_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
@@ -75,6 +76,19 @@ public class Helper {
             responseBuilder.entity(entity);
         }
         return responseBuilder.build();
+    }
+
+    public static Affiliation getAffiliation() {
+        Integer clubId = MyThreadLocal.get().getClubId();
+        String season = MyThreadLocal.get().getSeason();
+        Integer affiliationId = MyThreadLocal.get().getAffiliationId();
+
+        Affiliation affiliation = DAOFactory.getInstance().getAffiliationDAO().fetchByIdClubIdSeason(affiliationId, clubId, season);
+
+        if (affiliation == null) {
+            throw new FunctionalException(AFFILIATION_NOT_FOUND, affiliationId, clubId, season);
+        }
+        return affiliation;
     }
 
     public static Affiliation createAffiliation() {

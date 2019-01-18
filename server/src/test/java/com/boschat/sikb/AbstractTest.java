@@ -17,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.jooq.Loader;
+import org.jooq.TableField;
+import org.jooq.impl.TableImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -35,6 +37,7 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
@@ -59,6 +62,8 @@ public abstract class AbstractTest {
     protected static final String DEFAULT_CLUB_SHORT_NAME = "KBAR";
 
     protected static final String DEFAULT_CLUB_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
+
+    protected static final Integer DEFAULT_AFFILIATION_ID = 1;
 
     protected static final String DEFAULT_AFFILIATION_PREFECTURE_NUMBER = "W333333333";
 
@@ -100,7 +105,7 @@ public abstract class AbstractTest {
 
     private static String proffamPort;
 
-    private static JerseyTest jerseyTest;
+    protected static JerseyTest jerseyTest;
 
     /**
      * find a random free port to assign to mock server
@@ -111,6 +116,40 @@ public abstract class AbstractTest {
     private static Integer findRandomOpenPortOnAllLocalInterfaces() throws IOException {
         try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
+        }
+    }
+
+    protected static void loadClubs(String resourcePath) throws IOException {
+        loadDataSuite(resourcePath, CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO);
+    }
+
+    protected static void loadAffiliations(String resourcePath) throws IOException {
+        loadDataSuite(resourcePath, AFFILIATION, AFFILIATION.ID, AFFILIATION.PREFECTURENUMBER, AFFILIATION.PREFECTURECITY, AFFILIATION.SIRETNUMBER,
+                AFFILIATION.ADDRESS,
+                AFFILIATION.POSTALCODE, AFFILIATION.CITY, AFFILIATION.PHONENUMBER, AFFILIATION.EMAIL, AFFILIATION.WEBSITE, AFFILIATION.PRESIDENT,
+                AFFILIATION.PRESIDENTSEX, AFFILIATION.SECRETARY, AFFILIATION.SECRETARYSEX, AFFILIATION.TREASURER, AFFILIATION.TREASURERSEX,
+                AFFILIATION.MEMBERSNUMBER, AFFILIATION.ELECTEDDATE, AFFILIATION.CREATIONDATE, AFFILIATION.MODIFICATIONDATE, AFFILIATION.SEASON,
+                AFFILIATION.CLUBID);
+
+    }
+
+    protected static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
+        URL url = AbstractTest.class.getClassLoader().getResource(resourcePath);
+        if (url == null) {
+            LOGGER.error("resourcePath notFound : " + resourcePath);
+        } else {
+            Loader loader = DAOFactory.getInstance().getDslContext()
+                                      .loadInto(clazz)
+                                      .loadCSV(url.openStream())
+                                      .fields(fields)
+                                      .separator(';')
+                                      .execute();
+
+            int processed = loader.processed();
+            int stored = loader.stored();
+            int ignored = loader.ignored();
+
+            LOGGER.info(" processed {} - stored {} - ignored {}", processed, stored, ignored);
         }
     }
 
@@ -135,8 +174,8 @@ public abstract class AbstractTest {
     }
 
     protected static void truncateData() {
-        DAOFactory.getInstance().getClubDAO().truncate();
         DAOFactory.getInstance().getAffiliationDAO().truncate();
+        DAOFactory.getInstance().getClubDAO().truncate();
     }
 
     private static void executeScript(String path) throws Exception {
@@ -246,36 +285,41 @@ public abstract class AbstractTest {
 */
     }
 
+    protected Response affiliationGet(ApiVersion version, Integer clubId, String season, Integer affiliationId) {
+        String path = buildPath(version, clubId, season, affiliationId);
+        return createRequest(path).get();
+    }
+
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
-        String path = buildPath(version, clubId, season);
+        String path = buildPath(version, clubId, season, null);
         return createRequest(path).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPath(version, null, null);
+        String path = buildPath(version, null, null, null);
         return createRequest(path).post(entity);
     }
 
     protected Response clubGetById(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null);
+        String path = buildPath(version, clubId, null, null);
         return createRequest(path).get();
     }
 
     protected Response clubFind(ApiVersion version) {
-        String path = buildPath(version, null, null);
+        String path = buildPath(version, null, null, null);
         return createRequest(path).get();
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
-        String path = buildPath(version, clubId, null);
+        String path = buildPath(version, clubId, null, null);
         return createRequest(path).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null);
+        String path = buildPath(version, clubId, null, null);
         return createRequest(path).delete();
     }
 
@@ -319,7 +363,7 @@ public abstract class AbstractTest {
         return builder;
     }
 
-    private String buildPath(ApiVersion version, Integer clubId, String season) {
+    private String buildPath(ApiVersion version, Integer clubId, String season, Integer affiliationId) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
         if (clubId != null) {
             path.append("/");
@@ -330,6 +374,11 @@ public abstract class AbstractTest {
             path.append(season);
             path.append("/affiliations");
         }
+        if (affiliationId != null) {
+            path.append("/");
+            path.append(affiliationId);
+        }
+
         return path.toString();
     }
 

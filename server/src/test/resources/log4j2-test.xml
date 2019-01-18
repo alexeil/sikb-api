@@ -15,7 +15,7 @@
         </Logger>
 
         <!-- LOGGER JOOQ DB -->
-        <Logger level="warn" name="org.jooq" additivity="false">
+        <Logger level="trace" name="org.jooq" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>

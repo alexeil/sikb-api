@@ -1,7 +1,12 @@
 package com.boschat.sikb.persistence;
 
 import com.boschat.sikb.tables.daos.AffiliationDao;
+import com.boschat.sikb.tables.pojos.Affiliation;
+import com.boschat.sikb.tables.records.AffiliationRecord;
 import org.jooq.Configuration;
+
+import static com.boschat.sikb.Tables.AFFILIATION;
+import static org.jooq.impl.DSL.using;
 
 public class AffiliationDAOExtended extends AffiliationDao {
 
@@ -9,7 +14,18 @@ public class AffiliationDAOExtended extends AffiliationDao {
         super(configuration);
     }
 
+    public Affiliation fetchByIdClubIdSeason(Integer affiliationId, Integer clubId, String season) {
+        AffiliationRecord record = using(this.configuration())
+                .selectFrom(this.getTable())
+                .where(AFFILIATION.ID.equal(affiliationId))
+                .and(AFFILIATION.CLUBID.equal(clubId))
+                .and(AFFILIATION.SEASON.equal(season))
+                .fetchOne();
+
+        return record == null ? null : mapper().map(record);
+    }
+
     public void truncate() {
-        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).cascade().execute();
+        using(this.configuration()).truncate(this.getTable()).cascade().execute();
     }
 }
