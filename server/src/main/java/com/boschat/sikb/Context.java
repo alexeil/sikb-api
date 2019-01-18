@@ -12,6 +12,8 @@ public class Context {
 
     private Integer clubId;
 
+    private String season;
+
     public Context(CallType callType) {
         this.callType = callType;
     }
@@ -42,5 +44,13 @@ public class Context {
 
     public void setClubId(Integer clubId) {
         this.clubId = clubId;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
     }
 }

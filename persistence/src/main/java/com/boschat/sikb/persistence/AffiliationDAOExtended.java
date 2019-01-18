@@ -10,6 +10,6 @@ public class AffiliationDAOExtended extends AffiliationDao {
     }
 
     public void truncate() {
-        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).execute();
+        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).cascade().execute();
     }
 }

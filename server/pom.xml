@@ -180,11 +180,6 @@
                             </includes>
                             <replacements>
                                 <replacement>
-                                    <token>/affiliations</token>
-                                    <value>/v1/affiliations</value>
-                                </replacement>
-
-                                <replacement>
                                     <token>/clubs</token>
                                     <value>/v1/clubs</value>
                                 </replacement>

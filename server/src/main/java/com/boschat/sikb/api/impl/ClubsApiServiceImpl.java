@@ -21,19 +21,8 @@ import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
 public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
-    public Response createAffiliation(Integer clubId, String season, AffiliationForCreation affiliationForCreation, SecurityContext securityContext)
-            throws NotFoundException {
-        return runService(AFFILIATION_CREATE, affiliationForCreation);
-    }
-
-    @Override
     public Response createClub(ClubForCreation clubForCreation, SecurityContext securityContext) throws NotFoundException {
         return runService(CLUB_CREATE, clubForCreation);
-    }
-
-    @Override
-    public Response deleteAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
-        return null;
     }
 
     @Override
@@ -42,18 +31,8 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
-    public Response findAffiliations(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
-        return null;
-    }
-
-    @Override
     public Response findClubs(SecurityContext securityContext) throws NotFoundException {
         return runService(CLUB_FIND);
-    }
-
-    @Override
-    public Response getAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
-        return null;
     }
 
     @Override
@@ -62,14 +41,29 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
-    public Response updateAffiliation(Integer clubId, String season, SecurityContext securityContext) throws NotFoundException {
-        return null;
-    }
-
-    @Override
     public Response updateClub(Integer clubId, ClubForUpdate clubForUpdate, SecurityContext securityContext) throws NotFoundException {
         return runService(CLUB_UPDATE, clubId, clubForUpdate);
 
     }
 
+    @Override
+    public Response getAffiliation(Integer clubId, String season, Integer affiliationId, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public Response createAffiliation(Integer clubId, String season, AffiliationForCreation affiliationForCreation, SecurityContext securityContext)
+            throws NotFoundException {
+        return runService(AFFILIATION_CREATE, clubId, season, affiliationForCreation);
+    }
+
+    @Override
+    public Response updateAffiliation(Integer clubId, String season, Integer affiliationId, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public Response deleteAffiliation(Integer clubId, String season, Integer affiliationId, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
 }

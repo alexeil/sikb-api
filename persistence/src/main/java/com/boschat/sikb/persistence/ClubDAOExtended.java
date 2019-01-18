@@ -10,6 +10,6 @@ public class ClubDAOExtended extends ClubDao {
     }
 
     public void truncate() {
-        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).execute();
+        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).cascade().execute();
     }
 }

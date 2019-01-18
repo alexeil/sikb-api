@@ -14,8 +14,8 @@
             <AppenderRef ref="Console"/>
         </Logger>
 
-        <!-- LOGGER JOOQ DB -->
-        <Logger level="warn" name="org.jooq" additivity="false">
+        <!-- LOGGER MARIA DB -->
+        <Logger level="debug" name="com.orange.erable.common.myBatis.EmbeddedMySQLDb" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>

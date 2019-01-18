@@ -84,7 +84,9 @@ public enum CallType {
 
         @Override
         public void fillContext(Object... params) {
-            MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[0]));
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeason((String) params[1]);
+            MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
         }
     };
 

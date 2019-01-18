@@ -8,7 +8,7 @@
 
     <context-param>
         <param-name>log4jConfiguration</param-name>
-        <param-value>file://E:/dev/src/sikb-api/configuration/src/main/resources/log4j2.xml</param-value>
+        <param-value>file://C:/Projets/perso/sikb-api/configuration/src/main/resources/log4j2.xml</param-value>
     </context-param>
 
     <servlet>

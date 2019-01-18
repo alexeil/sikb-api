@@ -4,10 +4,13 @@ import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.api.ResponseCode;
 import com.boschat.sikb.exceptions.FunctionalException;
 import com.boschat.sikb.exceptions.TechnicalException;
+import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
+import com.boschat.sikb.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -17,6 +20,9 @@ import java.util.stream.Collectors;
 
 import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
+import static com.boschat.sikb.utils.DateUtils.getOffsetDateTimeFromTimestamp;
+import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
 
 public class Helper {
 
@@ -75,7 +81,29 @@ public class Helper {
         CreateOrUpdateAffiliationContext createContext = MyThreadLocal.get().getCreateOrUpdateAffiliationContext();
 
         Affiliation affiliationBean = new Affiliation();
-        affiliationBean.setAssociationname(createContext.getAssociationName());
+
+        affiliationBean.setPrefecturenumber(createContext.getPrefectureNumber());
+        affiliationBean.setPrefecturecity(createContext.getPrefectureCity());
+        affiliationBean.setSiretnumber(createContext.getSiretNumber());
+        affiliationBean.setAddress(createContext.getAddress());
+        affiliationBean.setPostalcode(createContext.getPostalCode());
+        affiliationBean.setCity(createContext.getCity());
+        affiliationBean.setPhonenumber(createContext.getPhoneNumber());
+        affiliationBean.setEmail(createContext.getEmail());
+        affiliationBean.setWebsite(createContext.getWebSite());
+
+        affiliationBean.setPresident(createContext.getPresident());
+        affiliationBean.setPresidentsex(createContext.getPresidentSex().toString());
+        affiliationBean.setSecretary(createContext.getSecretary());
+        affiliationBean.setSecretarysex(createContext.getSecretarySex().toString());
+        affiliationBean.setTreasurer(createContext.getTreasurer());
+        affiliationBean.setTreasurersex(createContext.getTreasurerSex().toString());
+        affiliationBean.setMembersnumber(createContext.getMembersNumber());
+        affiliationBean.setElecteddate(getDateFromLocalDate(createContext.getElectedDate()));
+
+        affiliationBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        affiliationBean.setSeason(MyThreadLocal.get().getSeason());
+        affiliationBean.setClubid(MyThreadLocal.get().getClubId());
         DAOFactory.getInstance().getAffiliationDAO().insert(affiliationBean);
         return affiliationBean;
     }
@@ -132,7 +160,32 @@ public class Helper {
     public static com.boschat.sikb.model.Affiliation convertBeanToModel(Affiliation affiliationBean) {
         com.boschat.sikb.model.Affiliation affiliation = new com.boschat.sikb.model.Affiliation();
         affiliation.setId(affiliationBean.getId());
-        affiliation.setAssociationName(affiliationBean.getAssociationname());
+
+        affiliation.setPrefectureNumber(affiliationBean.getPrefecturenumber());
+        affiliation.setPrefectureCity(affiliationBean.getPrefecturecity());
+        affiliation.setSiretNumber(affiliationBean.getSiretnumber());
+        affiliation.setAddress(affiliationBean.getAddress());
+        affiliation.setPostalCode(affiliationBean.getPostalcode());
+        affiliation.setCity(affiliationBean.getCity());
+        affiliation.setPhoneNumber(affiliationBean.getPhonenumber());
+        affiliation.setEmail(affiliationBean.getEmail());
+        affiliation.setWebSite(affiliationBean.getWebsite());
+
+        if (affiliationBean.getPresident() != null) {
+            Board board = new Board();
+            board.setPresident(affiliationBean.getPresident());
+            board.setPresidentSex(Sex.fromValue(affiliationBean.getPresidentsex()));
+            board.setSecretary(affiliationBean.getSecretary());
+            board.setSecretarySex(Sex.fromValue(affiliationBean.getSecretarysex()));
+            board.setTreasurer(affiliationBean.getTreasurer());
+            board.setTreasurerSex(Sex.fromValue(affiliationBean.getTreasurersex()));
+            board.setMembersNumber(affiliationBean.getMembersnumber());
+            board.setElectedDate(affiliationBean.getElecteddate().toLocalDate());
+            affiliation.setBoard(board);
+        }
+        affiliation.setCreationDateTime(getOffsetDateTimeFromTimestamp(affiliationBean.getCreationdate()));
+        affiliation.setModificationDateTime(getOffsetDateTimeFromTimestamp(affiliationBean.getModificationdate()));
+
         return affiliation;
     }
 

@@ -44,10 +44,14 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
      */
     public static ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
+
         return mapper
-                .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                //.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
+                //.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
                 .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
                 .registerModule(new JavaTimeModule());
+
     }
 
     public static ObjectMapper getMapper() {
