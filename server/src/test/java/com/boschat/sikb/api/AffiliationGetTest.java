@@ -24,7 +24,7 @@ class AffiliationGetTest extends AbstractTest {
     @Test
     @DisplayName(" (default) ")
     void defaultAffiliation() throws Exception {
-        Response response = affiliationGet(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON, DEFAULT_AFFILIATION_ID);
+        Response response = affiliationGet(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON);
 
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);

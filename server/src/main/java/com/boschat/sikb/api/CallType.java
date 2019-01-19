@@ -12,6 +12,7 @@ import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.createAffiliation;
 import static com.boschat.sikb.Helper.createClub;
+import static com.boschat.sikb.Helper.deleteAffiliation;
 import static com.boschat.sikb.Helper.deleteClub;
 import static com.boschat.sikb.Helper.findClubs;
 import static com.boschat.sikb.Helper.getAffiliation;
@@ -100,7 +101,19 @@ public enum CallType {
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
             MyThreadLocal.get().setSeason((String) params[1]);
-            MyThreadLocal.get().setAffiliationId((Integer) params[2]);
+        }
+    },
+    AFFILIATION_DELETE("Delete an affiliation", DELETED) {
+        @Override
+        public Object call() {
+            deleteAffiliation();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeason((String) params[1]);
         }
     };
 

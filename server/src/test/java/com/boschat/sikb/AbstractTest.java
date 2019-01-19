@@ -285,41 +285,46 @@ public abstract class AbstractTest {
 */
     }
 
-    protected Response affiliationGet(ApiVersion version, Integer clubId, String season, Integer affiliationId) {
-        String path = buildPath(version, clubId, season, affiliationId);
+    protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
+        String path = buildPath(version, clubId, season);
         return createRequest(path).get();
+    }
+
+    protected Response affiliationDelete(ApiVersion version, Integer clubId, String season) {
+        String path = buildPath(version, clubId, season);
+        return createRequest(path).delete();
     }
 
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
-        String path = buildPath(version, clubId, season, null);
+        String path = buildPath(version, clubId, season);
         return createRequest(path).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPath(version, null, null, null);
+        String path = buildPath(version, null, null);
         return createRequest(path).post(entity);
     }
 
     protected Response clubGetById(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null, null);
+        String path = buildPath(version, clubId, null);
         return createRequest(path).get();
     }
 
     protected Response clubFind(ApiVersion version) {
-        String path = buildPath(version, null, null, null);
+        String path = buildPath(version, null, null);
         return createRequest(path).get();
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
-        String path = buildPath(version, clubId, null, null);
+        String path = buildPath(version, clubId, null);
         return createRequest(path).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null, null);
+        String path = buildPath(version, clubId, null);
         return createRequest(path).delete();
     }
 
@@ -363,7 +368,7 @@ public abstract class AbstractTest {
         return builder;
     }
 
-    private String buildPath(ApiVersion version, Integer clubId, String season, Integer affiliationId) {
+    private String buildPath(ApiVersion version, Integer clubId, String season) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
         if (clubId != null) {
             path.append("/");
@@ -374,11 +379,6 @@ public abstract class AbstractTest {
             path.append(season);
             path.append("/affiliations");
         }
-        if (affiliationId != null) {
-            path.append("/");
-            path.append(affiliationId);
-        }
-
         return path.toString();
     }
 

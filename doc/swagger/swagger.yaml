@@ -138,7 +138,7 @@ paths:
         - clubs
   '/clubs/{clubId}/{season}/affiliations':
     post:
-      summary: Create an club affiliation for a season
+      summary: Create the club affiliation for a season
       description: ''
       operationId: createAffiliation
       parameters:
@@ -167,15 +167,13 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - affiliations
-  '/clubs/{clubId}/{season}/affiliations/{affiliationId}':
     get:
-      summary: get a club affiliation for a season
+      summary: get the club affiliation for a season
       description: ''
       operationId: getAffiliation
       parameters:
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
-        - $ref: '#/components/parameters/affiliationId'
       responses:
         200:
           description: get the club affiliation for the season
@@ -192,13 +190,12 @@ paths:
       tags:
         - affiliations
     put:
-      summary: Update an affiliation
+      summary: Update the club affiliation for a season
       description: ''
       operationId: UpdateAffiliation
       parameters:
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
-        - $ref: '#/components/parameters/affiliationId'
       responses:
         200:
           description: updated club affiliation
@@ -215,13 +212,12 @@ paths:
       tags:
         - affiliations
     delete:
-      summary: Delete an affiliation
+      summary: Delete the club affiliation for a season
       description: ''
       operationId: deleteAffiliation
       parameters:
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
-        - $ref: '#/components/parameters/affiliationId'
       responses:
         204:
           description: the club affiliation is deleted
@@ -243,13 +239,6 @@ components:
       required: true
       in: path
       description: "Id of a club"
-    affiliationId:
-      name: "affiliationId"
-      schema:
-        type: integer
-      required: true
-      in: path
-      description: "Id of an affiliation"
     season:
       name: "season"
       schema:

@@ -79,15 +79,18 @@ public class Helper {
         return responseBuilder.build();
     }
 
+    public static void deleteAffiliation() {
+        DAOFactory.getInstance().getAffiliationDAO().delete(getAffiliation());
+    }
+
     public static Affiliation getAffiliation() {
         Integer clubId = MyThreadLocal.get().getClubId();
         String season = MyThreadLocal.get().getSeason();
-        Integer affiliationId = MyThreadLocal.get().getAffiliationId();
 
-        Affiliation affiliation = DAOFactory.getInstance().getAffiliationDAO().fetchByIdClubIdSeason(affiliationId, clubId, season);
+        Affiliation affiliation = DAOFactory.getInstance().getAffiliationDAO().fetchByIdClubIdSeason(clubId, season);
 
         if (affiliation == null) {
-            throw new FunctionalException(AFFILIATION_NOT_FOUND, affiliationId, clubId, season);
+            throw new FunctionalException(AFFILIATION_NOT_FOUND, clubId, season);
         }
         return affiliation;
     }

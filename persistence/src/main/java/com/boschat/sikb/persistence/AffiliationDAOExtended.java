@@ -14,11 +14,10 @@ public class AffiliationDAOExtended extends AffiliationDao {
         super(configuration);
     }
 
-    public Affiliation fetchByIdClubIdSeason(Integer affiliationId, Integer clubId, String season) {
+    public Affiliation fetchByIdClubIdSeason(Integer clubId, String season) {
         AffiliationRecord record = using(this.configuration())
                 .selectFrom(this.getTable())
-                .where(AFFILIATION.ID.equal(affiliationId))
-                .and(AFFILIATION.CLUBID.equal(clubId))
+                .where(AFFILIATION.CLUBID.equal(clubId))
                 .and(AFFILIATION.SEASON.equal(season))
                 .fetchOne();
 
