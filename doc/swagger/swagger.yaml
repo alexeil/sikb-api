@@ -196,6 +196,14 @@ paths:
       parameters:
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/affiliationForUpdate'
+        required:
+          true
+        description: body
       responses:
         200:
           description: updated club affiliation

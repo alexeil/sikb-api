@@ -95,34 +95,87 @@ public class Helper {
         return affiliation;
     }
 
+    public static Affiliation UpdateAffiliation() {
+        return CreateOrUpdateAffiliation(false);
+    }
+
     public static Affiliation createAffiliation() {
+        return CreateOrUpdateAffiliation(true);
+    }
+
+    private static Affiliation CreateOrUpdateAffiliation(boolean isCreation) {
         CreateOrUpdateAffiliationContext createContext = MyThreadLocal.get().getCreateOrUpdateAffiliationContext();
 
-        Affiliation affiliationBean = new Affiliation();
+        Affiliation affiliationBean;
+        if (isCreation) {
+            affiliationBean = new Affiliation();
+            affiliationBean.setSeason(MyThreadLocal.get().getSeason());
+            affiliationBean.setClubid(MyThreadLocal.get().getClubId());
+            affiliationBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        } else {
+            affiliationBean = getAffiliation();
+            affiliationBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        }
 
-        affiliationBean.setPrefecturenumber(createContext.getPrefectureNumber());
-        affiliationBean.setPrefecturecity(createContext.getPrefectureCity());
-        affiliationBean.setSiretnumber(createContext.getSiretNumber());
-        affiliationBean.setAddress(createContext.getAddress());
-        affiliationBean.setPostalcode(createContext.getPostalCode());
-        affiliationBean.setCity(createContext.getCity());
-        affiliationBean.setPhonenumber(createContext.getPhoneNumber());
-        affiliationBean.setEmail(createContext.getEmail());
-        affiliationBean.setWebsite(createContext.getWebSite());
+        if (createContext.getPrefectureNumber() != null) {
+            affiliationBean.setPrefecturenumber(createContext.getPrefectureNumber());
+        }
+        if (createContext.getPrefectureCity() != null) {
+            affiliationBean.setPrefecturecity(createContext.getPrefectureCity());
+        }
+        if (createContext.getSiretNumber() != null) {
+            affiliationBean.setSiretnumber(createContext.getSiretNumber());
+        }
+        if (createContext.getAddress() != null) {
+            affiliationBean.setAddress(createContext.getAddress());
+        }
+        if (createContext.getPostalCode() != null) {
+            affiliationBean.setPostalcode(createContext.getPostalCode());
+        }
+        if (createContext.getCity() != null) {
+            affiliationBean.setCity(createContext.getCity());
+        }
+        if (createContext.getPhoneNumber() != null) {
+            affiliationBean.setPhonenumber(createContext.getPhoneNumber());
+        }
+        if (createContext.getEmail() != null) {
+            affiliationBean.setEmail(createContext.getEmail());
+        }
+        if (createContext.getWebSite() != null) {
+            affiliationBean.setWebsite(createContext.getWebSite());
+        }
 
-        affiliationBean.setPresident(createContext.getPresident());
-        affiliationBean.setPresidentsex(createContext.getPresidentSex().toString());
-        affiliationBean.setSecretary(createContext.getSecretary());
-        affiliationBean.setSecretarysex(createContext.getSecretarySex().toString());
-        affiliationBean.setTreasurer(createContext.getTreasurer());
-        affiliationBean.setTreasurersex(createContext.getTreasurerSex().toString());
-        affiliationBean.setMembersnumber(createContext.getMembersNumber());
-        affiliationBean.setElecteddate(getDateFromLocalDate(createContext.getElectedDate()));
+        if (createContext.getPresident() != null) {
+            affiliationBean.setPresident(createContext.getPresident());
+        }
+        if (createContext.getPresidentSex() != null) {
+            affiliationBean.setPresidentsex(createContext.getPresidentSex().toString());
+        }
+        if (createContext.getSecretary() != null) {
+            affiliationBean.setSecretary(createContext.getSecretary());
+        }
+        if (createContext.getSecretarySex() != null) {
+            affiliationBean.setSecretarysex(createContext.getSecretarySex().toString());
+        }
+        if (createContext.getTreasurer() != null) {
+            affiliationBean.setTreasurer(createContext.getTreasurer());
+        }
+        if (createContext.getTreasurerSex() != null) {
+            affiliationBean.setTreasurersex(createContext.getTreasurerSex().toString());
+        }
+        if (createContext.getMembersNumber() != null) {
+            affiliationBean.setMembersnumber(createContext.getMembersNumber());
+        }
+        if (createContext.getElectedDate() != null) {
+            affiliationBean.setElecteddate(getDateFromLocalDate(createContext.getElectedDate()));
+        }
 
-        affiliationBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
-        affiliationBean.setSeason(MyThreadLocal.get().getSeason());
-        affiliationBean.setClubid(MyThreadLocal.get().getClubId());
-        DAOFactory.getInstance().getAffiliationDAO().insert(affiliationBean);
+        if (isCreation) {
+            DAOFactory.getInstance().getAffiliationDAO().insert(affiliationBean);
+        } else {
+            DAOFactory.getInstance().getAffiliationDAO().update(affiliationBean);
+        }
+
         return affiliationBean;
     }
 
@@ -141,23 +194,7 @@ public class Helper {
     }
 
     public static Club UpdateClub() {
-        CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
-
-        Club clubToUpdate = getClub();
-
-        if (createContext.getName() != null) {
-            clubToUpdate.setName(createContext.getName());
-        }
-        if (createContext.getShortName() != null) {
-            clubToUpdate.setShortname(createContext.getShortName());
-        }
-        if (createContext.getLogo() != null) {
-            clubToUpdate.setLogo(createContext.getLogo());
-        }
-
-        DAOFactory.getInstance().getClubDAO().update(clubToUpdate);
-
-        return clubToUpdate;
+        return saveClub(false);
     }
 
     public static void deleteClub() {
@@ -165,13 +202,36 @@ public class Helper {
     }
 
     public static Club createClub() {
-        CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
+        return saveClub(true);
+    }
 
-        Club clubBean = new Club();
-        clubBean.setName(createContext.getName());
-        clubBean.setShortname(createContext.getShortName());
-        clubBean.setLogo(createContext.getLogo());
-        DAOFactory.getInstance().getClubDAO().insert(clubBean);
+    private static Club saveClub(boolean isModification) {
+        CreateOrUpdateClubContext createContext = MyThreadLocal.get().getCreateOrUpdateClubContext();
+        Club clubBean;
+        if (isModification) {
+            clubBean = new Club();
+            clubBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        } else {
+            clubBean = getClub();
+            clubBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        }
+
+        if (createContext.getName() != null) {
+            clubBean.setName(createContext.getName());
+        }
+        if (createContext.getShortName() != null) {
+            clubBean.setShortname(createContext.getShortName());
+        }
+        if (createContext.getLogo() != null) {
+            clubBean.setLogo(createContext.getLogo());
+        }
+
+        if (isModification) {
+            DAOFactory.getInstance().getClubDAO().insert(clubBean);
+        } else {
+            DAOFactory.getInstance().getClubDAO().update(clubBean);
+        }
+
         return clubBean;
     }
 

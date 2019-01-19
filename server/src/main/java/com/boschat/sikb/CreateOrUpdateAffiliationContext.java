@@ -55,15 +55,16 @@ public class CreateOrUpdateAffiliationContext {
         createOrUpdateContext.setWebSite(affiliationForCreation.getWebSite());
 
         Board board = affiliationForCreation.getBoard();
-        createOrUpdateContext.setPresident(board.getPresident());
-        createOrUpdateContext.setPresidentSex(board.getPresidentSex());
-        createOrUpdateContext.setSecretary(board.getSecretary());
-        createOrUpdateContext.setSecretarySex(board.getSecretarySex());
-        createOrUpdateContext.setTreasurer(board.getTreasurer());
-        createOrUpdateContext.setTreasurerSex(board.getTreasurerSex());
-        createOrUpdateContext.setMembersNumber(board.getMembersNumber());
-        createOrUpdateContext.setElectedDate(board.getElectedDate());
-
+        if (board != null) {
+            createOrUpdateContext.setPresident(board.getPresident());
+            createOrUpdateContext.setPresidentSex(board.getPresidentSex());
+            createOrUpdateContext.setSecretary(board.getSecretary());
+            createOrUpdateContext.setSecretarySex(board.getSecretarySex());
+            createOrUpdateContext.setTreasurer(board.getTreasurer());
+            createOrUpdateContext.setTreasurerSex(board.getTreasurerSex());
+            createOrUpdateContext.setMembersNumber(board.getMembersNumber());
+            createOrUpdateContext.setElectedDate(board.getElectedDate());
+        }
         return createOrUpdateContext;
 
     }

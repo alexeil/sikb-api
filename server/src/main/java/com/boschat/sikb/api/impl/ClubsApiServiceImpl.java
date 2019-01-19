@@ -2,6 +2,7 @@ package com.boschat.sikb.api.impl;
 
 import com.boschat.sikb.api.ClubsApiService;
 import com.boschat.sikb.model.AffiliationForCreation;
+import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 
@@ -12,6 +13,7 @@ import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.AFFILIATION_CREATE;
 import static com.boschat.sikb.api.CallType.AFFILIATION_DELETE;
 import static com.boschat.sikb.api.CallType.AFFILIATION_GET;
+import static com.boschat.sikb.api.CallType.AFFILIATION_UPDATE;
 import static com.boschat.sikb.api.CallType.CLUB_CREATE;
 import static com.boschat.sikb.api.CallType.CLUB_DELETE;
 import static com.boschat.sikb.api.CallType.CLUB_FIND;
@@ -58,8 +60,8 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
-    public Response updateAffiliation(Integer clubId, String season, SecurityContext securityContext) {
-        return null;
+    public Response updateAffiliation(Integer clubId, String season, AffiliationForUpdate affiliationForUpdate, SecurityContext securityContext) {
+        return runService(AFFILIATION_UPDATE, clubId, season, affiliationForUpdate);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.boschat.sikb;
 import com.boschat.sikb.api.ResponseCode;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
+import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
@@ -299,6 +300,12 @@ public abstract class AbstractTest {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
         String path = buildPath(version, clubId, season);
         return createRequest(path).post(entity);
+    }
+
+    protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
+        Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
+        String path = buildPath(version, clubId, season);
+        return createRequest(path).put(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
