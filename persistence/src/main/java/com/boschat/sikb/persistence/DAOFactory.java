@@ -21,6 +21,9 @@ public class DAOFactory {
     private static AffiliationDAOExtended affiliationDAO = null;
 
     private static ClubDAOExtended clubDAO = null;
+
+    private static UserDAOExtended userDAO = null;
+
     private static DAOFactory daoFactory = null;
 
     private Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -63,6 +66,13 @@ public class DAOFactory {
             clubDAO = new ClubDAOExtended(configuration);
         }
         return clubDAO;
+    }
+
+    public UserDAOExtended getUserDAO() {
+        if (userDAO == null) {
+            userDAO = new UserDAOExtended(configuration);
+        }
+        return userDAO;
     }
 
     public DSLContext getDslContext() {

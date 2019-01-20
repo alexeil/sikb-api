@@ -3,6 +3,15 @@ CREATE SCHEMA sikb;
 
 DROP TABLE IF EXISTS sikb.sikb;
 
+CREATE TABLE sikb.user (
+                         "id" serial PRIMARY KEY,
+                         "email" varchar(255),
+                         "password" varchar(255),
+                         "information" json,
+                         "creationDate" timestamp,
+                         "modificationDate" timestamp
+);
+
 CREATE TABLE sikb.club (
                          "id" serial PRIMARY KEY,
                          "name" varchar(255),

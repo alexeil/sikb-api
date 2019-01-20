@@ -9,6 +9,9 @@ import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Sex;
+import com.boschat.sikb.model.User;
+import com.boschat.sikb.model.UserForCreation;
+import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
@@ -39,6 +42,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.boschat.sikb.Tables.AFFILIATION;
+import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
@@ -55,6 +59,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 public abstract class AbstractTest {
 
     protected static final Integer DEFAULT_CLUB_ID = 1;
+
+    protected static final Integer DEFAULT_USER_ID = 1;
+
+    protected static final String DEFAULT_USER_EMAIL = "myEmail@kin-ball.fr";
+
 
     protected static final String DEFAULT_SEASON = "20182019";
 
@@ -120,6 +129,10 @@ public abstract class AbstractTest {
         }
     }
 
+    protected static void loadUsers(String resourcePath) throws IOException {
+        loadDataSuite(resourcePath, USER, USER.ID, USER.EMAIL, USER.PASSWORD, USER.INFORMATION, USER.CREATIONDATE, USER.MODIFICATIONDATE);
+    }
+
     protected static void loadClubs(String resourcePath) throws IOException {
         loadDataSuite(resourcePath, CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO);
     }
@@ -134,7 +147,7 @@ public abstract class AbstractTest {
 
     }
 
-    protected static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
+    private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
         URL url = AbstractTest.class.getClassLoader().getResource(resourcePath);
         if (url == null) {
             LOGGER.error("resourcePath notFound : " + resourcePath);
@@ -154,29 +167,10 @@ public abstract class AbstractTest {
         }
     }
 
-    protected static void loadDataSuite(String resourcePath) throws IOException {
-        URL url = AbstractTest.class.getClassLoader().getResource(resourcePath);
-        if (url == null) {
-            LOGGER.error("resourcePath notFound : " + resourcePath);
-        } else {
-            Loader loader = DAOFactory.getInstance().getDslContext()
-                                      .loadInto(CLUB)
-                                      .loadCSV(url.openStream())
-                                      .fields(CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO)
-                                      .separator(';')
-                                      .execute();
-
-            int processed = loader.processed();
-            int stored = loader.stored();
-            int ignored = loader.ignored();
-
-            LOGGER.info(" processed {} - stored {} - ignored {}", processed, stored, ignored);
-        }
-    }
-
     protected static void truncateData() {
         DAOFactory.getInstance().getAffiliationDAO().truncate();
         DAOFactory.getInstance().getClubDAO().truncate();
+        DAOFactory.getInstance().getUserDAO().truncate();
     }
 
     private static void executeScript(String path) throws Exception {
@@ -195,6 +189,14 @@ public abstract class AbstractTest {
 
     protected static Affiliation getAffiliation(Response result) throws IOException {
         return getBody(result, Affiliation.class);
+    }
+
+    protected static User getUser(Response result) throws IOException {
+        return getBody(result, User.class);
+    }
+
+    protected static List<User> getUsers(Response result) throws IOException {
+        return Arrays.asList(getBody(result, User[].class));
     }
 
     protected static Club getClub(Response result) throws IOException {
@@ -308,20 +310,42 @@ public abstract class AbstractTest {
         return createRequest(path).put(entity);
     }
 
+    protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
+        Entity<UserForCreation> entity = Entity.json(userForCreation);
+        String path = buildPathUser(version, null);
+        return createRequest(path).post(entity);
+    }
+
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
         String path = buildPath(version, null, null);
         return createRequest(path).post(entity);
     }
 
-    protected Response clubGetById(ApiVersion version, Integer clubId) {
+    protected Response clubGet(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
+        return createRequest(path).get();
+    }
+
+    protected Response userGet(ApiVersion version, Integer userId) {
+        String path = buildPathUser(version, userId);
         return createRequest(path).get();
     }
 
     protected Response clubFind(ApiVersion version) {
         String path = buildPath(version, null, null);
         return createRequest(path).get();
+    }
+
+    protected Response userFind(ApiVersion version) {
+        String path = buildPathUser(version, null);
+        return createRequest(path).get();
+    }
+
+    protected Response userUpdate(ApiVersion version, Integer userId, UserForUpdate userForUpdate) {
+        Entity<UserForUpdate> entity = Entity.json(userForUpdate);
+        String path = buildPathUser(version, userId);
+        return createRequest(path).put(entity);
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
@@ -332,6 +356,11 @@ public abstract class AbstractTest {
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
+        return createRequest(path).delete();
+    }
+
+    protected Response userDelete(ApiVersion version, Integer userId) {
+        String path = buildPathUser(version, userId);
         return createRequest(path).delete();
     }
 
@@ -373,6 +402,15 @@ public abstract class AbstractTest {
             builder = builder.header(X_ORANGE_CHANNEL_PARAM_NAME, xORANGEChannel);
         }*/
         return builder;
+    }
+
+    private String buildPathUser(ApiVersion version, Integer userId) {
+        StringBuilder path = new StringBuilder("/" + version.getName() + "/users");
+        if (userId != null) {
+            path.append("/");
+            path.append(userId);
+        }
+        return path.toString();
     }
 
     private String buildPath(ApiVersion version, Integer clubId, String season) {
@@ -433,12 +471,20 @@ public abstract class AbstractTest {
     }
 
     protected void checkClub(Club club, String name, String shortName, String logo) {
-        assertAll("Check profile " + club.getName(),
-                () -> assertNotNull(club, " Affiliation shouldn't be null"),
+        assertAll("Check Club " + club.getName(),
+                () -> assertNotNull(club, " Club shouldn't be null"),
                 () -> assertNotNull(club.getId(), "Id shouldn't be null"),
                 () -> assertEquals(name, club.getName(), " name incorrect"),
                 () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
                 () -> assertEquals(logo, club.getLogo(), " logo incorrect")
+        );
+    }
+
+    protected void checkUser(User user, String email) {
+        assertAll("Check User " + user.getEmail(),
+                () -> assertNotNull(user, " User shouldn't be null"),
+                () -> assertNotNull(user.getId(), "Id shouldn't be null"),
+                () -> assertEquals(email, user.getEmail(), " email incorrect")
         );
     }
 }

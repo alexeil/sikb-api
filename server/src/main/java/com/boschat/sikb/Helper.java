@@ -10,6 +10,7 @@ import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
+import com.boschat.sikb.tables.pojos.User;
 import com.boschat.sikb.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import static com.boschat.sikb.api.ResponseCode.AFFILIATION_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.api.ResponseCode.USER_NOT_FOUND;
 import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
 import static com.boschat.sikb.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
@@ -179,6 +181,56 @@ public class Helper {
         return affiliationBean;
     }
 
+    public static User getUser() {
+        Integer userId = MyThreadLocal.get().getUserId();
+        User user = DAOFactory.getInstance().getUserDAO().fetchOneById(userId);
+
+        if (user == null) {
+            throw new FunctionalException(USER_NOT_FOUND, userId);
+        }
+        return user;
+    }
+
+    public static List<User> findUsers() {
+        return DAOFactory.getInstance().getUserDAO().findAll();
+    }
+
+    public static User UpdateUser() {
+        return saveUser(false);
+    }
+
+    public static void deleteUser() {
+        DAOFactory.getInstance().getUserDAO().delete(getUser());
+    }
+
+    public static User createUser() {
+        return saveUser(true);
+    }
+
+    private static User saveUser(boolean isModification) {
+        CreateOrUpdateUserContext createContext = MyThreadLocal.get().getCreateOrUpdateUserContext();
+        User userBean;
+        if (isModification) {
+            userBean = new User();
+            userBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        } else {
+            userBean = getUser();
+            userBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        }
+
+        if (createContext.getEmail() != null) {
+            userBean.setEmail(createContext.getEmail());
+        }
+
+        if (isModification) {
+            DAOFactory.getInstance().getUserDAO().insert(userBean);
+        } else {
+            DAOFactory.getInstance().getUserDAO().update(userBean);
+        }
+
+        return userBean;
+    }
+
     public static Club getClub() {
         Integer clubId = MyThreadLocal.get().getClubId();
         Club club = DAOFactory.getInstance().getClubDAO().fetchOneById(clubId);
@@ -278,5 +330,16 @@ public class Helper {
         club.setShortName(clubBean.getShortname());
         club.setLogo(clubBean.getLogo());
         return club;
+    }
+
+    public static List<com.boschat.sikb.model.User> convertUserBeansToModels(List<User> userBeans) {
+        return userBeans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static com.boschat.sikb.model.User convertBeanToModel(User userBean) {
+        com.boschat.sikb.model.User user = new com.boschat.sikb.model.User();
+        user.setId(userBean.getId());
+        user.setEmail(userBean.getEmail());
+        return user;
     }
 }

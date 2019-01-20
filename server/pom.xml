@@ -183,6 +183,11 @@
                                     <token>/clubs</token>
                                     <value>/v1/clubs</value>
                                 </replacement>
+                                <replacement>
+                                    <token>/users</token>
+                                    <value>/v1/users</value>
+                                </replacement>
+
                             </replacements>
                         </configuration>
                     </execution>

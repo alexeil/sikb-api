@@ -19,8 +19,8 @@ class AffiliationUpdateTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws Exception {
         truncateData();
-        loadClubs("sql/affiliationUpdate/insertClub.csv");
-        loadAffiliations("sql/affiliationUpdate/insertAffiliation.csv");
+        loadClubs("sql/insertClub.csv");
+        loadAffiliations("sql/insertAffiliation.csv");
     }
 
     @Test

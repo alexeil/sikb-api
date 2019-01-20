@@ -22,7 +22,7 @@ class ClubFindTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws IOException {
         truncateData();
-        loadDataSuite("sql/clubFind.csv");
+        loadClubs("sql/insertClub.csv");
     }
 
     @Test

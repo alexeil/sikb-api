@@ -2,28 +2,93 @@ package com.boschat.sikb.api;
 
 import com.boschat.sikb.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.CreateOrUpdateClubContext;
+import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.UserForCreation;
+import com.boschat.sikb.model.UserForUpdate;
 
 import static com.boschat.sikb.Helper.UpdateAffiliation;
 import static com.boschat.sikb.Helper.UpdateClub;
+import static com.boschat.sikb.Helper.UpdateUser;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
+import static com.boschat.sikb.Helper.convertUserBeansToModels;
 import static com.boschat.sikb.Helper.createAffiliation;
 import static com.boschat.sikb.Helper.createClub;
+import static com.boschat.sikb.Helper.createUser;
 import static com.boschat.sikb.Helper.deleteAffiliation;
 import static com.boschat.sikb.Helper.deleteClub;
+import static com.boschat.sikb.Helper.deleteUser;
 import static com.boschat.sikb.Helper.findClubs;
+import static com.boschat.sikb.Helper.findUsers;
 import static com.boschat.sikb.Helper.getAffiliation;
 import static com.boschat.sikb.Helper.getClub;
+import static com.boschat.sikb.Helper.getUser;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
 
 public enum CallType {
+    USER_CREATE("Create a user", CREATED) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createUser());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForCreation) params[0]));
+        }
+    },
+    USER_DELETE("Delete a user", DELETED) {
+        @Override
+        public Object call() {
+            deleteUser();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setUserId((Integer) params[0]);
+        }
+    },
+    USER_UPDATE("Update a User", OK) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(UpdateUser());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setUserId((Integer) params[0]);
+            MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForUpdate) params[1]));
+        }
+    },
+    USER_GET("get a user", OK) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(getUser());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setUserId((Integer) params[0]);
+        }
+    },
+    USER_FIND("find all users", OK) {
+        @Override
+        public Object call() {
+            return convertUserBeansToModels(findUsers());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+        }
+    },
     CLUB_CREATE("Create a club", CREATED) {
         @Override
         public Object call() {

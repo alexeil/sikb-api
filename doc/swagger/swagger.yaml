@@ -18,7 +18,127 @@ servers:
   - url: http://localhost:8080/sikb/api/v1
     description: Local URL
 
+security:
+  - basicAuth: []
+
 paths:
+  '/users':
+    get:
+      summary: Find all users
+      description: ''
+      operationId: findUsers
+      responses:
+        200:
+          description: find all users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+    post:
+      summary: Create a user
+      description: ''
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userForCreation'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+  '/users/{userId}':
+    get:
+      summary: get a user
+      description: ''
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        200:
+          description: get back a user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+    put:
+      summary: Update a user
+      description: ''
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+    delete:
+      summary: Delete a user
+      description: ''
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/userId'
+      responses:
+        204:
+          description: The user is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
   '/clubs':
     get:
       summary: Find all club
@@ -211,6 +331,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/affiliation'
+        '401':
+          description: unauthorized
         default:
           description: Default error sample response
           content:
@@ -239,6 +361,10 @@ paths:
         - affiliations
 
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   parameters:
     clubId:
       name: "clubId"
@@ -247,6 +373,13 @@ components:
       required: true
       in: path
       description: "Id of a club"
+    userId:
+      name: "userId"
+      schema:
+        type: integer
+      required: true
+      in: path
+      description: "Id of a user"
     season:
       name: "season"
       schema:
@@ -259,6 +392,27 @@ components:
       description: "Name of the season"
 
   schemas:
+    user:
+      required:
+        - id
+        - email
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+    userForCreation:
+      required:
+        - email
+      properties:
+        email:
+          type: string
+    userForUpdate:
+      properties:
+        email:
+          type: string
+
     club:
       required:
         - id

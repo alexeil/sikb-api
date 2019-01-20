@@ -34,7 +34,7 @@ class ClubUpdateTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws IOException {
         truncateData();
-        loadDataSuite("sql/clubUpdate.csv");
+        loadClubs("sql/insertClub.csv");
     }
 
     @Test

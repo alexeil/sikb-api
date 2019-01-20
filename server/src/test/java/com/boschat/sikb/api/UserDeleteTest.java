@@ -9,30 +9,29 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
+import static com.boschat.sikb.api.ResponseCode.USER_NOT_FOUND;
 
-@DisplayName(" Delete a club ")
-class ClubDeleteTest extends AbstractTest {
+@DisplayName(" Delete a user ")
+class UserDeleteTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
         truncateData();
-        loadClubs("sql/insertClub.csv");
+        loadUsers("sql/insertUser.csv");
     }
 
     @Test
-    @DisplayName(" default club ")
+    @DisplayName(" default user ")
     void name() throws Exception {
-        Response response = clubDelete(V1, DEFAULT_CLUB_ID);
-
+        Response response = userDelete(V1, DEFAULT_USER_ID);
         checkResponse(response, DELETED);
     }
 
     @Test
     @DisplayName(" not found ")
     void notFound() throws Exception {
-        Response response = clubDelete(V1, 999);
-        checkResponse(response, CLUB_NOT_FOUND, 999);
+        Response response = userDelete(V1, 999);
+        checkResponse(response, USER_NOT_FOUND, 999);
     }
 }

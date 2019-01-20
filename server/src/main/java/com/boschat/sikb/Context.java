@@ -16,6 +16,10 @@ public class Context {
 
     private Integer affiliationId;
 
+    private CreateOrUpdateUserContext createOrUpdateUserContext;
+
+    private Integer userId;
+
     public Context(CallType callType) {
         this.callType = callType;
     }
@@ -62,5 +66,21 @@ public class Context {
 
     public void setAffiliationId(Integer affiliationId) {
         this.affiliationId = affiliationId;
+    }
+
+    public CreateOrUpdateUserContext getCreateOrUpdateUserContext() {
+        return createOrUpdateUserContext;
+    }
+
+    public void setCreateOrUpdateUserContext(CreateOrUpdateUserContext createOrUpdateUserContext) {
+        this.createOrUpdateUserContext = createOrUpdateUserContext;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

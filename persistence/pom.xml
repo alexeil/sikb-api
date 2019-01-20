@@ -17,6 +17,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
         </dependency>
@@ -85,6 +90,17 @@
                             <inputCatalog>public</inputCatalog>
                               -->
                             <inputSchema>sikb</inputSchema>
+
+                            <forcedTypes>
+                                <forcedType>
+
+                                    <!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
+                                    <userType>com.google.gson.JsonElement</userType>
+                                    <binding>com.boschat.sikb.persistence.binding.PostgresJSONGsonBinding</binding>
+                                    <expression>information</expression>
+                                    <types>.*</types>
+                                </forcedType>
+                            </forcedTypes>
                         </database>
 
                         <generate>

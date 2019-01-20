@@ -24,6 +24,7 @@ public enum ResponseCode {
     SERVICE_NOT_FOUND(ERROR, 404, 0, "Service not found"),
     CLUB_NOT_FOUND(ERROR, 404, 1, "Club (Id %s) not found"),
     AFFILIATION_NOT_FOUND(ERROR, 404, 2, "Affiliation (clubId %s, season %s) not found"),
+    USER_NOT_FOUND(ERROR, 404, 3, "User (id %s) not found"),
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem
