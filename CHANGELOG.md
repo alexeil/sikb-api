@@ -9,3 +9,4 @@
 * POST /clubs/{clubId}/{season}/affiliations available
 
 ### Bug
+
