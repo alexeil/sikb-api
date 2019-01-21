@@ -1,0 +1,32 @@
+@startuml
+title Initiating Worflow
+ 
+participant "Club" as club
+participant "Admin" as admin
+participant "SIKB-API" as api 
+
+== Club account initialization ==
+club -> admin : ask for autorization (not an api)
+admin -> api : POST /users
+admin <-- api : 201
+admin -> api : POST /clubs (with name only)
+admin <-- api : 201
+club <-- admin : OK (a mail is sent to the club to set a password)
+club -> api : PUT /users/{userId}
+club <-- api : 200
+
+== Club login ==
+club -> api : POST /users/login
+club <-- api : 201 with access_token
+
+== Affiliation ==
+club -> api : PUT /clubs/{clubId} with club information
+club <-- api : 200
+club -> api : POST /clubs/{clubId}/{season}/affiliations
+club <-- api : 201
+
+== Club logout ==
+club -> api : GET /users/logout
+club <-- api : 200
+
+@enduml

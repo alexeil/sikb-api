@@ -4,8 +4,14 @@
 These APIs are still in progress from a functional point of view and technical feasibility.
 
 ## Documentation
-1) First take contact with the administrator to provide to a user account and to initiate a club with a name.
-2) Based on the swagger /docs/json/swagger.yml
-  *  You will update your club information PUT /clubs/{clubId}
-  *  Create your first affiliation for the current season (YYYYZZZZ) POST /clubs/{clubId}/{season}/affiliation
-  *  You can still update your affiliation information with PUT /clubs/{clubId}/{season}/affiliation
+
+### Api Subscription
+Anyone wanting to consume these APIs need to send an email to thierry.boschat@kin-ball.fr
+
+### Workflow
+
+![Worflow](doc/schema/workflow.png)
+
+  1. A club need to send an email to thierry.boschat@kin-ball.fr to get their account initialized
+  2. Then after confirming his identity and update password, the club can log into the platform
+  3. Then the club is free to update jis information and create an affiliation

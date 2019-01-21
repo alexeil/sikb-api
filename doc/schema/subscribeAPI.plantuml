@@ -1,0 +1,12 @@
+@startuml
+title Subscribe API
+ 
+participant "Api client" as client
+participant "Admin" as admin
+
+client -> admin : subscribe to api
+client <-- admin : OK (provide login/password)
+
+
+
+@enduml
