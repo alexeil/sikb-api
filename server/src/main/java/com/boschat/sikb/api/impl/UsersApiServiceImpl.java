@@ -2,6 +2,7 @@ package com.boschat.sikb.api.impl;
 
 import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.UsersApiService;
+import com.boschat.sikb.model.LoginData;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 
@@ -41,5 +42,20 @@ public class UsersApiServiceImpl extends UsersApiService {
     @Override
     public Response updateUser(Integer userId, UserForUpdate userForUpdate, SecurityContext securityContext) throws NotFoundException {
         return runService(USER_UPDATE, userId, userForUpdate);
+    }
+
+    @Override
+    public Response userLogin(LoginData loginData, SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public Response userLogout(SecurityContext securityContext) throws NotFoundException {
+        return null;
+    }
+
+    @Override
+    public Response userReset(SecurityContext securityContext) throws NotFoundException {
+        return null;
     }
 }
