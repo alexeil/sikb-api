@@ -97,15 +97,15 @@ public class Helper {
         return affiliation;
     }
 
-    public static Affiliation UpdateAffiliation() {
-        return CreateOrUpdateAffiliation(false);
+    public static Affiliation updateAffiliation() {
+        return createOrUpdateAffiliation(false);
     }
 
     public static Affiliation createAffiliation() {
-        return CreateOrUpdateAffiliation(true);
+        return createOrUpdateAffiliation(true);
     }
 
-    private static Affiliation CreateOrUpdateAffiliation(boolean isCreation) {
+    private static Affiliation createOrUpdateAffiliation(boolean isCreation) {
         CreateOrUpdateAffiliationContext createContext = MyThreadLocal.get().getCreateOrUpdateAffiliationContext();
 
         Affiliation affiliationBean;
@@ -195,7 +195,7 @@ public class Helper {
         return DAOFactory.getInstance().getUserDAO().findAll();
     }
 
-    public static User UpdateUser() {
+    public static User updateUser() {
         return saveUser(false);
     }
 
@@ -245,7 +245,7 @@ public class Helper {
         return DAOFactory.getInstance().getClubDAO().findAll();
     }
 
-    public static Club UpdateClub() {
+    public static Club updateClub() {
         return saveClub(false);
     }
 

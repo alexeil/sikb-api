@@ -24,7 +24,6 @@ import org.jooq.Loader;
 import org.jooq.TableField;
 import org.jooq.impl.TableImpl;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -173,16 +172,6 @@ public abstract class AbstractTest {
         DAOFactory.getInstance().getUserDAO().truncate();
     }
 
-    private static void executeScript(String path) throws Exception {
-        //FIXME Doesn't execute script so far
-        URL url = AbstractTest.class.getClassLoader().getResource(path);
-        if (url == null) {
-            //LOGGER.error(new LogMetadata("resourcePath notFound : " + resourcePath));
-        } else {
-            DAOFactory.getInstance().getAffiliationDAO().truncate();
-        }
-    }
-
     private static ZError getZError(Response result) throws IOException {
         return getBody(result, ZError.class);
     }
@@ -209,7 +198,7 @@ public abstract class AbstractTest {
 
     private static <T> T getBody(Response result, Class<T> clazz) throws IOException {
         String body = result.readEntity(String.class);
-        return com.boschat.sikb.servlet.JacksonJsonProvider.getMapper().readValue(body, clazz);
+        return JacksonJsonProvider.getMapper().readValue(body, clazz);
     }
 
     protected static void checkResponse(Response result, ResponseCode responseCode, Object... params) throws IOException {
@@ -226,7 +215,7 @@ public abstract class AbstractTest {
         } else {
             ZError errorResponse = getZError(result);
             assertAll(
-                    () -> Assertions.assertNotNull(errorResponse, "ZError not found"),
+                () -> assertNotNull(errorResponse, "ZError not found"),
                     () -> assertEquals(responseCode.getCode(), errorResponse.getCode().intValue(), "Wrong code expected"),
                     () -> assertEquals(String.format(responseCode.getErrorMessage(), params), errorResponse.getMessage(),
                             "Wrong message expected"),

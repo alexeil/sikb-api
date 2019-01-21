@@ -71,6 +71,50 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - users
+  '/users/login':
+    post:
+      summary: Log in a user
+      description: ''
+      operationId: userLogin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginData'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: a new access token is created. This token will be send in every further requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/session'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+  '/users/logout':
+    get:
+      summary: Log out a user (Revoke access Token)
+      description: ''
+      operationId: userLogout
+      responses:
+        204:
+          description: Access token is revoked and user logged out
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
   '/users/{userId}':
     get:
       summary: get a user
@@ -131,6 +175,22 @@ paths:
       responses:
         204:
           description: The user is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - users
+  '/users/{userId}/reset':
+    post:
+      summary: Ask to reset a password
+      description: ''
+      operationId: userReset
+      responses:
+        201:
+          description: A mail was sent allowing to reset the password
         default:
           description: Default error sample response
           content:
@@ -540,6 +600,25 @@ components:
       enum:
         - MALE
         - FEMALE
+
+    loginData:
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+        password:
+          type: string
+          format: password
+
+    session:
+      required:
+        - access_token
+      properties:
+        access_token:
+          type: string
+
     ZError:
       required:
         - code

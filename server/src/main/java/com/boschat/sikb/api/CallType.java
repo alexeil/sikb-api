@@ -11,9 +11,6 @@ import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 
-import static com.boschat.sikb.Helper.UpdateAffiliation;
-import static com.boschat.sikb.Helper.UpdateClub;
-import static com.boschat.sikb.Helper.UpdateUser;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
@@ -28,6 +25,9 @@ import static com.boschat.sikb.Helper.findUsers;
 import static com.boschat.sikb.Helper.getAffiliation;
 import static com.boschat.sikb.Helper.getClub;
 import static com.boschat.sikb.Helper.getUser;
+import static com.boschat.sikb.Helper.updateAffiliation;
+import static com.boschat.sikb.Helper.updateClub;
+import static com.boschat.sikb.Helper.updateUser;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.DELETED;
 import static com.boschat.sikb.api.ResponseCode.OK;
@@ -59,7 +59,7 @@ public enum CallType {
     USER_UPDATE("Update a User", OK) {
         @Override
         public Object call() {
-            return convertBeanToModel(UpdateUser());
+            return convertBeanToModel(updateUser());
         }
 
         @Override
@@ -87,6 +87,7 @@ public enum CallType {
 
         @Override
         public void fillContext(Object... params) {
+            // No additional parameters
         }
     },
     CLUB_CREATE("Create a club", CREATED) {
@@ -115,7 +116,7 @@ public enum CallType {
     CLUB_UPDATE("Update a club", OK) {
         @Override
         public Object call() {
-            return convertBeanToModel(UpdateClub());
+            return convertBeanToModel(updateClub());
         }
 
         @Override
@@ -143,6 +144,7 @@ public enum CallType {
 
         @Override
         public void fillContext(Object... params) {
+            // No additional parameters
         }
     },
     AFFILIATION_CREATE("Create an affiliation", CREATED) {
@@ -173,7 +175,7 @@ public enum CallType {
     AFFILIATION_UPDATE("Update an affiliation", OK) {
         @Override
         public Object call() {
-            return convertBeanToModel(UpdateAffiliation());
+            return convertBeanToModel(updateAffiliation());
         }
 
         @Override
