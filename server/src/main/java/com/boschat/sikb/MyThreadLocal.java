@@ -4,7 +4,11 @@ import com.boschat.sikb.api.CallType;
 
 public class MyThreadLocal {
 
-    private static final ThreadLocal threadLocal = new ThreadLocal();
+    private static final ThreadLocal<Context> threadLocal = new ThreadLocal<>();
+
+    private MyThreadLocal() {
+
+    }
 
     public static void init(CallType callType) {
         threadLocal.set(new Context(callType));
@@ -15,6 +19,6 @@ public class MyThreadLocal {
     }
 
     public static Context get() {
-        return (Context) threadLocal.get();
+        return threadLocal.get();
     }
 }

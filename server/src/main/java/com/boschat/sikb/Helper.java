@@ -31,6 +31,10 @@ public class Helper {
 
     private static final Logger LOGGER = LogManager.getLogger(Helper.class);
 
+    private Helper() {
+
+    }
+
     public static Response runService(CallType callType, Object... params) {
         Response response = null;
         try {

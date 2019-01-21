@@ -60,14 +60,6 @@ public class Context {
         this.season = season;
     }
 
-    public Integer getAffiliationId() {
-        return affiliationId;
-    }
-
-    public void setAffiliationId(Integer affiliationId) {
-        this.affiliationId = affiliationId;
-    }
-
     public CreateOrUpdateUserContext getCreateOrUpdateUserContext() {
         return createOrUpdateUserContext;
     }
