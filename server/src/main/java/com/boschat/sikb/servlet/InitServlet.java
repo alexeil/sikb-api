@@ -1,9 +1,12 @@
 package com.boschat.sikb.servlet;
 
+import com.boschat.sikb.configuration.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServlet;
+
+import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
 
 public class InitServlet extends HttpServlet {
 
@@ -16,14 +19,14 @@ public class InitServlet extends HttpServlet {
      */
     @Override
     public void init() {
-        LOGGER.trace("init servlet");
-      /*  try {
-            ErableServlet.reloadFamilyApp();
+        LOGGER.trace("Server starting...");
+        try {
+            reloadProperties();
         } catch (Throwable t) {
-            LOGGER.error(new LogMetadata(INI_SER_FAIL, t));
+            LOGGER.error(t.getMessage(), t);
         } finally {
-            LOGGER.info(new LogMetadata(INI_SER, INI_SER.getMessage()));
-        }*/
+            LOGGER.info("Serveur started");
+        }
     }
 
     /*
@@ -33,6 +36,6 @@ public class InitServlet extends HttpServlet {
      */
     @Override
     public void destroy() {
-        // ConfigLoader.getInstance().clear();
+        ConfigLoader.getInstance().clear();
     }
 }

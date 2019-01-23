@@ -24,6 +24,8 @@ public class DAOFactory {
 
     private static UserDAOExtended userDAO = null;
 
+    private static ApplicationDAOExtended applicationDAO = null;
+
     private static DAOFactory daoFactory = null;
 
     private Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
@@ -73,6 +75,13 @@ public class DAOFactory {
             userDAO = new UserDAOExtended(configuration);
         }
         return userDAO;
+    }
+
+    public ApplicationDAOExtended getApplicationDAO() {
+        if (applicationDAO == null) {
+            applicationDAO = new ApplicationDAOExtended(configuration);
+        }
+        return applicationDAO;
     }
 
     public DSLContext getDslContext() {

@@ -1,6 +1,8 @@
 package com.boschat.sikb;
 
 import com.boschat.sikb.api.CallType;
+import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.UpdatePassword;
 
 public class Context {
 
@@ -10,18 +12,25 @@ public class Context {
 
     private CallType callType;
 
+    private String accessToken;
+
     private Integer clubId;
 
     private String season;
-
-    private Integer affiliationId;
 
     private CreateOrUpdateUserContext createOrUpdateUserContext;
 
     private Integer userId;
 
-    public Context(CallType callType) {
+    private Credentials credentials;
+
+    private String token;
+
+    private UpdatePassword updatePassword;
+
+    public Context(CallType callType, String accessToken) {
         this.callType = callType;
+        this.accessToken = accessToken;
     }
 
     public CreateOrUpdateAffiliationContext getCreateOrUpdateAffiliationContext() {
@@ -74,5 +83,29 @@ public class Context {
 
     public void setUserId(Integer userId) {
         this.userId = userId;
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public UpdatePassword getUpdatePassword() {
+        return updatePassword;
+    }
+
+    public void setUpdatePassword(UpdatePassword updatePassword) {
+        this.updatePassword = updatePassword;
     }
 }

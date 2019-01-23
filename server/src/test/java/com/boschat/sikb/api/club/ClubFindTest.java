@@ -1,4 +1,4 @@
-package com.boschat.sikb.api;
+package com.boschat.sikb.api.club;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.model.Club;
@@ -22,7 +22,7 @@ class ClubFindTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws IOException {
         truncateData();
-        loadClubs("sql/insertClub.csv");
+        loadClubs();
     }
 
     @Test

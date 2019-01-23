@@ -25,47 +25,49 @@ public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
     public Response createClub(ClubForCreation clubForCreation, SecurityContext securityContext) {
-        return runService(CLUB_CREATE, clubForCreation);
+        return runService(CLUB_CREATE, null, clubForCreation);
     }
 
     @Override
     public Response deleteClub(Integer clubId, SecurityContext securityContext) {
-        return runService(CLUB_DELETE, clubId);
+        return runService(CLUB_DELETE, null, clubId);
     }
 
     @Override
     public Response findClubs(SecurityContext securityContext) {
-        return runService(CLUB_FIND);
+        return runService(CLUB_FIND, null);
     }
 
     @Override
-    public Response getClubById(Integer clubId, SecurityContext securityContext) {
-        return runService(CLUB_GET, clubId);
+    public Response getClubById(String accessToken, Integer clubId, SecurityContext securityContext) {
+        return runService(CLUB_GET, accessToken, clubId);
     }
 
     @Override
-    public Response updateClub(Integer clubId, ClubForUpdate clubForUpdate, SecurityContext securityContext) {
-        return runService(CLUB_UPDATE, clubId, clubForUpdate);
+    public Response updateClub(String accessToken, Integer clubId, ClubForUpdate clubForUpdate, SecurityContext securityContext) {
+        return runService(CLUB_UPDATE, accessToken, clubId, clubForUpdate);
 
     }
 
     @Override
-    public Response getAffiliation(Integer clubId, String season, SecurityContext securityContext) {
-        return runService(AFFILIATION_GET, clubId, season);
+    public Response getAffiliation(String accessToken, Integer clubId, String season, SecurityContext securityContext) {
+        return runService(AFFILIATION_GET, accessToken, clubId, season);
     }
 
     @Override
-    public Response createAffiliation(Integer clubId, String season, AffiliationForCreation affiliationForCreation, SecurityContext securityContext) {
-        return runService(AFFILIATION_CREATE, clubId, season, affiliationForCreation);
+    public Response createAffiliation(String accessToken, Integer clubId, String season, AffiliationForCreation affiliationForCreation,
+        SecurityContext securityContext) {
+        return runService(AFFILIATION_CREATE, accessToken, clubId, season, affiliationForCreation);
     }
 
     @Override
-    public Response updateAffiliation(Integer clubId, String season, AffiliationForUpdate affiliationForUpdate, SecurityContext securityContext) {
-        return runService(AFFILIATION_UPDATE, clubId, season, affiliationForUpdate);
+    public Response updateAffiliation(String accessToken, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate,
+        SecurityContext securityContext) {
+        return runService(AFFILIATION_UPDATE, accessToken, clubId, season, affiliationForUpdate);
     }
 
     @Override
-    public Response deleteAffiliation(Integer clubId, String season, SecurityContext securityContext) {
-        return runService(AFFILIATION_DELETE, clubId, season);
+    public Response deleteAffiliation(String accessToken, Integer clubId, String season, SecurityContext securityContext) {
+        return runService(AFFILIATION_DELETE, accessToken, clubId, season);
     }
 }

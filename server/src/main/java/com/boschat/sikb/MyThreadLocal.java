@@ -10,8 +10,8 @@ public class MyThreadLocal {
 
     }
 
-    public static void init(CallType callType) {
-        threadLocal.set(new Context(callType));
+    public static void init(CallType callType, String accessToken) {
+        threadLocal.set(new Context(callType, accessToken));
     }
 
     public static void unset() {

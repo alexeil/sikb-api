@@ -1,30 +1,30 @@
 package com.boschat.sikb.servlet;
 
-import com.boschat.sikb.model.UserBean;
+import com.boschat.sikb.model.ApplicationBean;
 
 import javax.ws.rs.core.SecurityContext;
 import java.security.Principal;
 
 public class ApplicationSecurityContext implements SecurityContext {
 
-    private UserBean user;
+    private ApplicationBean application;
 
     private String scheme;
 
-    public ApplicationSecurityContext(UserBean user, String scheme) {
-        this.user = user;
+    public ApplicationSecurityContext(ApplicationBean application, String scheme) {
+        this.application = application;
         this.scheme = scheme;
     }
 
     @Override
     public Principal getUserPrincipal() {
-        return this.user;
+        return this.application;
     }
 
     @Override
     public boolean isUserInRole(String s) {
-        if (user.getRole() != null) {
-            return user.getRole().contains(s);
+        if (application.getRole() != null) {
+            return application.getRole().contains(s);
         }
         return false;
     }

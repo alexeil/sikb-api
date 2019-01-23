@@ -1,8 +1,5 @@
 package com.boschat.sikb;
 
-/**
- * Created by tboschat on 27/07/2017.
- */
 public enum ApiVersion {
     V1("v1");
 

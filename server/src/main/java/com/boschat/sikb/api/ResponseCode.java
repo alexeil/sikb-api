@@ -8,7 +8,7 @@ import static org.apache.logging.log4j.Level.INFO;
 public enum ResponseCode {
     OK(INFO, 200),
     CREATED(INFO, 201),
-    DELETED(INFO, 204),
+    NO_CONTENT(INFO, 204),
 
     // 4xx code indicates an error caused by the user
     MISSING_BODY_FIELD(ERROR, 400, 1, "The body field %s is absent"),
@@ -20,15 +20,22 @@ public enum ResponseCode {
     INVALID_QUERY_STRING_PARAMETER(ERROR, 400, 7, "The query string value %s is invalid : %s"),
     INVALID_BODY(INFO, 400, 8, "The body is invalid"),
     INVALID_BODY_FIELD_FORMAT(INFO, 400, 9, "Body Field format error"),
+    WRONG_LOGIN_OR_PASSWORD(INFO, 400, 10, "Wrong login/password"),
 
+    UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
+    
     SERVICE_NOT_FOUND(ERROR, 404, 0, "Service not found"),
-    CLUB_NOT_FOUND(ERROR, 404, 1, "Club (Id %s) not found"),
-    AFFILIATION_NOT_FOUND(ERROR, 404, 2, "Affiliation (clubId %s, season %s) not found"),
-    USER_NOT_FOUND(ERROR, 404, 3, "User (id %s) not found"),
+    CLUB_NOT_FOUND(INFO, 404, 1, "Club (Id %s) not found"),
+    AFFILIATION_NOT_FOUND(INFO, 404, 2, "Affiliation (clubId %s, season %s) not found"),
+    USER_NOT_FOUND(INFO, 404, 3, "User (id %s) not found"),
+    CONFIRM_TOKEN_NOT_FOUND(INFO, 404, 4, "Confirm token not found"),
+    CONFIRM_TOKEN_EXPIRED(INFO, 404, 5, "Confirm token is no longer available"),
+    
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem
-    INTERNAL_ERROR(ERROR, 500, 1, "Internal Error : %s");
+    INTERNAL_ERROR(ERROR, 500, 1, "Internal Error : %s"),
+    CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s");
 
     /**
      * http code returned

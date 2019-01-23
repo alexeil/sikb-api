@@ -1,4 +1,4 @@
-package com.boschat.sikb.api;
+package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.ApiVersion.V1;
 import static com.boschat.sikb.api.ResponseCode.AFFILIATION_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.DELETED;
+import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Delete an affiliation ")
 class AffiliationDeleteTest extends AbstractTest {
@@ -17,15 +17,15 @@ class AffiliationDeleteTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws Exception {
         truncateData();
-        loadClubs("sql/insertClub.csv");
-        loadAffiliations("sql/insertAffiliation.csv");
+        loadClubs();
+        loadAffiliations();
     }
 
     @Test
     @DisplayName(" (default) ")
     void defaultAffiliation() throws Exception {
         Response response = affiliationDelete(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON);
-        checkResponse(response, DELETED);
+        checkResponse(response, NO_CONTENT);
     }
 
     @Test

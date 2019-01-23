@@ -80,7 +80,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/loginData'
+              $ref: '#/components/schemas/credentials'
         required:
           true
         description: body
@@ -98,12 +98,14 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - users
+        - Identification
   '/users/logout':
     get:
       summary: Log out a user (Revoke access Token)
       description: ''
       operationId: userLogout
+      parameters:
+        - $ref: '#/components/parameters/access_token'
       responses:
         204:
           description: Access token is revoked and user logged out
@@ -114,13 +116,84 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - users
+        - Identification
+  '/users/reset':
+    post:
+      summary: Ask to reset a password
+      description: ''
+      operationId: userReset
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      responses:
+        204:
+          description: A mail will be send allowing user to reset his password
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - Identification
+  '/users/updatePassword':
+    post:
+      summary: Update the user password
+      description: ''
+      operationId: userUpdatePassword
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updatePassword'
+        required:
+          true
+        description: body
+      responses:
+        204:
+          description: The password was updated
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - Identification
+  '/users/confirm':
+    post:
+      summary: Confirm user email
+      description: 'A mail was sent to the user email address with a link to confirm his email and set his password'
+      operationId: userConfirm
+      parameters:
+        - $ref: '#/components/parameters/confirmToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updatePassword'
+        required:
+          true
+        description: body
+      responses:
+        204:
+          description: A mail was sent allowing to reset the password
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - Identification
   '/users/{userId}':
     get:
       summary: get a user
       description: ''
       operationId: getUser
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/userId'
       responses:
         200:
@@ -142,6 +215,7 @@ paths:
       description: ''
       operationId: updateUser
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/userId'
       requestBody:
         content:
@@ -175,22 +249,6 @@ paths:
       responses:
         204:
           description: The user is deleted
-        default:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
-      tags:
-        - users
-  '/users/{userId}/reset':
-    post:
-      summary: Ask to reset a password
-      description: ''
-      operationId: userReset
-      responses:
-        201:
-          description: A mail was sent allowing to reset the password
         default:
           description: Default error sample response
           content:
@@ -254,6 +312,7 @@ paths:
       description: ''
       operationId: getClubById
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
       responses:
         200:
@@ -275,6 +334,7 @@ paths:
       description: ''
       operationId: updateClub
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
       requestBody:
         content:
@@ -322,6 +382,7 @@ paths:
       description: ''
       operationId: createAffiliation
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
       requestBody:
@@ -352,6 +413,7 @@ paths:
       description: ''
       operationId: getAffiliation
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
       responses:
@@ -374,6 +436,7 @@ paths:
       description: ''
       operationId: UpdateAffiliation
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
       requestBody:
@@ -406,6 +469,7 @@ paths:
       description: ''
       operationId: deleteAffiliation
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
         - $ref: '#/components/parameters/season'
       responses:
@@ -425,6 +489,7 @@ components:
     basicAuth:
       type: http
       scheme: basic
+
   parameters:
     clubId:
       name: "clubId"
@@ -450,6 +515,20 @@ components:
       required: true
       in: path
       description: "Name of the season"
+    access_token:
+      name: "access_token"
+      required: true
+      schema:
+        type: string
+      in: header
+      description: "Once the user is logged, the user receive an access token and have to send it for each further requests"
+    confirmToken:
+      name: "token"
+      schema:
+        type: string
+      required: true
+      in: query
+      description: "Token to confirm email adress"
 
   schemas:
     user:
@@ -601,16 +680,18 @@ components:
         - MALE
         - FEMALE
 
-    loginData:
+    credentials:
       required:
         - login
         - password
       properties:
         login:
           type: string
+          minLength: 1
         password:
           type: string
           format: password
+          minLength: 1
 
     session:
       required:
@@ -619,6 +700,19 @@ components:
         access_token:
           type: string
 
+    updatePassword:
+      required:
+        - oldPassword
+        - newPassword
+      properties:
+        oldPassword:
+          type: string
+          format: password
+          minLength: 1
+        newPassword:
+          type: string
+          format: password
+          minLength: 1
     ZError:
       required:
         - code
@@ -629,3 +723,61 @@ components:
           format: int32
         message:
           type: string
+      example:
+        - description: 400/1
+          code: 1
+          message: "The body field %s is absent"
+        - description: 400/2
+          code: 2
+          message: "The body field value %s is invalid : %s"
+        - description: 400/3
+          code: 3
+          message: "The field value %s is invalid"
+        - description: 400/4
+          code: 4
+          message: "The header %s is missing"
+        - description: 400/5
+          code: 5
+          message: "The header value %s is invalid  : %s"
+        - description: 400/6
+          code: 6
+          message: "The query string %s is absent"
+        - description: 400/7
+          code: 7
+          message: "The query string value %s is invalid : %s"
+        - description: 400/8
+          code: 8
+          message: "The body is invalid"
+        - description: 400/9
+          code: 9
+          message: "Body Field format error"
+        - description: 400/10
+          code: 10
+          message: "Wrong login/password"
+        - description: 401/1
+          code: 1
+          message: "Unauthorized"
+        - description: 404/0
+          code: 0
+          message: "Service not found"
+        - description: 404/1
+          code: 1
+          message: "Club (Id %s) not found"
+        - description: 404/2
+          code: 2
+          message: "Affiliation (clubId %s, season %s) not found"
+        - description: 404/3
+          code: 3
+          message: "User (id %s) not found"
+        - description: 404/4
+          code: 4
+          message: "Confirm token not found"
+        - description: 404/5
+          code: 5
+          message: "Confirm token is no longer available"
+        - description: 405/0
+          code: 0
+          message: "Method Not Allowed"
+        - description: 500/1
+          code: 1
+          message: "Internal Error : %s"

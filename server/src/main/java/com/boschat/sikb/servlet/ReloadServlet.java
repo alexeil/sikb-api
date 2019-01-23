@@ -1,5 +1,6 @@
 package com.boschat.sikb.servlet;
 
+import com.boschat.sikb.configuration.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,25 +10,17 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
+
 @Path("/")
-@Produces({"application/json"})
+@Produces({ "application/json" })
 public class ReloadServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(ReloadServlet.class);
 
-   /* public static void reloadProperties() {
-        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(FamilyTechnicalProperties.class, ERABLE_CONFIG_TECH_DIR.getValue(), RS.getId());
-        ConfigLoader.getInstance().loadFunctionalConfig(ERABLE_CONFIG_FUNC_DIR.getValue(), RS.getId(), FunctionalConfig.class);
+    public static void reloadProperties() {
+        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(CONFIG_TECH_PATH.getValue(), "application.properties");
     }
-
-    static void reloadFamilyApp() {
-        reloadProperties();
-        // Reload interfaces with new properties
-        CliperService.getInstance().reinitPartyPort();
-        PortfolioService.getInstance().reinitApi();
-        CacheAppService.getInstance().reinitApi();
-        FamilyCircuitBreaker.reset();
-    }*/
 
     /**
      * Reload configuration.
@@ -38,13 +31,12 @@ public class ReloadServlet {
     @Path("reload")
     public Response reloadConfiguration() {
         LOGGER.trace("reload");
-        return Response.status(HttpServletResponse.SC_OK).entity("Hey beau gosse ! Je commence mon API BackEnd").build();
-      /* try {
-            reloadFamilyApp();
+        try {
+            reloadProperties();
             return Response.status(HttpServletResponse.SC_OK).build();
         } catch (Throwable e) {
-            LOGGER.error(new LogMetadata(RELOAD_ERROR, e));
+            LOGGER.error(e.getMessage(), e);
             return Response.status(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).build();
-        }*/
+        }
     }
 }

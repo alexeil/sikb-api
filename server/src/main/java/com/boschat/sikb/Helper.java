@@ -5,15 +5,21 @@ import com.boschat.sikb.api.ResponseCode;
 import com.boschat.sikb.exceptions.FunctionalException;
 import com.boschat.sikb.exceptions.TechnicalException;
 import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
+import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.User;
 import com.boschat.sikb.utils.DateUtils;
+import com.boschat.sikb.utils.HashUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.tools.StringUtils;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -21,11 +27,17 @@ import java.util.stream.Collectors;
 
 import static com.boschat.sikb.api.ResponseCode.AFFILIATION_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
+import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_EXPIRED;
+import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.api.ResponseCode.USER_NOT_FOUND;
+import static com.boschat.sikb.api.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
+import static com.boschat.sikb.configuration.ApplicationProperties.ACTIVATION_TOKEN_EXPIRATION_DAYS;
 import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
 import static com.boschat.sikb.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
+import static com.boschat.sikb.utils.HashUtils.generateToken;
+import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
 
 public class Helper {
 
@@ -35,10 +47,10 @@ public class Helper {
 
     }
 
-    public static Response runService(CallType callType, Object... params) {
+    public static Response runService(CallType callType, String accessToken, Object... params) {
         Response response = null;
         try {
-            MyThreadLocal.init(callType);
+            MyThreadLocal.init(callType, accessToken);
 
             callType.fillContext(params);
             response = buildResponse(callType.getResponseCode(), callType.call());
@@ -185,6 +197,52 @@ public class Helper {
         return affiliationBean;
     }
 
+    public static Session confirmUser() {
+        String token = MyThreadLocal.get().getToken();
+        UpdatePassword updatePassword = MyThreadLocal.get().getUpdatePassword();
+        List<User> users = DAOFactory.getInstance().getUserDAO().fetchByActivationtoken(token);
+
+        if (CollectionUtils.isEmpty(users)) {
+            throw new FunctionalException(CONFIRM_TOKEN_NOT_FOUND);
+        } else {
+            User user = users.get(0);
+            boolean isExpired = user.getActivationtokenexpirationdate().before(getTimestampFromOffsetDateTime(DateUtils.now()));
+
+            if (isExpired) {
+                throw new FunctionalException(CONFIRM_TOKEN_EXPIRED);
+            } else {
+                String salt = HashUtils.generateSalt();
+                user.setPassword(HashUtils.hash(updatePassword.getNewPassword(), salt));
+                user.setSalt(salt);
+                user.setEnabled(true);
+                user.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+                user.setActivationtoken(null);
+                user.setActivationtokenexpirationdate(null);
+                DAOFactory.getInstance().getUserDAO().update(user);
+            }
+        }
+        return null;
+    }
+
+    public static Session loginUser() {
+        Credentials credentials = MyThreadLocal.get().getCredentials();
+
+        User user = DAOFactory.getInstance().getUserDAO().fetchOneByEmail(credentials.getLogin());
+        if (user == null || StringUtils.isEmpty(user.getPassword())) {
+            throw new FunctionalException(WRONG_LOGIN_OR_PASSWORD);
+        }
+
+        boolean isRightPassword = isExpectedPassword(credentials.getPassword(), user.getSalt(), user.getPassword());
+        if (isRightPassword) {
+            String accessToken = generateToken();
+            user.setAccesstoken(accessToken);
+            DAOFactory.getInstance().getUserDAO().update(user);
+            return new Session().accessToken(accessToken);
+        } else {
+            throw new FunctionalException(WRONG_LOGIN_OR_PASSWORD);
+        }
+    }
+
     public static User getUser() {
         Integer userId = MyThreadLocal.get().getUserId();
         User user = DAOFactory.getInstance().getUserDAO().fetchOneById(userId);
@@ -200,7 +258,7 @@ public class Helper {
     }
 
     public static User updateUser() {
-        return saveUser(false);
+        return saveUser(true);
     }
 
     public static void deleteUser() {
@@ -208,18 +266,21 @@ public class Helper {
     }
 
     public static User createUser() {
-        return saveUser(true);
+        return saveUser(false);
     }
 
     private static User saveUser(boolean isModification) {
         CreateOrUpdateUserContext createContext = MyThreadLocal.get().getCreateOrUpdateUserContext();
         User userBean;
         if (isModification) {
-            userBean = new User();
-            userBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
-        } else {
             userBean = getUser();
             userBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        } else {
+            userBean = new User();
+            userBean.setActivationtoken(generateToken());
+            userBean.setActivationtokenexpirationdate(
+                getTimestampFromOffsetDateTime(DateUtils.now().plusDays(ACTIVATION_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
+            userBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         }
 
         if (createContext.getEmail() != null) {
@@ -227,9 +288,9 @@ public class Helper {
         }
 
         if (isModification) {
-            DAOFactory.getInstance().getUserDAO().insert(userBean);
-        } else {
             DAOFactory.getInstance().getUserDAO().update(userBean);
+        } else {
+            DAOFactory.getInstance().getUserDAO().insert(userBean);
         }
 
         return userBean;

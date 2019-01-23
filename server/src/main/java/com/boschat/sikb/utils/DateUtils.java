@@ -9,9 +9,6 @@ import java.time.ZoneOffset;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
 
-/**
- * Created by tboschat on 19/04/2017.
- */
 public class DateUtils {
 
     private static Clock clock = Clock.systemDefaultZone();

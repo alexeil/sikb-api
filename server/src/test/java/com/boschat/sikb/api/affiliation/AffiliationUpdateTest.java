@@ -1,4 +1,4 @@
-package com.boschat.sikb.api;
+package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.model.Affiliation;
@@ -19,8 +19,8 @@ class AffiliationUpdateTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws Exception {
         truncateData();
-        loadClubs("sql/insertClub.csv");
-        loadAffiliations("sql/insertAffiliation.csv");
+        loadClubs();
+        loadAffiliations();
     }
 
     @Test

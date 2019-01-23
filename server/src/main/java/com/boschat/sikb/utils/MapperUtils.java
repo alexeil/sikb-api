@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 
 public class MapperUtils {
 
-    private static final Logger LOGGER = LogManager.getLogger(CheckUtils.class);
+    private static final Logger LOGGER = LogManager.getLogger(MapperUtils.class);
 
     private MapperUtils() {
 

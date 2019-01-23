@@ -8,9 +8,12 @@ import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 
+import static com.boschat.sikb.Helper.confirmUser;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
@@ -25,11 +28,12 @@ import static com.boschat.sikb.Helper.findUsers;
 import static com.boschat.sikb.Helper.getAffiliation;
 import static com.boschat.sikb.Helper.getClub;
 import static com.boschat.sikb.Helper.getUser;
+import static com.boschat.sikb.Helper.loginUser;
 import static com.boschat.sikb.Helper.updateAffiliation;
 import static com.boschat.sikb.Helper.updateClub;
 import static com.boschat.sikb.Helper.updateUser;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
-import static com.boschat.sikb.api.ResponseCode.DELETED;
+import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.api.ResponseCode.OK;
 
 public enum CallType {
@@ -44,7 +48,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForCreation) params[0]));
         }
     },
-    USER_DELETE("Delete a user", DELETED) {
+    USER_DELETE("Delete a user", NO_CONTENT) {
         @Override
         public Object call() {
             deleteUser();
@@ -90,6 +94,29 @@ public enum CallType {
             // No additional parameters
         }
     },
+    USER_LOGIN("Log in a user", CREATED) {
+        @Override
+        public Object call() {
+            return loginUser();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setCredentials((Credentials) params[0]);
+        }
+    },
+    USER_CONFIRM("Confirm user email & password", NO_CONTENT) {
+        @Override
+        public Object call() {
+            return confirmUser();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setToken((String) params[0]);
+            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[1]);
+        }
+    },
     CLUB_CREATE("Create a club", CREATED) {
         @Override
         public Object call() {
@@ -101,7 +128,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
         }
     },
-    CLUB_DELETE("Delete a club", DELETED) {
+    CLUB_DELETE("Delete a club", NO_CONTENT) {
         @Override
         public Object call() {
             deleteClub();
@@ -185,7 +212,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForUpdate) params[2]));
         }
     },
-    AFFILIATION_DELETE("Delete an affiliation", DELETED) {
+    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT) {
         @Override
         public Object call() {
             deleteAffiliation();

@@ -1,4 +1,4 @@
-package com.boschat.sikb.api;
+package com.boschat.sikb.api.club;
 
 import com.boschat.sikb.AbstractTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
 import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.DELETED;
+import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Delete a club ")
 class ClubDeleteTest extends AbstractTest {
@@ -18,7 +18,7 @@ class ClubDeleteTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws IOException {
         truncateData();
-        loadClubs("sql/insertClub.csv");
+        loadClubs();
     }
 
     @Test
@@ -26,7 +26,7 @@ class ClubDeleteTest extends AbstractTest {
     void name() throws Exception {
         Response response = clubDelete(V1, DEFAULT_CLUB_ID);
 
-        checkResponse(response, DELETED);
+        checkResponse(response, NO_CONTENT);
     }
 
     @Test

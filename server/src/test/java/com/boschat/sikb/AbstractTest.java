@@ -8,13 +8,17 @@ import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
+import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
+import com.boschat.sikb.servlet.ReloadServlet;
 import com.boschat.sikb.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,11 +47,13 @@ import java.util.List;
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
-import static com.boschat.sikb.api.ResponseCode.DELETED;
+import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
 import static com.boschat.sikb.tables.Club.CLUB;
+import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static org.glassfish.jersey.test.TestProperties.CONTAINER_PORT;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,6 +69,7 @@ public abstract class AbstractTest {
 
     protected static final String DEFAULT_USER_EMAIL = "myEmail@kin-ball.fr";
 
+    protected static final String DEFAULT_USER_PASSWORD = "test";
 
     protected static final String DEFAULT_SEASON = "20182019";
 
@@ -71,8 +78,6 @@ public abstract class AbstractTest {
     protected static final String DEFAULT_CLUB_SHORT_NAME = "KBAR";
 
     protected static final String DEFAULT_CLUB_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
-
-    protected static final Integer DEFAULT_AFFILIATION_ID = 1;
 
     protected static final String DEFAULT_AFFILIATION_PREFECTURE_NUMBER = "W333333333";
 
@@ -112,15 +117,12 @@ public abstract class AbstractTest {
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
 
-    private static String proffamPort;
+    private static String serverPort;
 
     protected static JerseyTest jerseyTest;
 
     /**
      * find a random free port to assign to mock server
-     *
-     * @return
-     * @throws IOException
      */
     private static Integer findRandomOpenPortOnAllLocalInterfaces() throws IOException {
         try (ServerSocket socket = new ServerSocket(0)) {
@@ -128,21 +130,23 @@ public abstract class AbstractTest {
         }
     }
 
-    protected static void loadUsers(String resourcePath) throws IOException {
-        loadDataSuite(resourcePath, USER, USER.ID, USER.EMAIL, USER.PASSWORD, USER.INFORMATION, USER.CREATIONDATE, USER.MODIFICATIONDATE);
+    protected static void loadUsers() throws IOException {
+        loadDataSuite("sql/insertUser.csv", USER, USER.ID, USER.EMAIL, USER.PASSWORD, USER.SALT, USER.INFORMATION, USER.ACTIVATIONTOKEN,
+            USER.ACTIVATIONTOKENEXPIRATIONDATE, USER.ACCESSTOKEN, USER.ENABLED, USER.CREATIONDATE, USER.MODIFICATIONDATE);
     }
 
-    protected static void loadClubs(String resourcePath) throws IOException {
-        loadDataSuite(resourcePath, CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO);
+    protected static void loadClubs() throws IOException {
+        loadDataSuite("sql/insertClub.csv", CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO);
     }
 
-    protected static void loadAffiliations(String resourcePath) throws IOException {
-        loadDataSuite(resourcePath, AFFILIATION, AFFILIATION.ID, AFFILIATION.PREFECTURENUMBER, AFFILIATION.PREFECTURECITY, AFFILIATION.SIRETNUMBER,
-                AFFILIATION.ADDRESS,
-                AFFILIATION.POSTALCODE, AFFILIATION.CITY, AFFILIATION.PHONENUMBER, AFFILIATION.EMAIL, AFFILIATION.WEBSITE, AFFILIATION.PRESIDENT,
-                AFFILIATION.PRESIDENTSEX, AFFILIATION.SECRETARY, AFFILIATION.SECRETARYSEX, AFFILIATION.TREASURER, AFFILIATION.TREASURERSEX,
-                AFFILIATION.MEMBERSNUMBER, AFFILIATION.ELECTEDDATE, AFFILIATION.CREATIONDATE, AFFILIATION.MODIFICATIONDATE, AFFILIATION.SEASON,
-                AFFILIATION.CLUBID);
+    protected static void loadAffiliations() throws IOException {
+        loadDataSuite("sql/insertAffiliation.csv", AFFILIATION, AFFILIATION.ID, AFFILIATION.PREFECTURENUMBER, AFFILIATION.PREFECTURECITY,
+            AFFILIATION.SIRETNUMBER,
+            AFFILIATION.ADDRESS,
+            AFFILIATION.POSTALCODE, AFFILIATION.CITY, AFFILIATION.PHONENUMBER, AFFILIATION.EMAIL, AFFILIATION.WEBSITE, AFFILIATION.PRESIDENT,
+            AFFILIATION.PRESIDENTSEX, AFFILIATION.SECRETARY, AFFILIATION.SECRETARYSEX, AFFILIATION.TREASURER, AFFILIATION.TREASURERSEX,
+            AFFILIATION.MEMBERSNUMBER, AFFILIATION.ELECTEDDATE, AFFILIATION.CREATIONDATE, AFFILIATION.MODIFICATIONDATE, AFFILIATION.SEASON,
+            AFFILIATION.CLUBID);
 
     }
 
@@ -184,6 +188,10 @@ public abstract class AbstractTest {
         return getBody(result, User.class);
     }
 
+    protected static Session getSession(Response result) throws IOException {
+        return getBody(result, Session.class);
+    }
+
     protected static List<User> getUsers(Response result) throws IOException {
         return Arrays.asList(getBody(result, User[].class));
     }
@@ -204,11 +212,11 @@ public abstract class AbstractTest {
     protected static void checkResponse(Response result, ResponseCode responseCode, Object... params) throws IOException {
         Short code = (short) result.getStatusInfo().getStatusCode();
 
-        if (OK.equals(responseCode) || CREATED.equals(responseCode) || DELETED.equals(responseCode)) {
-            if (!OK.getCodeHttp().equals(code) && !CREATED.getCodeHttp().equals(code) && !DELETED.getCodeHttp().equals(code)) {
+        if (OK.equals(responseCode) || CREATED.equals(responseCode) || NO_CONTENT.equals(responseCode)) {
+            if (!OK.getCodeHttp().equals(code) && !CREATED.getCodeHttp().equals(code) && !NO_CONTENT.getCodeHttp().equals(code)) {
                 ZError errorResponse = getZError(result);
                 fail("Unexpected Error occurred : " + result.getStatusInfo().getStatusCode() + "/" + errorResponse.getCode() + " : "
-                        + errorResponse.getMessage());
+                    + errorResponse.getMessage());
             }
 
             assertEquals(responseCode.getCodeHttp(), code, "ResponseCode incorrect");
@@ -216,10 +224,10 @@ public abstract class AbstractTest {
             ZError errorResponse = getZError(result);
             assertAll(
                 () -> assertNotNull(errorResponse, "ZError not found"),
-                    () -> assertEquals(responseCode.getCode(), errorResponse.getCode().intValue(), "Wrong code expected"),
-                    () -> assertEquals(String.format(responseCode.getErrorMessage(), params), errorResponse.getMessage(),
-                            "Wrong message expected"),
-                    () -> assertEquals(responseCode.getCodeHttp(), code, "Wrong http code expected")
+                () -> assertEquals(responseCode.getCode(), errorResponse.getCode().intValue(), "Wrong code expected"),
+                () -> assertEquals(String.format(responseCode.getErrorMessage(), params), errorResponse.getMessage(),
+                    "Wrong message expected"),
+                () -> assertEquals(responseCode.getCodeHttp(), code, "Wrong http code expected")
             );
         }
 
@@ -241,168 +249,161 @@ public abstract class AbstractTest {
 
             @Override
             protected Application configure() {
-                if (null == proffamPort) {
+                if (null == serverPort) {
                     try {
-                        proffamPort = String.valueOf(findRandomOpenPortOnAllLocalInterfaces());
-                        forceSet(CONTAINER_PORT, proffamPort);
+                        serverPort = String.valueOf(findRandomOpenPortOnAllLocalInterfaces());
+                        forceSet(CONTAINER_PORT, serverPort);
                     } catch (IOException e) {
                         fail(e);
                     }
                 }
 
                 return new ResourceConfig().packages(
-                        "com.boschat.sikb.api",
-                        "com.boschat.sikb.servlet",
-                        "com.boschat.sikb.mapper");
+                    "com.boschat.sikb.api",
+                    "com.boschat.sikb.servlet",
+                    "com.boschat.sikb.mapper");
             }
         };
     }
 
     @BeforeEach
-    public void start() throws IOException {
-        //reinitMockServer();
+    public void start() {
         initContext();
     }
 
     public void initContext() {
         DateUtils.useFixedClockAt(NOW);
- /*       System.setProperty(ERABLE_SERVICE.getEnv(), "proffam");
-        System.setProperty(ERABLE_CONFIG_TECH_DIR.getEnv(), "../../server/proffamww/conf/usine/technical");
-        System.setProperty(ERABLE_CONFIG_FUNC_DIR.getEnv(), "../../server/proffamww/conf/usine/functionnal");
-        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(TechnicalPropertiesWW.class, ERABLE_CONFIG_TECH_DIR.getValue(), WW.getId());
-
-        System.setProperty(ERABLE_CONFIG_TECH_DIR.getEnv(), "../../server/proffamrs/conf/usine/technical");
-        System.setProperty(ERABLE_CONFIG_FUNC_DIR.getEnv(), "../../server/proffamrs/conf/usine/functionnal");
-        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(TechnicalPropertiesWW.class, ERABLE_CONFIG_TECH_DIR.getValue(), RS.getId());
-*/
+        System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
+        ReloadServlet.reloadProperties();
     }
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path).get();
+        return createRequest(path, null).get();
     }
 
     protected Response affiliationDelete(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path).delete();
+        return createRequest(path, null).delete();
     }
 
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
         String path = buildPath(version, clubId, season);
-        return createRequest(path).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
         String path = buildPath(version, clubId, season);
-        return createRequest(path).put(entity);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
-        String path = buildPathUser(version, null);
-        return createRequest(path).post(entity);
+        String path = buildPathUser(version, null, false, false, false, false, false);
+        return createRequest(path, null).post(entity);
+    }
+
+    protected Response userLogin(ApiVersion version, Credentials credentials) {
+        Entity<Credentials> entity = Entity.json(credentials);
+        String path = buildPathUser(version, null, true, false, false, false, false);
+        return createRequest(path, null).post(entity);
+    }
+
+    protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
+        Entity<UpdatePassword> entity = Entity.json(credentials);
+        String path = buildPathUser(version, null, false, false, false, true, false);
+        return createRequest(path, token).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
         String path = buildPath(version, null, null);
-        return createRequest(path).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response clubGet(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userGet(ApiVersion version, Integer userId) {
-        String path = buildPathUser(version, userId);
-        return createRequest(path).get();
+        String path = buildPathUser(version, userId, false, false, false, false, false);
+        return createRequest(path, null).get();
     }
 
     protected Response clubFind(ApiVersion version) {
         String path = buildPath(version, null, null);
-        return createRequest(path).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userFind(ApiVersion version) {
-        String path = buildPathUser(version, null);
-        return createRequest(path).get();
+        String path = buildPathUser(version, null, false, false, false, false, false);
+        return createRequest(path, null).get();
     }
 
     protected Response userUpdate(ApiVersion version, Integer userId, UserForUpdate userForUpdate) {
         Entity<UserForUpdate> entity = Entity.json(userForUpdate);
-        String path = buildPathUser(version, userId);
-        return createRequest(path).put(entity);
+        String path = buildPathUser(version, userId, false, false, false, false, false);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
         String path = buildPath(version, clubId, null);
-        return createRequest(path).put(entity);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path).delete();
+        return createRequest(path, null).delete();
     }
 
     protected Response userDelete(ApiVersion version, Integer userId) {
-        String path = buildPathUser(version, userId);
-        return createRequest(path).delete();
+        String path = buildPathUser(version, userId, false, false, false, false, false);
+        return createRequest(path, null).delete();
     }
 
-    private Invocation.Builder createRequest(String path) {
+    protected Invocation.Builder createRequest(String path, String token) {
 
-        WebTarget target = jerseyTest.target(path)
-                                     //.register(JacksonFeature.class)
-                                     .register(JacksonJsonProvider.class);
-        /*if (profileIdType != null) {
-            target = target.queryParam(PROFILE_ID_TYPE_PARAM_NAME, profileIdType);
-        }*/
+        WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
 
+        if (token != null) {
+            target = target.queryParam("token", token);
+        }
         Invocation.Builder builder = target.request();
-        /*if (xORANGEPartnerId != null) {
-            builder = builder.header(X_ORANGE_PARTNER_ID_PARAM_NAME, xORANGEPartnerId);
-        }
-        if (xORANGECallerId != null) {
-            builder = builder.header(X_ORANGE_CALLER_ID_PARAM_NAME, xORANGECallerId);
-        }
-        if (xORANGECallerVersion != null) {
-            builder = builder.header(X_ORANGE_CALLER_VERSION_PARAM_NAME, xORANGECallerVersion);
-        }
-        if (xORANGEOrigin != null) {
-            builder = builder.header(X_ORANGE_ORIGIN_PARAM_NAME, xORANGEOrigin);
-        }
-        if (xORANGEUserId != null) {
-            builder = builder.header(X_ORANGE_USER_ID_PARAM_NAME, xORANGEUserId);
-        }
-        if (erableRequestId != null) {
-            builder = builder.header(ERABLE_REQUEST_ID, erableRequestId);
-        }
-        if (erableServiceId != null) {
-            builder = builder.header(ERABLE_SERVICE_ID, erableServiceId);
-        }
-        if (xORANGEServiceInstanceId != null) {
-            builder = builder.header(X_ORANGE_SERVICE_INSTANCE_ID_PARAM_NAME, xORANGEServiceInstanceId);
-        }
-        if (xORANGEChannel != null) {
-            builder = builder.header(X_ORANGE_CHANNEL_PARAM_NAME, xORANGEChannel);
-        }*/
+        builder.header("Authorization", "Basic " + basicEncode("admin", "admin"));
+
         return builder;
     }
 
-    private String buildPathUser(ApiVersion version, Integer userId) {
+    private String buildPathUser(ApiVersion version, Integer userId, boolean login, boolean logout, boolean reset, boolean confirm, boolean updatePassword) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/users");
         if (userId != null) {
             path.append("/");
             path.append(userId);
         }
+
+        if (login) {
+            path.append("/login");
+        }
+        if (logout) {
+            path.append("/logout");
+        }
+        if (reset) {
+            path.append("/reset");
+        }
+        if (confirm) {
+            path.append("/confirm");
+        }
+        if (updatePassword) {
+            path.append("/updatePassword");
+        }
         return path.toString();
     }
 
-    private String buildPath(ApiVersion version, Integer clubId, String season) {
+    protected String buildPath(ApiVersion version, Integer clubId, String season) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
         if (clubId != null) {
             path.append("/");
@@ -417,63 +418,71 @@ public abstract class AbstractTest {
     }
 
     protected void checkAffiliation(Affiliation affiliation, String prefectureNumber, String prefectureCity, String siretNumber, String address,
-            String postalCode, String city, String phoneNumber, String email, String webSite, OffsetDateTime creationDateTime,
-            OffsetDateTime modificationDateTime, String president, Sex presidentSex, String secretary, Sex secretarySex,
-            String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate) {
+        String postalCode, String city, String phoneNumber, String email, String webSite, OffsetDateTime creationDateTime,
+        OffsetDateTime modificationDateTime, String president, Sex presidentSex, String secretary, Sex secretarySex,
+        String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate) {
         assertAll("Check affiliation " + affiliation.getId(),
-                () -> assertNotNull(affiliation, " Affiliation shouldn't be null"),
-                () -> assertNotNull(affiliation.getId(), "Id shouldn't be null"),
+            () -> assertNotNull(affiliation, " Affiliation shouldn't be null"),
+            () -> assertNotNull(affiliation.getId(), "Id shouldn't be null"),
 
-                () -> assertEquals(prefectureNumber, affiliation.getPrefectureNumber(), " prefectureNumber shouldn't be null"),
-                () -> assertEquals(prefectureCity, affiliation.getPrefectureCity(), " prefectureCity shouldn't be null"),
-                () -> assertEquals(siretNumber, affiliation.getSiretNumber(), " siretNumber incorrect"),
-                () -> assertEquals(address, affiliation.getAddress(), " address incorrect"),
-                () -> assertEquals(postalCode, affiliation.getPostalCode(), " postalCode incorrect"),
-                () -> assertEquals(city, affiliation.getCity(), " city incorrect"),
-                () -> assertEquals(phoneNumber, affiliation.getPhoneNumber(), " phoneNumber incorrect"),
-                () -> assertEquals(email, affiliation.getEmail(), " email incorrect"),
-                () -> assertEquals(webSite, affiliation.getWebSite(), " webSite incorrect"),
-                () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate),
-                () -> assertEquals(creationDateTime, affiliation.getCreationDateTime(), " creationDateTime incorrect"),
-                () -> assertEquals(modificationDateTime, affiliation.getModificationDateTime(), " modificationDateTime incorrect")
+            () -> assertEquals(prefectureNumber, affiliation.getPrefectureNumber(), " prefectureNumber shouldn't be null"),
+            () -> assertEquals(prefectureCity, affiliation.getPrefectureCity(), " prefectureCity shouldn't be null"),
+            () -> assertEquals(siretNumber, affiliation.getSiretNumber(), " siretNumber incorrect"),
+            () -> assertEquals(address, affiliation.getAddress(), " address incorrect"),
+            () -> assertEquals(postalCode, affiliation.getPostalCode(), " postalCode incorrect"),
+            () -> assertEquals(city, affiliation.getCity(), " city incorrect"),
+            () -> assertEquals(phoneNumber, affiliation.getPhoneNumber(), " phoneNumber incorrect"),
+            () -> assertEquals(email, affiliation.getEmail(), " email incorrect"),
+            () -> assertEquals(webSite, affiliation.getWebSite(), " webSite incorrect"),
+            () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate),
+            () -> assertEquals(creationDateTime, affiliation.getCreationDateTime(), " creationDateTime incorrect"),
+            () -> assertEquals(modificationDateTime, affiliation.getModificationDateTime(), " modificationDateTime incorrect")
         );
     }
 
     private void checkBoard(Board board, String president, Sex presidentSex, String secretary, Sex secretarySex,
-            String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate) {
+        String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate) {
 
         if (president == null) {
             assertNull(board, " Affiliation should be null");
         } else {
             assertAll("Check board ",
-                    () -> assertNotNull(board, " Affiliation shouldn't be null"),
-                    () -> assertEquals(president, board.getPresident(), " president incorrect"),
-                    () -> assertEquals(presidentSex, board.getPresidentSex(), " presidentSex incorrect"),
-                    () -> assertEquals(secretary, board.getSecretary(), " secretary incorrect"),
-                    () -> assertEquals(secretarySex, board.getSecretarySex(), " secretarySex incorrect"),
-                    () -> assertEquals(treasurer, board.getTreasurer(), " treasurer incorrect"),
-                    () -> assertEquals(treasurerSex, board.getTreasurerSex(), " treasurerSex incorrect"),
-                    () -> assertEquals(membersNumber, board.getMembersNumber(), " membersNumber incorrect"),
-                    () -> assertEquals(electedDate, board.getElectedDate(), " electedDate incorrect")
+                () -> assertNotNull(board, " Affiliation shouldn't be null"),
+                () -> assertEquals(president, board.getPresident(), " president incorrect"),
+                () -> assertEquals(presidentSex, board.getPresidentSex(), " presidentSex incorrect"),
+                () -> assertEquals(secretary, board.getSecretary(), " secretary incorrect"),
+                () -> assertEquals(secretarySex, board.getSecretarySex(), " secretarySex incorrect"),
+                () -> assertEquals(treasurer, board.getTreasurer(), " treasurer incorrect"),
+                () -> assertEquals(treasurerSex, board.getTreasurerSex(), " treasurerSex incorrect"),
+                () -> assertEquals(membersNumber, board.getMembersNumber(), " membersNumber incorrect"),
+                () -> assertEquals(electedDate, board.getElectedDate(), " electedDate incorrect")
             );
         }
     }
 
     protected void checkClub(Club club, String name, String shortName, String logo) {
         assertAll("Check Club " + club.getName(),
-                () -> assertNotNull(club, " Club shouldn't be null"),
-                () -> assertNotNull(club.getId(), "Id shouldn't be null"),
-                () -> assertEquals(name, club.getName(), " name incorrect"),
-                () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
-                () -> assertEquals(logo, club.getLogo(), " logo incorrect")
+            () -> assertNotNull(club, " Club shouldn't be null"),
+            () -> assertNotNull(club.getId(), "Id shouldn't be null"),
+            () -> assertEquals(name, club.getName(), " name incorrect"),
+            () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
+            () -> assertEquals(logo, club.getLogo(), " logo incorrect")
         );
     }
 
     protected void checkUser(User user, String email) {
         assertAll("Check User " + user.getEmail(),
-                () -> assertNotNull(user, " User shouldn't be null"),
-                () -> assertNotNull(user.getId(), "Id shouldn't be null"),
-                () -> assertEquals(email, user.getEmail(), " email incorrect")
+            () -> assertNotNull(user, " User shouldn't be null"),
+            () -> assertNotNull(user.getId(), "Id shouldn't be null"),
+            () -> assertEquals(email, user.getEmail(), " email incorrect")
         );
     }
+
+    protected void checkSession(Session session) {
+        assertAll("Check Session ",
+            () -> assertNotNull(session, " User shouldn't be null"),
+            () -> assertNotNull(session.getAccessToken(), "AccessToken  shouldn't be null")
+        );
+    }
+
 }
