@@ -15,7 +15,7 @@ INSERT INTO  sikb.application values (2,'website','website','website');
 
 CREATE TABLE sikb.user (
                          "id" serial PRIMARY KEY,
-                         "login" text UNIQUE,
+                         "email" text UNIQUE,
                          "password" text,
                          "salt" text,
                          "information" json,
@@ -45,7 +45,7 @@ CREATE TABLE sikb.affiliation (
                                 "postalCode" varchar(255),
                                 "city" varchar(255),
                                 "phoneNumber" varchar(255),
-                                "login" varchar(255),
+                                "email" varchar(255),
                                 "webSite" varchar(255),
 
                                 "president" varchar(255),
