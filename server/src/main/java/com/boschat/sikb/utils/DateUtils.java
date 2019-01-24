@@ -7,8 +7,6 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE;
-
 public class DateUtils {
 
     private static Clock clock = Clock.systemDefaultZone();
@@ -32,23 +30,12 @@ public class DateUtils {
         clock = Clock.fixed(date.toInstant(), currentZoneOffSet);
     }
 
-    public static void useSystemDefaultZoneClock() {
-        clock = Clock.systemDefaultZone();
-    }
-
     private static Clock getClock() {
         return clock;
     }
 
     public static ZoneOffset getCurrentZoneOffSet() {
         return currentZoneOffSet;
-    }
-
-    public static LocalDate parseLocalDate(String date) {
-        if (date != null) {
-            return LocalDate.parse(date, ISO_LOCAL_DATE);
-        }
-        return null;
     }
 
     public static Timestamp getTimestampFromOffsetDateTime(OffsetDateTime datetime) {

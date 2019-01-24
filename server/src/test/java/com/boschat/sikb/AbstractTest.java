@@ -17,8 +17,8 @@ import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.servlet.InitServlet;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
-import com.boschat.sikb.servlet.ReloadServlet;
 import com.boschat.sikb.utils.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +29,6 @@ import org.jooq.TableField;
 import org.jooq.impl.TableImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -113,13 +112,15 @@ public abstract class AbstractTest {
 
     protected static final LocalDate DEFAULT_AFFILIATION_ELECTED_DATE = LocalDate.of(2018, 6, 29);
 
-    protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, OffsetDateTime.now().getOffset());
+    protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
 
     private static String serverPort;
 
     protected static JerseyTest jerseyTest;
+
+    private static InitServlet initServlet = new InitServlet();
 
     /**
      * find a random free port to assign to mock server
@@ -266,15 +267,22 @@ public abstract class AbstractTest {
         };
     }
 
-    @BeforeEach
-    public void start() {
+    @BeforeAll
+    public static void start() {
         initContext();
     }
 
-    public void initContext() {
+    @AfterAll
+    public static void end() {
+        initServlet.destroy();
+    }
+
+    private static void initContext() {
         DateUtils.useFixedClockAt(NOW);
         System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
-        ReloadServlet.reloadProperties();
+
+        initServlet = new InitServlet();
+        initServlet.init();
     }
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {

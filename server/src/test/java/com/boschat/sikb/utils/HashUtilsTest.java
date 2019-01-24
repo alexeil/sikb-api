@@ -4,7 +4,6 @@ import com.boschat.sikb.model.Credentials;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.boschat.sikb.utils.HashUtils.SALT_SIZE;
 import static com.boschat.sikb.utils.HashUtils.basicDecode;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static com.boschat.sikb.utils.HashUtils.generateSalt;
@@ -29,13 +28,6 @@ class HashUtilsTest {
     private static final String SECOND_SALT = generateSalt();
 
     private static final String SECOND_HASH = hash(PASSWORD, SECOND_SALT);
-
-    @Test
-    @DisplayName(" generate Salt ")
-    void testGeSalt() {
-        int arrayLength = FIRST_SALT.length();
-        assertEquals(arrayLength, SALT_SIZE, "incorrect length");
-    }
 
     @Test
     @DisplayName(" generate Hash ")
