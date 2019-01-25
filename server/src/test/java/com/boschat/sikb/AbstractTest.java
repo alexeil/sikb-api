@@ -129,12 +129,12 @@ public abstract class AbstractTest {
 
     protected static JerseyTest jerseyTest;
 
-    private static InitServlet initServlet = new InitServlet();
+    private static InitServlet initServlet;
 
     /**
      * find a random free port to assign to mock server
      */
-    private static Integer findRandomOpenPortOnAllLocalInterfaces() throws IOException {
+    public static Integer findRandomOpenPortOnAllLocalInterfaces() throws IOException {
         try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
         }
@@ -510,10 +510,14 @@ public abstract class AbstractTest {
         );
     }
 
-    protected void checkEmail(String recipient, String title) {
-        assertReceivedMessage(wiser)
+    public static void checkEmailWithWiser(Wiser myWiser, String recipient, String title) {
+        assertReceivedMessage(myWiser)
             .from(SMTP_LOGIN.getValue())
             .to(recipient)
             .withSubject(title);
+    }
+
+    public static void checkEmail(String recipient, String title) {
+        checkEmailWithWiser(wiser, recipient, title);
     }
 }

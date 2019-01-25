@@ -41,7 +41,7 @@ public class WiserAssertions {
 
     public WiserAssertions to(String to) {
         findFirstOrElseThrow(m -> m.getEnvelopeReceiver().equals(to),
-            assertionError("No message to [{0}] found!", to));
+            assertionError("No message to [{0}] found! but [{1}] found", to, messages.get(0).getEnvelopeReceiver()));
         return this;
     }
 

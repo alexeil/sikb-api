@@ -2,6 +2,8 @@ package com.boschat.sikb.utils;
 
 import com.boschat.sikb.exceptions.TechnicalException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.mail.Address;
 import javax.mail.BodyPart;
@@ -31,6 +33,8 @@ import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
 
 public class MailUtils {
 
+    private static final Logger LOGGER = LogManager.getLogger(MailUtils.class);
+
     public static final String EMAIL_TITLE_CREATE_USER = "Welcome, ready to set your account ?";
 
     private static MailUtils instance;
@@ -55,6 +59,10 @@ public class MailUtils {
         if (SMTP_DEBUG.getBooleanValue()) {
             session.setDebug(SMTP_DEBUG.getBooleanValue());
         }
+    }
+
+    public static void reset() {
+        instance = null;
     }
 
     public static MailUtils getInstance() {
@@ -85,6 +93,7 @@ public class MailUtils {
     }
 
     private void sendEmail(String template, String title, String recipient, String link) {
+        LOGGER.trace("Sending an email with template \"{}\", title \"{}\" TO \"{}\" and with link \"{}\"", template, title, recipient, link);
 
         Map<String, String> input = new HashMap<>();
         input.put("link", link);
@@ -112,7 +121,9 @@ public class MailUtils {
             message.setContent(multipart);
 
             Transport.send(message);
+            LOGGER.trace("email sent !");
         } catch (Exception e) {
+            LOGGER.trace("email not sent an error occurred ! ");
             throw new TechnicalException(EMAIL_ERROR, e);
         }
     }
