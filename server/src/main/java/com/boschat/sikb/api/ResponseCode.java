@@ -35,7 +35,8 @@ public enum ResponseCode {
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem
     INTERNAL_ERROR(ERROR, 500, 1, "Internal Error : %s"),
-    CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s");
+    CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s"),
+    EMAIL_ERROR(ERROR, 500, 3, "Error with emailing");
 
     /**
      * http code returned

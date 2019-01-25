@@ -1,23 +1,23 @@
 @startuml
-title Initiating Worflow
+title Initiating Workflow
  
 participant "Club" as club
 participant "Admin" as admin
 participant "SIKB-API" as api 
 
 == Club account initialization ==
-club -> admin : ask for autorization (not an api)
+club -> admin : ask initiating an account (user + club) (not an api)
 admin -> api : POST /users
 admin <-- api : 201
 admin -> api : POST /clubs (with name only)
 admin <-- api : 201
-club <-- admin : OK (a mail is sent to the club to set a password)
-club -> api : PUT /users/{userId}
-club <-- api : 200
+club <-- admin : OK (a mail is sent to the club to confirm email and set a password)
+club -> api : PUT /users/confirm
+club <-- api : 204 (initialization is finish, the user can login)
 
 == Club login ==
 club -> api : POST /users/login
-club <-- api : 201 with access_token
+club <-- api : 201 with access_token (to send as header within all further requests)
 
 == Affiliation ==
 club -> api : PUT /clubs/{clubId} with club information

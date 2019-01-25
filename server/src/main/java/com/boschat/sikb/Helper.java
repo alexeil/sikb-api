@@ -16,6 +16,7 @@ import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.User;
 import com.boschat.sikb.utils.DateUtils;
 import com.boschat.sikb.utils.HashUtils;
+import com.boschat.sikb.utils.MailUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -291,6 +292,7 @@ public class Helper {
             DAOFactory.getInstance().getUserDAO().update(userBean);
         } else {
             DAOFactory.getInstance().getUserDAO().insert(userBean);
+            MailUtils.getInstance().sendCreateUserEmail(userBean.getEmail(), userBean.getActivationtoken());
         }
 
         return userBean;

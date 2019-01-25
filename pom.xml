@@ -57,10 +57,19 @@
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<mail.version>1.4.7</mail.version>
 		<commons-collections4.version>4.2</commons-collections4.version>
+		<subethasmtp.version>3.1.7</subethasmtp.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>org.subethamail</groupId>
+				<artifactId>subethasmtp</artifactId>
+				<version>${subethasmtp.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>persistence</artifactId>

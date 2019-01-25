@@ -1,6 +1,7 @@
 package com.boschat.sikb;
 
 import com.boschat.sikb.api.ResponseCode;
+import com.boschat.sikb.configuration.ConfigLoader;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
@@ -29,6 +30,7 @@ import org.jooq.TableField;
 import org.jooq.impl.TableImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.subethamail.wiser.Wiser;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -45,9 +47,14 @@ import java.util.List;
 
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.USER;
+import static com.boschat.sikb.WiserAssertions.assertReceivedMessage;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
 import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
+import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_HOST;
+import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_LOGIN;
+import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
 import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
@@ -92,7 +99,7 @@ public abstract class AbstractTest {
 
     protected static final String DEFAULT_AFFILIATION_PHONE_NUMBER = "0709864324";
 
-    protected static final String DEFAULT_AFFILIATION_EMAIL = "myEmail@kin-ball.fr";
+    protected static final String DEFAULT_AFFILIATION_EMAIL = "thierry.boschat@kin-ball.fr";
 
     protected static final String DEFAULT_AFFILIATION_WEBSITE = "myWebsite.kin-ball.fr";
 
@@ -115,6 +122,8 @@ public abstract class AbstractTest {
     protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
     private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
+
+    private static Wiser wiser;
 
     private static String serverPort;
 
@@ -268,21 +277,29 @@ public abstract class AbstractTest {
     }
 
     @BeforeAll
-    public static void start() {
+    public static void start() throws IOException {
         initContext();
     }
 
     @AfterAll
     public static void end() {
         initServlet.destroy();
+        wiser.stop();
     }
 
-    private static void initContext() {
+    private static void initContext() throws IOException {
         DateUtils.useFixedClockAt(NOW);
         System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
 
         initServlet = new InitServlet();
         initServlet.init();
+
+        ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
+        ConfigLoader.getInstance().setProperties(SMTP_PORT, findRandomOpenPortOnAllLocalInterfaces().toString());
+        ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
+
+        wiser = new Wiser(SMTP_PORT.getIntegerValue());
+        wiser.start();
     }
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
@@ -493,4 +510,10 @@ public abstract class AbstractTest {
         );
     }
 
+    protected void checkEmail(String recipient, String title) {
+        assertReceivedMessage(wiser)
+            .from(SMTP_LOGIN.getValue())
+            .to(recipient)
+            .withSubject(title);
+    }
 }

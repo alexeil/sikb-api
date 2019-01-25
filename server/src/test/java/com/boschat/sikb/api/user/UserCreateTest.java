@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.ApiVersion.V1;
 import static com.boschat.sikb.api.ResponseCode.CREATED;
+import static com.boschat.sikb.utils.MailUtils.EMAIL_TITLE_CREATE_USER;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -43,5 +44,7 @@ class UserCreateTest extends AbstractTest {
             () -> assertNotNull(userBean.getActivationtoken(), "Activationtoken shouldn't be null"),
             () -> assertNotNull(userBean.getActivationtokenexpirationdate(), "Activationtokenexpirationdate shouldn't be null")
         );
+
+        checkEmail(DEFAULT_AFFILIATION_EMAIL, EMAIL_TITLE_CREATE_USER);
     }
 }
