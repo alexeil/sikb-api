@@ -38,7 +38,7 @@ import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.api.ResponseCode.OK;
 
 public enum CallType {
-    USER_CREATE("Create a user", CREATED) {
+    USER_CREATE("Create a user", CREATED, true) {
         @Override
         public Object call() {
             return convertBeanToModel(createUser());
@@ -49,7 +49,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForCreation) params[0]));
         }
     },
-    USER_DELETE("Delete a user", NO_CONTENT) {
+    USER_DELETE("Delete a user", NO_CONTENT, true) {
         @Override
         public Object call() {
             deleteUser();
@@ -61,7 +61,7 @@ public enum CallType {
             MyThreadLocal.get().setUserId((Integer) params[0]);
         }
     },
-    USER_UPDATE("Update a User", OK) {
+    USER_UPDATE("Update a User", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(updateUser());
@@ -73,7 +73,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForUpdate) params[1]));
         }
     },
-    USER_GET("get a user", OK) {
+    USER_GET("get a user", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(getUser());
@@ -84,7 +84,7 @@ public enum CallType {
             MyThreadLocal.get().setUserId((Integer) params[0]);
         }
     },
-    USER_FIND("find all users", OK) {
+    USER_FIND("find all users", OK, true) {
         @Override
         public Object call() {
             return convertUserBeansToModels(findUsers());
@@ -95,7 +95,7 @@ public enum CallType {
             // No additional parameters
         }
     },
-    USER_LOGIN("Log in a user", CREATED) {
+    USER_LOGIN("Log in a user", CREATED, false) {
         @Override
         public Object call() {
             return loginUser();
@@ -106,7 +106,7 @@ public enum CallType {
             MyThreadLocal.get().setCredentials((Credentials) params[0]);
         }
     },
-    USER_LOGOUT("Log out a user", NO_CONTENT) {
+    USER_LOGOUT("Log out a user", NO_CONTENT, true) {
         @Override
         public Object call() {
             logoutUser();
@@ -118,7 +118,7 @@ public enum CallType {
             // no params
         }
     },
-    USER_CONFIRM("Confirm user email & password", NO_CONTENT) {
+    USER_CONFIRM("Confirm user email & password", NO_CONTENT, false) {
         @Override
         public Object call() {
             return confirmUser();
@@ -130,7 +130,7 @@ public enum CallType {
             MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[1]);
         }
     },
-    CLUB_CREATE("Create a club", CREATED) {
+    CLUB_CREATE("Create a club", CREATED, true) {
         @Override
         public Object call() {
             return convertBeanToModel(createClub());
@@ -141,7 +141,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
         }
     },
-    CLUB_DELETE("Delete a club", NO_CONTENT) {
+    CLUB_DELETE("Delete a club", NO_CONTENT, true) {
         @Override
         public Object call() {
             deleteClub();
@@ -153,7 +153,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    CLUB_UPDATE("Update a club", OK) {
+    CLUB_UPDATE("Update a club", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(updateClub());
@@ -165,7 +165,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForUpdate) params[1]));
         }
     },
-    CLUB_GET("get a club", OK) {
+    CLUB_GET("get a club", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(getClub());
@@ -176,7 +176,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    CLUB_FIND("find all clubs", OK) {
+    CLUB_FIND("find all clubs", OK, true) {
         @Override
         public Object call() {
             return convertBeansToModels(findClubs());
@@ -187,7 +187,7 @@ public enum CallType {
             // No additional parameters
         }
     },
-    AFFILIATION_CREATE("Create an affiliation", CREATED) {
+    AFFILIATION_CREATE("Create an affiliation", CREATED, true) {
         @Override
         public Object call() {
             return convertBeanToModel(createAffiliation());
@@ -200,7 +200,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
         }
     },
-    AFFILIATION_GET("Get an affiliation", OK) {
+    AFFILIATION_GET("Get an affiliation", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(getAffiliation());
@@ -212,7 +212,7 @@ public enum CallType {
             MyThreadLocal.get().setSeason((String) params[1]);
         }
     },
-    AFFILIATION_UPDATE("Update an affiliation", OK) {
+    AFFILIATION_UPDATE("Update an affiliation", OK, true) {
         @Override
         public Object call() {
             return convertBeanToModel(updateAffiliation());
@@ -225,7 +225,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForUpdate) params[2]));
         }
     },
-    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT) {
+    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT, true) {
         @Override
         public Object call() {
             deleteAffiliation();
@@ -249,9 +249,12 @@ public enum CallType {
      */
     private final ResponseCode responseCode;
 
-    CallType(String infoLogMessage, ResponseCode responseCode) {
+    private final boolean checkAccessToken;
+
+    CallType(String infoLogMessage, ResponseCode responseCode, boolean checkAccessToken) {
         this.infoLogMessage = infoLogMessage;
         this.responseCode = responseCode;
+        this.checkAccessToken = checkAccessToken;
     }
 
     public abstract Object call();
@@ -264,5 +267,9 @@ public enum CallType {
 
     public ResponseCode getResponseCode() {
         return responseCode;
+    }
+
+    public boolean isCheckAccessToken() {
+        return checkAccessToken;
     }
 }

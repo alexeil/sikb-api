@@ -55,12 +55,12 @@ class MailUtilsTest {
 
     @Test
     @DisplayName(" send an email for a user creation ")
-    void sendEmailCreateUserwithoutDefaultRecipient() {
+    void sendEmailCreateUserWithoutDefaultRecipient() {
         ConfigLoader.getInstance().setProperties(SMTP_DEBUG, "true");
         ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
         ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
         MailUtils.getInstance().sendCreateUserEmail(RECIPIENT, TOKEN);
-        checkEmailWithWiser(wiser, "test@kin-ball.fr", EMAIL_TITLE_CREATE_USER);
+        checkEmailWithWiser(wiser, RECIPIENT, EMAIL_TITLE_CREATE_USER);
     }
 
     @Test

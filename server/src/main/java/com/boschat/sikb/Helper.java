@@ -23,6 +23,7 @@ import org.apache.logging.log4j.Logger;
 import org.jooq.tools.StringUtils;
 
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +32,12 @@ import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_EXPIRED;
 import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.api.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.api.ResponseCode.USER_NOT_FOUND;
 import static com.boschat.sikb.api.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
 import static com.boschat.sikb.configuration.ApplicationProperties.ACTIVATION_TOKEN_EXPIRATION_DAYS;
+import static com.boschat.sikb.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
 import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
 import static com.boschat.sikb.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
@@ -48,12 +52,14 @@ public class Helper {
 
     }
 
-    public static Response runService(CallType callType, String accessToken, Object... params) {
+    public static Response runService(CallType callType, String accessToken, SecurityContext securityContext, Object... params) {
         Response response = null;
         try {
             MyThreadLocal.init(callType, accessToken);
 
             callType.fillContext(params);
+
+            checkAccessToken(callType, accessToken, securityContext);
             response = buildResponse(callType.getResponseCode(), callType.call());
 
         } catch (FunctionalException e) {
@@ -68,6 +74,19 @@ public class Helper {
             MyThreadLocal.unset();
         }
         return response;
+    }
+
+    private static void checkAccessToken(CallType callType, String accessToken, SecurityContext securityContext) {
+        if (!"admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName()) && callType.isCheckAccessToken()) {
+            checkRequestHeader(accessToken, HEADER_ACCESS_TOKEN, null);
+            List<User> users = DAOFactory.getInstance().getUserDAO().fetchByAccesstoken(accessToken);
+            if (CollectionUtils.isNotEmpty(users)) {
+                User user = users.get(0);
+                MyThreadLocal.get().setCurrentUser(user);
+            } else {
+                throw new FunctionalException(UNAUTHORIZED);
+            }
+        }
     }
 
     private static void finallyLog(Response response) {
@@ -235,7 +254,7 @@ public class Helper {
             DAOFactory.getInstance().getUserDAO().update(user);
         }
     }
-    
+
     public static Session loginUser() {
         Credentials credentials = MyThreadLocal.get().getCredentials();
 

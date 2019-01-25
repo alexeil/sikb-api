@@ -25,43 +25,42 @@ public class UsersApiServiceImpl extends UsersApiService {
 
     @Override
     public Response createUser(UserForCreation userForCreation, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_CREATE, null, userForCreation);
+        return runService(USER_CREATE, null, securityContext, userForCreation);
     }
 
     @Override
     public Response deleteUser(Integer userId, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_DELETE, null, userId);
+        return runService(USER_DELETE, null, securityContext, userId);
     }
 
     @Override
     public Response findUsers(SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_FIND, null);
+        return runService(USER_FIND, null, securityContext);
     }
 
     @Override
     public Response userConfirm(String token, UpdatePassword updatePassword, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_CONFIRM, null, token, updatePassword);
+        return runService(USER_CONFIRM, null, securityContext, token, updatePassword);
     }
 
     @Override
     public Response getUser(String accessToken, Integer userId, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_GET, accessToken, userId);
+        return runService(USER_GET, accessToken, securityContext, userId);
     }
 
     @Override
     public Response updateUser(String accessToken, Integer userId, UserForUpdate userForUpdate, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_UPDATE, accessToken, userId, userForUpdate);
+        return runService(USER_UPDATE, accessToken, securityContext, userId, userForUpdate);
     }
 
     @Override
     public Response userLogin(Credentials loginData, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_LOGIN, null, loginData);
+        return runService(USER_LOGIN, null, securityContext, loginData);
     }
 
     @Override
     public Response userLogout(String accessToken, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_LOGOUT, accessToken);
-
+        return runService(USER_LOGOUT, accessToken, securityContext);
     }
 
     @Override

@@ -56,6 +56,8 @@ import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_HOST;
 import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_LOGIN;
 import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
 import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
+import static com.boschat.sikb.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.configuration.SikbConstants.HEADER_AUTHORIZATION;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
 import static com.boschat.sikb.tables.Club.CLUB;
@@ -397,7 +399,7 @@ public abstract class AbstractTest {
         return createRequest(path, null, null).delete();
     }
 
-    protected Invocation.Builder createRequest(String path, String token, String accessToken) {
+    private Invocation.Builder createRequest(String path, String token, String accessToken) {
 
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
 
@@ -407,9 +409,9 @@ public abstract class AbstractTest {
         Invocation.Builder builder = target.request();
 
         if (accessToken != null) {
-            builder.header("accessToken", accessToken);
+            builder.header(HEADER_ACCESS_TOKEN, accessToken);
         }
-        builder.header("Authorization", "Basic " + basicEncode("admin", "admin"));
+        builder.header(HEADER_AUTHORIZATION, "Basic " + basicEncode("admin", "admin"));
 
         return builder;
     }
