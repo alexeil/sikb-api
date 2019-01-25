@@ -108,4 +108,8 @@ public class Context {
     public void setUpdatePassword(UpdatePassword updatePassword) {
         this.updatePassword = updatePassword;
     }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

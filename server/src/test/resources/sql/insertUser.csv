@@ -1,5 +1,5 @@
 id;login;password;salt;information;activationToken;activationTokenExpirationDate;accessToken;enabled;creationDate;modificationDate
-1;myEmail@kin-ball.fr;Kq7TqzdpgnR+cHdpBt3wzjTWulafWXF6F/C5p3zwMSkt1H9KFTA2NaTOhiZUWo3sn8+W3fZye+5nBdPfIsLiyw==;gy7eniQ5OpIB83ufcBYgpZdgKpS/PQjvGUfcjyp1G5eFIjcF6B52AGS93+lmvnb7CDy3hq0rDQahxKN+/sYcvA==;;;;;true;2018-01-18 13:11:00.000000;2018-01-18 13:11:00.000000
+1;myEmail@kin-ball.fr;Kq7TqzdpgnR+cHdpBt3wzjTWulafWXF6F/C5p3zwMSkt1H9KFTA2NaTOhiZUWo3sn8+W3fZye+5nBdPfIsLiyw==;gy7eniQ5OpIB83ufcBYgpZdgKpS/PQjvGUfcjyp1G5eFIjcF6B52AGS93+lmvnb7CDy3hq0rDQahxKN+/sYcvA==;;;;YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==;true;2018-01-18 13:11:00.000000;2018-01-18 13:11:00.000000
 2;myEmail2@kin-ball.fr;;;;;;;;2018-01-18 13:11:00.000000;
 3;myEmail3@kin-ball.fr;;;;ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA;2018-01-18 13:11:00.000000;;;2018-01-18 13:11:00.000000;
 4;myEmail4@kin-ball.fr;;;;ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA==;2012-01-18 13:11:00.000000;;;2018-01-18 13:11:00.000000;

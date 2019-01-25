@@ -29,6 +29,7 @@ import static com.boschat.sikb.Helper.getAffiliation;
 import static com.boschat.sikb.Helper.getClub;
 import static com.boschat.sikb.Helper.getUser;
 import static com.boschat.sikb.Helper.loginUser;
+import static com.boschat.sikb.Helper.logoutUser;
 import static com.boschat.sikb.Helper.updateAffiliation;
 import static com.boschat.sikb.Helper.updateClub;
 import static com.boschat.sikb.Helper.updateUser;
@@ -103,6 +104,18 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setCredentials((Credentials) params[0]);
+        }
+    },
+    USER_LOGOUT("Log out a user", NO_CONTENT) {
+        @Override
+        public Object call() {
+            logoutUser();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
         }
     },
     USER_CONFIRM("Confirm user email & password", NO_CONTENT) {

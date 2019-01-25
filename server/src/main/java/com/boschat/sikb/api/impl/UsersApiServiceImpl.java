@@ -17,6 +17,7 @@ import static com.boschat.sikb.api.CallType.USER_DELETE;
 import static com.boschat.sikb.api.CallType.USER_FIND;
 import static com.boschat.sikb.api.CallType.USER_GET;
 import static com.boschat.sikb.api.CallType.USER_LOGIN;
+import static com.boschat.sikb.api.CallType.USER_LOGOUT;
 import static com.boschat.sikb.api.CallType.USER_UPDATE;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-19T12:29:54.648+01:00[Europe/Paris]")
@@ -59,7 +60,8 @@ public class UsersApiServiceImpl extends UsersApiService {
 
     @Override
     public Response userLogout(String accessToken, SecurityContext securityContext) throws NotFoundException {
-        return null;
+        return runService(USER_LOGOUT, accessToken);
+
     }
 
     @Override

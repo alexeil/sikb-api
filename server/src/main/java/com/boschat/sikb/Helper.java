@@ -225,6 +225,17 @@ public class Helper {
         return null;
     }
 
+    public static void logoutUser() {
+        String accessToken = MyThreadLocal.get().getAccessToken();
+
+        List<User> users = DAOFactory.getInstance().getUserDAO().fetchByAccesstoken(accessToken);
+        if (CollectionUtils.isNotEmpty(users)) {
+            User user = users.get(0);
+            user.setActivationtoken(null);
+            DAOFactory.getInstance().getUserDAO().update(user);
+        }
+    }
+    
     public static Session loginUser() {
         Credentials credentials = MyThreadLocal.get().getCredentials();
 

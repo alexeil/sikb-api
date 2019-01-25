@@ -69,6 +69,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
 
+    protected static final String DEFAULT_USER_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
+
     protected static final Integer DEFAULT_CLUB_ID = 1;
 
     protected static final Integer DEFAULT_USER_ID = 1;
@@ -304,93 +306,98 @@ public abstract class AbstractTest {
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null).get();
+        return createRequest(path, null, null).get();
     }
 
     protected Response affiliationDelete(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null).delete();
+        return createRequest(path, null, null).delete();
     }
 
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null).post(entity);
+        return createRequest(path, null, null).post(entity);
     }
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null).put(entity);
+        return createRequest(path, null, null).put(entity);
     }
 
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
-        return createRequest(path, null).post(entity);
+        return createRequest(path, null, null).post(entity);
+    }
+
+    protected Response userLogout(ApiVersion version, String accessToken) {
+        String path = buildPathUser(version, null, false, true, false, false, false);
+        return createRequest(path, null, accessToken).get();
     }
 
     protected Response userLogin(ApiVersion version, Credentials credentials) {
         Entity<Credentials> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, true, false, false, false, false);
-        return createRequest(path, null).post(entity);
+        return createRequest(path, null, null).post(entity);
     }
 
     protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
         Entity<UpdatePassword> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, false, false, false, true, false);
-        return createRequest(path, token).post(entity);
+        return createRequest(path, token, null).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
         String path = buildPath(version, null, null);
-        return createRequest(path, null).post(entity);
+        return createRequest(path, null, null).post(entity);
     }
 
     protected Response clubGet(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null).get();
+        return createRequest(path, null, null).get();
     }
 
     protected Response userGet(ApiVersion version, Integer userId) {
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null).get();
+        return createRequest(path, null, null).get();
     }
 
     protected Response clubFind(ApiVersion version) {
         String path = buildPath(version, null, null);
-        return createRequest(path, null).get();
+        return createRequest(path, null, null).get();
     }
 
     protected Response userFind(ApiVersion version) {
         String path = buildPathUser(version, null, false, false, false, false, false);
-        return createRequest(path, null).get();
+        return createRequest(path, null, null).get();
     }
 
     protected Response userUpdate(ApiVersion version, Integer userId, UserForUpdate userForUpdate) {
         Entity<UserForUpdate> entity = Entity.json(userForUpdate);
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null).put(entity);
+        return createRequest(path, null, null).put(entity);
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null).put(entity);
+        return createRequest(path, null, null).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null).delete();
+        return createRequest(path, null, null).delete();
     }
 
     protected Response userDelete(ApiVersion version, Integer userId) {
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null).delete();
+        return createRequest(path, null, null).delete();
     }
 
-    protected Invocation.Builder createRequest(String path, String token) {
+    protected Invocation.Builder createRequest(String path, String token, String accessToken) {
 
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
 
@@ -398,6 +405,10 @@ public abstract class AbstractTest {
             target = target.queryParam("token", token);
         }
         Invocation.Builder builder = target.request();
+
+        if (accessToken != null) {
+            builder.header("accessToken", accessToken);
+        }
         builder.header("Authorization", "Basic " + basicEncode("admin", "admin"));
 
         return builder;
