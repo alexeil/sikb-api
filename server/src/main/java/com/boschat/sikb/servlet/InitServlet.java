@@ -36,6 +36,7 @@ public class InitServlet extends HttpServlet {
      */
     @Override
     public void destroy() {
+        LOGGER.trace("Server destroyed...");
         ConfigLoader.getInstance().clear();
     }
 }

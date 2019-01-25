@@ -133,7 +133,7 @@ public abstract class AbstractTest {
 
     protected static JerseyTest jerseyTest;
 
-    private static InitServlet initServlet;
+    protected static InitServlet initServlet;
 
     /**
      * find a random free port to assign to mock server

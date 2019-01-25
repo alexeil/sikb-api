@@ -23,7 +23,7 @@ public class ConfigLoader {
         return loader;
     }
 
-    private static String findProperties(ApplicationProperties property, Properties properties) {
+    private static String findProperties(IProperties property, Properties properties) {
         if (null == properties) {
             throw new TechnicalException(CONFIG_TECH_LOADING_ERROR, "Properties not load.");
         }
@@ -40,7 +40,7 @@ public class ConfigLoader {
         }
     }
 
-    public String findProperties(ApplicationProperties property) {
+    public String findProperties(IProperties property) {
         return findProperties(property, properties);
     }
 

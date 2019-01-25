@@ -1,20 +1,37 @@
 package com.boschat.sikb;
 
+import com.boschat.sikb.configuration.ApplicationProperties;
+import com.boschat.sikb.configuration.ConfigLoader;
+import com.boschat.sikb.configuration.IProperties;
+import com.boschat.sikb.exceptions.TechnicalException;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static com.boschat.sikb.ServletTest.FakeProperties.FAKE_PROPERTY;
+import static com.boschat.sikb.api.ResponseCode.CONFIG_TECH_LOADING_ERROR;
 import static com.boschat.sikb.api.ResponseCode.SERVICE_NOT_FOUND;
+import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Test Servlet")
 class ServletTest extends AbstractTest {
+
+    private Response callRequest(String path) {
+        return jerseyTest.target(path)
+                         .request()
+                         .header("Authorization", "Basic " + basicEncode("admin", "admin"))
+                         .get();
+    }
 
     @Test
     @DisplayName(" JSON parse Error ")
@@ -24,26 +41,97 @@ class ServletTest extends AbstractTest {
             "Basic " + basicEncode("admin", "admin")).post(entity);
         assertEquals(400, response.getStatus(), "Wrong Status");
     }
-    
+
     @Test
     @DisplayName(" status ")
     void testStatus() {
-        Response response = jerseyTest.target("/status/").request().header("Authorization", "Basic " + basicEncode("admin", "admin")).get();
-
-        assertEquals(200, response.getStatus(), "Wrong Status");
-    }
-
-    @Test
-    @DisplayName(" reload ")
-    void testReload() {
-        Response response = jerseyTest.target("/reload/").request().header("Authorization", "Basic " + basicEncode("admin", "admin")).get();
+        Response response = callRequest("/status/");
         assertEquals(200, response.getStatus(), "Wrong Status");
     }
 
     @Test
     @DisplayName(" not found ")
     void notFound() throws IOException {
-        Response result = jerseyTest.target("/v1/profiles/aeggae1/toto").request().header("Authorization", "Basic " + basicEncode("admin", "admin")).get();
-        checkResponse(result, SERVICE_NOT_FOUND);
+        Response response = callRequest("/v1/profiles/aeggae1/toto");
+        checkResponse(response, SERVICE_NOT_FOUND);
+    }
+
+    public enum FakeProperties implements IProperties {
+        FAKE_PROPERTY("fake.property");
+
+        private String propName;
+
+        FakeProperties(String propName) {
+            this.propName = propName;
+        }
+
+        public String getPropName() {
+            return propName;
+        }
+    }
+
+    @Nested
+    @DisplayName(" check Properties ")
+    class checkProperties {
+
+        @AfterEach
+        private void reset() {
+            System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
+            initServlet.destroy();
+            initServlet.init();
+        }
+
+        @Test
+        @DisplayName(" reload ok ")
+        void testReload() {
+            Response response = callRequest("/reload/");
+            assertEquals(200, response.getStatus(), "Wrong Status");
+        }
+
+        @Test
+        @DisplayName(" reload with file not found")
+        void testReloadFileNotFound() {
+            System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources/unknown");
+            Response response = callRequest("/reload/");
+            assertEquals(500, response.getStatus(), "Wrong Status");
+        }
+
+        @Test
+        @DisplayName(" initServlet with file not found")
+        void initServletWithFileNotFound() {
+            try {
+                System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources/unknown");
+                initServlet.destroy();
+                initServlet.init();
+
+                ConfigLoader.getInstance().findProperties(ApplicationProperties.SMTP_PORT);
+                fail();
+            } catch (TechnicalException e) {
+                assertEquals(CONFIG_TECH_LOADING_ERROR, e.getErrorCode(), "Wrong error");
+            }
+        }
+
+        @Test
+        @DisplayName(" find unknown property")
+        void findUnknownProperty() {
+            try {
+                ConfigLoader.getInstance().findProperties(FAKE_PROPERTY);
+                fail();
+            } catch (TechnicalException e) {
+                assertEquals(CONFIG_TECH_LOADING_ERROR, e.getErrorCode(), "Wrong error");
+            }
+        }
+
+        @Test
+        @DisplayName(" find a property but not loaded")
+        void findPropertyNotLoaded() {
+            try {
+                initServlet.destroy();
+                ConfigLoader.getInstance().findProperties(ApplicationProperties.SMTP_PORT);
+                fail();
+            } catch (TechnicalException e) {
+                assertEquals(CONFIG_TECH_LOADING_ERROR, e.getErrorCode(), "Wrong error");
+            }
+        }
     }
 }

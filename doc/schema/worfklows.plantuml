@@ -6,7 +6,7 @@ participant "Admin" as admin
 participant "SIKB-API" as api 
 
 == Club account initialization ==
-club -> admin : ask initiating an account (user + club) (not an api)
+club -> admin : ask for initiating an account (user + club) (not an api)
 admin -> api : POST /users
 admin <-- api : 201
 admin -> api : POST /clubs (with name only)
