@@ -11,9 +11,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_EXPIRED;
-import static com.boschat.sikb.api.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_EXPIRED;
+import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;

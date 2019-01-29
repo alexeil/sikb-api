@@ -1,6 +1,6 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.api.ResponseCode;
+import com.boschat.sikb.common.configuration.ResponseCode;
 
 import java.util.Arrays;
 

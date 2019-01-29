@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Logout a User ")
 class UserLogoutTest extends AbstractTest {

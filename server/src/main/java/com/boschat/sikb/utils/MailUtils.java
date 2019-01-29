@@ -1,6 +1,6 @@
 package com.boschat.sikb.utils;
 
-import com.boschat.sikb.exceptions.TechnicalException;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,13 +23,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import static com.boschat.sikb.api.ResponseCode.EMAIL_ERROR;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEBUG;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_HOST;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_LOGIN;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PASSWORD;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_LOGIN;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PASSWORD;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.ResponseCode.EMAIL_ERROR;
 
 public class MailUtils {
 

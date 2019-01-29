@@ -1,7 +1,7 @@
 package com.boschat.sikb.utils;
 
-import com.boschat.sikb.configuration.ConfigLoader;
-import com.boschat.sikb.exceptions.TechnicalException;
+import com.boschat.sikb.common.configuration.ConfigLoader;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.servlet.ReloadServlet;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -15,11 +15,11 @@ import java.io.IOException;
 
 import static com.boschat.sikb.AbstractTest.checkEmailWithWiser;
 import static com.boschat.sikb.AbstractTest.findRandomOpenPortOnAllLocalInterfaces;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEBUG;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_HOST;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
-import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 import static com.boschat.sikb.utils.MailUtils.EMAIL_TITLE_CREATE_USER;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -36,7 +36,7 @@ class MailUtilsTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
+        System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
         ReloadServlet.reloadProperties();
         ConfigLoader.getInstance().setProperties(SMTP_PORT, findRandomOpenPortOnAllLocalInterfaces().toString());
         wiser = new Wiser(SMTP_PORT.getIntegerValue());

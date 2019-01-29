@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.OK;
-import static com.boschat.sikb.api.ResponseCode.USER_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
 
 @DisplayName(" Update a user ")
 class UserUpdateTest extends AbstractTest {

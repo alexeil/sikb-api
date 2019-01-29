@@ -10,8 +10,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
 @DisplayName(" get a club ")
 class ClubGetTest extends AbstractTest {

@@ -1,20 +1,16 @@
 package com.boschat.sikb.utils;
 
-import com.boschat.sikb.api.ResponseCode;
-import com.boschat.sikb.exceptions.FunctionalException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.boschat.sikb.common.configuration.ResponseCode;
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import org.apache.logging.log4j.util.Strings;
 
-import static com.boschat.sikb.api.ResponseCode.INVALID_HEADER_VALUE;
-import static com.boschat.sikb.api.ResponseCode.INVALID_QUERY_STRING_PARAMETER;
-import static com.boschat.sikb.api.ResponseCode.MISSING_BODY_FIELD;
-import static com.boschat.sikb.api.ResponseCode.MISSING_HEADER;
-import static com.boschat.sikb.api.ResponseCode.MISSING_QUERY_STRING_PARAMETER;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_HEADER_VALUE;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_QUERY_STRING_PARAMETER;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_QUERY_STRING_PARAMETER;
 
 public class CheckUtils {
-
-    private static final Logger LOGGER = LogManager.getLogger(CheckUtils.class);
 
     private CheckUtils() {
 

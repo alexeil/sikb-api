@@ -1,6 +1,6 @@
 package com.boschat.sikb.servlet;
 
-import com.boschat.sikb.configuration.ConfigLoader;
+import com.boschat.sikb.common.configuration.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

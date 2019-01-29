@@ -1,10 +1,15 @@
-package com.boschat.sikb.configuration;
+package com.boschat.sikb.common.configuration;
 
 import org.apache.commons.lang3.StringUtils;
 
 public enum EnvVar {
 
-    CONFIG_TECH_PATH("CONFIG_TECH_PATH");
+    CONFIG_PATH("CONFIG_PATH"),
+    POSTGRES_DB("POSTGRES_DB"),
+    POSTGRES_USER("POSTGRES_USER"),
+    POSTGRES_PASSWORD("POSTGRES_PASSWORD"),
+    POSTGRES_HOST("POSTGRES_HOST"),
+    POSTGRES_PORT("POSTGRES_PORT");
 
     private String env;
 

@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 
 @DisplayName(" Login a User ")
 class UserLoginTest extends AbstractTest {

@@ -1,4 +1,4 @@
-package com.boschat.sikb.configuration;
+package com.boschat.sikb.common.configuration;
 
 public class SikbConstants {
 

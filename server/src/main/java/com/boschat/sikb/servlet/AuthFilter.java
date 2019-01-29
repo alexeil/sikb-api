@@ -1,6 +1,6 @@
 package com.boschat.sikb.servlet;
 
-import com.boschat.sikb.exceptions.FunctionalException;
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.model.ApplicationBean;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.persistence.DAOFactory;
@@ -12,7 +12,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 
-import static com.boschat.sikb.api.ResponseCode.UNAUTHORIZED;
+import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.utils.HashUtils.basicDecode;
 
 /**

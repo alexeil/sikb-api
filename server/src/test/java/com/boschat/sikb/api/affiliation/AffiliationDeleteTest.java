@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.AFFILIATION_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Delete an affiliation ")
 class AffiliationDeleteTest extends AbstractTest {

@@ -1,6 +1,6 @@
-package com.boschat.sikb.configuration;
+package com.boschat.sikb.common.configuration;
 
-import com.boschat.sikb.exceptions.TechnicalException;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
-import static com.boschat.sikb.api.ResponseCode.CONFIG_TECH_LOADING_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
 
 public class ConfigLoader {
 

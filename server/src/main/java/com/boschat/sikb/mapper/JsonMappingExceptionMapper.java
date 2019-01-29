@@ -7,7 +7,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import static com.boschat.sikb.api.ResponseCode.INVALID_BODY_FIELD_FORMAT;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD_FORMAT;
 import static com.boschat.sikb.utils.MapperUtils.logAndBuildResponse;
 
 @Provider

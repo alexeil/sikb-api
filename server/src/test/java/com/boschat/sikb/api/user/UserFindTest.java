@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

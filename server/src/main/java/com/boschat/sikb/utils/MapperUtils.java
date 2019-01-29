@@ -1,6 +1,6 @@
 package com.boschat.sikb.utils;
 
-import com.boschat.sikb.api.ResponseCode;
+import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.model.ZError;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

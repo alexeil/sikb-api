@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import static com.boschat.sikb.api.ResponseCode.INVALID_BODY;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY;
 
 @Provider
 @Priority(1)

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 
 @DisplayName(" Create an affiliation ")
 class AffiliationCreateTest extends AbstractTest {

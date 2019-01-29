@@ -1,4 +1,4 @@
-package com.boschat.sikb.configuration;
+package com.boschat.sikb.common.configuration;
 
 public enum ApplicationProperties implements IProperties {
     ACTIVATION_TOKEN_EXPIRATION_DAYS("activation.token.expirationDays"),

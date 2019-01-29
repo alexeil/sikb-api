@@ -4,6 +4,7 @@ import com.boschat.sikb.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.CreateOrUpdateClubContext;
 import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
+import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
@@ -33,9 +34,9 @@ import static com.boschat.sikb.Helper.logoutUser;
 import static com.boschat.sikb.Helper.updateAffiliation;
 import static com.boschat.sikb.Helper.updateClub;
 import static com.boschat.sikb.Helper.updateUser;
-import static com.boschat.sikb.api.ResponseCode.CREATED;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
-import static com.boschat.sikb.api.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
 public enum CallType {
     USER_CREATE("Create a user", CREATED, true) {

@@ -1,6 +1,6 @@
 package com.boschat.sikb.servlet;
 
-import com.boschat.sikb.configuration.ConfigLoader;
+import com.boschat.sikb.common.configuration.ConfigLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
+import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 
 @Path("/")
 @Produces({ "application/json" })
@@ -19,7 +19,7 @@ public class ReloadServlet {
     private static final Logger LOGGER = LogManager.getLogger(ReloadServlet.class);
 
     public static void reloadProperties() {
-        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(CONFIG_TECH_PATH.getValue(), "application.properties");
+        ConfigLoader.getInstance().loadAndCheckTechnicalConfig(CONFIG_PATH.getValue(), "application.properties");
     }
 
     /**

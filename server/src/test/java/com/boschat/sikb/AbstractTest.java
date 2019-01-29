@@ -1,7 +1,7 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.api.ResponseCode;
-import com.boschat.sikb.configuration.ConfigLoader;
+import com.boschat.sikb.common.configuration.ConfigLoader;
+import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
@@ -48,16 +48,21 @@ import java.util.List;
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.WiserAssertions.assertReceivedMessage;
-import static com.boschat.sikb.api.ResponseCode.CREATED;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
-import static com.boschat.sikb.api.ResponseCode.OK;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_HOST;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_LOGIN;
-import static com.boschat.sikb.configuration.ApplicationProperties.SMTP_PORT;
-import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
-import static com.boschat.sikb.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
-import static com.boschat.sikb.configuration.SikbConstants.HEADER_AUTHORIZATION;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_LOGIN;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_HOST;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PASSWORD;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PORT;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_USER;
+import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
 import static com.boschat.sikb.tables.Club.CLUB;
@@ -103,7 +108,7 @@ public abstract class AbstractTest {
 
     protected static final String DEFAULT_AFFILIATION_PHONE_NUMBER = "0709864324";
 
-    protected static final String DEFAULT_AFFILIATION_EMAIL = "thierry.boschat@kin-ball.fr";
+    protected static final String DEFAULT_AFFILIATION_EMAIL = "myEmail@kin-ball.fr";
 
     protected static final String DEFAULT_AFFILIATION_WEBSITE = "myWebsite.kin-ball.fr";
 
@@ -293,7 +298,12 @@ public abstract class AbstractTest {
 
     private static void initContext() throws IOException {
         DateUtils.useFixedClockAt(NOW);
-        System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
+        System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
+        System.setProperty(POSTGRES_DB.getEnv(), "sikb");
+        System.setProperty(POSTGRES_HOST.getEnv(), "localhost");
+        System.setProperty(POSTGRES_PORT.getEnv(), "5432");
+        System.setProperty(POSTGRES_USER.getEnv(), "postgres");
+        System.setProperty(POSTGRES_PASSWORD.getEnv(), "postgres");
 
         initServlet = new InitServlet();
         initServlet.init();

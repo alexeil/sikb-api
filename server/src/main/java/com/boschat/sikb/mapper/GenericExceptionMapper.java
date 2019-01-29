@@ -1,6 +1,6 @@
 package com.boschat.sikb.mapper;
 
-import com.boschat.sikb.exceptions.FunctionalException;
+import com.boschat.sikb.common.exceptions.FunctionalException;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAllowedException;
@@ -9,9 +9,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
-import static com.boschat.sikb.api.ResponseCode.INTERNAL_ERROR;
-import static com.boschat.sikb.api.ResponseCode.METHOD_NOT_ALLOWED;
-import static com.boschat.sikb.api.ResponseCode.SERVICE_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.METHOD_NOT_ALLOWED;
+import static com.boschat.sikb.common.configuration.ResponseCode.SERVICE_NOT_FOUND;
 import static com.boschat.sikb.utils.MapperUtils.logAndBuildResponse;
 
 @Provider

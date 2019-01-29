@@ -13,10 +13,11 @@ addons:
 
 env:
   global:
-  # - PGPORT=5433
-    # - PGUSER=postgres
-    # - PGPASSWORD=postgres
-    # - PGDATABASE=sikb
+    - POSTGRES_DB=sikb
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    - POSTGRES_HOST=localhost
+    - POSTGRES_PORT=5432
 
 before_install:
   # Fix install Postgres 10
@@ -31,7 +32,7 @@ before_install:
   - psql -l
 
 script:
-- mvn clean install
+  - mvn clean install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

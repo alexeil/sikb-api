@@ -11,11 +11,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.MISSING_HEADER;
-import static com.boschat.sikb.api.ResponseCode.OK;
-import static com.boschat.sikb.api.ResponseCode.UNAUTHORIZED;
-import static com.boschat.sikb.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
-import static com.boschat.sikb.configuration.SikbConstants.HEADER_AUTHORIZATION;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 
 @DisplayName(" Test Administration Account ")

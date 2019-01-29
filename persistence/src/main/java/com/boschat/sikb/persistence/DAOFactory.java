@@ -1,5 +1,6 @@
 package com.boschat.sikb.persistence;
 
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -10,46 +11,45 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_HOST;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PASSWORD;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PORT;
+import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_USER;
+import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
+
 public class DAOFactory {
 
-    private static final String USERNAME = "postgres";
+    private static DAOFactory instance = null;
 
-    private static final String PASSWORD = "postgres";
+    private AffiliationDAOExtended affiliationDAO = null;
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/sikb";
+    private ClubDAOExtended clubDAO = null;
 
-    private static AffiliationDAOExtended affiliationDAO = null;
+    private UserDAOExtended userDAO = null;
 
-    private static ClubDAOExtended clubDAO = null;
+    private ApplicationDAOExtended applicationDAO = null;
 
-    private static UserDAOExtended userDAO = null;
+    private Configuration configuration;
 
-    private static ApplicationDAOExtended applicationDAO = null;
-
-    private static DAOFactory daoFactory = null;
-
-    private Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-
-    private Configuration configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
-
-    private DSLContext dslContext = DSL.using(connection, SQLDialect.POSTGRES);
+    private DSLContext dslContext;
 
     private DAOFactory() throws SQLException {
+        String URL = "jdbc:postgresql://" + POSTGRES_HOST.getValue() + ':' + POSTGRES_PORT.getValue() + "/" + POSTGRES_DB.getValue();
+        Connection connection = DriverManager.getConnection(URL, POSTGRES_USER.getValue(), POSTGRES_PASSWORD.getValue());
+        configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
+        dslContext = DSL.using(connection, SQLDialect.POSTGRES);
     }
 
     public static DAOFactory getInstance() {
-        if (daoFactory == null) {
+        if (instance == null) {
             try {
-                daoFactory = new DAOFactory();
-            } catch (SQLException e) {
-                e.printStackTrace();
+                instance = new DAOFactory();
+            } catch (Exception e) {
+                throw new TechnicalException(DATABASE_ERROR, e);
             }
         }
-        return daoFactory;
-    }
-
-    public Connection getConnection() {
-        return connection;
+        return instance;
     }
 
     public Configuration getConfiguration() {

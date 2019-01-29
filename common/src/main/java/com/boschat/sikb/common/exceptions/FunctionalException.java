@@ -1,6 +1,6 @@
-package com.boschat.sikb.exceptions;
+package com.boschat.sikb.common.exceptions;
 
-import com.boschat.sikb.api.ResponseCode;
+import com.boschat.sikb.common.configuration.ResponseCode;
 
 public class FunctionalException extends RuntimeException {
 

@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
-import static com.boschat.sikb.api.ResponseCode.CLUB_NOT_FOUND;
-import static com.boschat.sikb.api.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Delete a club ")
 class ClubDeleteTest extends AbstractTest {

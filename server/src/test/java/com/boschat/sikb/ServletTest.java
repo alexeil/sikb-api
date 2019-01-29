@@ -1,9 +1,9 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.configuration.ApplicationProperties;
-import com.boschat.sikb.configuration.ConfigLoader;
-import com.boschat.sikb.configuration.IProperties;
-import com.boschat.sikb.exceptions.TechnicalException;
+import com.boschat.sikb.common.configuration.ApplicationProperties;
+import com.boschat.sikb.common.configuration.ConfigLoader;
+import com.boschat.sikb.common.configuration.IProperties;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.AfterEach;
@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ServletTest.FakeProperties.FAKE_PROPERTY;
-import static com.boschat.sikb.api.ResponseCode.CONFIG_TECH_LOADING_ERROR;
-import static com.boschat.sikb.api.ResponseCode.SERVICE_NOT_FOUND;
-import static com.boschat.sikb.configuration.EnvVar.CONFIG_TECH_PATH;
+import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
+import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.SERVICE_NOT_FOUND;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -76,7 +76,7 @@ class ServletTest extends AbstractTest {
 
         @AfterEach
         private void reset() {
-            System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources");
+            System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
             initServlet.destroy();
             initServlet.init();
         }
@@ -91,7 +91,7 @@ class ServletTest extends AbstractTest {
         @Test
         @DisplayName(" reload with file not found")
         void testReloadFileNotFound() {
-            System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources/unknown");
+            System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources/unknown");
             Response response = callRequest("/reload/");
             assertEquals(500, response.getStatus(), "Wrong Status");
         }
@@ -100,7 +100,7 @@ class ServletTest extends AbstractTest {
         @DisplayName(" initServlet with file not found")
         void initServletWithFileNotFound() {
             try {
-                System.setProperty(CONFIG_TECH_PATH.getEnv(), "src/main/resources/unknown");
+                System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources/unknown");
                 initServlet.destroy();
                 initServlet.init();
 
