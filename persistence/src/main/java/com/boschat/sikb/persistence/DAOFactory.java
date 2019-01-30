@@ -1,6 +1,8 @@
 package com.boschat.sikb.persistence;
 
 import com.boschat.sikb.common.exceptions.TechnicalException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -9,7 +11,6 @@ import org.jooq.impl.DefaultConfiguration;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_HOST;
@@ -19,6 +20,8 @@ import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_USER;
 import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
 
 public class DAOFactory {
+
+    private static final Logger LOGGER = LogManager.getLogger(DAOFactory.class);
 
     private static DAOFactory instance = null;
 
@@ -34,8 +37,9 @@ public class DAOFactory {
 
     private DSLContext dslContext;
 
-    private DAOFactory() throws SQLException {
+    private DAOFactory() throws Throwable {
         String URL = "jdbc:postgresql://" + POSTGRES_HOST.getValue() + ':' + POSTGRES_PORT.getValue() + "/" + POSTGRES_DB.getValue();
+        LOGGER.trace(URL);
         Connection connection = DriverManager.getConnection(URL, POSTGRES_USER.getValue(), POSTGRES_PASSWORD.getValue());
         configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
         dslContext = DSL.using(connection, SQLDialect.POSTGRES);
@@ -45,7 +49,7 @@ public class DAOFactory {
         if (instance == null) {
             try {
                 instance = new DAOFactory();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 throw new TechnicalException(DATABASE_ERROR, e);
             }
         }

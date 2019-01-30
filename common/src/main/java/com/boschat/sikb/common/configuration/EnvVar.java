@@ -4,21 +4,28 @@ import org.apache.commons.lang3.StringUtils;
 
 public enum EnvVar {
 
-    CONFIG_PATH("CONFIG_PATH"),
-    POSTGRES_DB("POSTGRES_DB"),
-    POSTGRES_USER("POSTGRES_USER"),
-    POSTGRES_PASSWORD("POSTGRES_PASSWORD"),
-    POSTGRES_HOST("POSTGRES_HOST"),
-    POSTGRES_PORT("POSTGRES_PORT");
+    CONFIG_PATH("CONFIG_PATH", true),
+    POSTGRES_DB("POSTGRES_DB", true),
+    POSTGRES_USER("POSTGRES_USER", true),
+    POSTGRES_PASSWORD("POSTGRES_PASSWORD", false),
+    POSTGRES_HOST("POSTGRES_HOST", true),
+    POSTGRES_PORT("POSTGRES_PORT", true);
 
     private String env;
 
-    EnvVar(String env) {
+    private boolean printable;
+
+    EnvVar(String env, boolean printable) {
         this.env = env;
+        this.printable = printable;
     }
 
     public String getEnv() {
         return env;
+    }
+
+    public boolean isPrintable() {
+        return printable;
     }
 
     /**

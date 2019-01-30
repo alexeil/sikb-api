@@ -1,0 +1,47 @@
+<assembly
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+	<id>${application.code}</id>
+	<formats>
+		<format>tar.gz</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>${version}/jetty</outputDirectory>
+			<!-- <outputFileNameMapping>${module.rs.code}-${project.version}.${artifact.extension}</outputFileNameMapping>-->
+			<unpack>false</unpack>
+			<includes>
+				<include>sikb:server:war:*</include>
+			</includes>
+			<useProjectArtifact>false</useProjectArtifact>
+		</dependencySet>
+
+	</dependencySets>
+
+	<files>
+		<file>
+			<source>${root.basedir}/persistence/src/main/resources/initdb.sql</source>
+			<outputDirectory>${project.version}/database</outputDirectory>
+			<lineEnding>unix</lineEnding>
+			<filtered>true</filtered>
+		</file>
+
+		<file>
+			<outputDirectory>${project.version}/conf</outputDirectory>
+			<source>${root.basedir}/server/src/main/resources/application.properties</source>
+			<lineEnding>unix</lineEnding>
+			<filtered>true</filtered>
+		</file>
+
+		<file>
+			<outputDirectory>${project.version}/conf</outputDirectory>
+			<source>${root.basedir}/server/src/main/resources/log4j2.xml</source>
+			<lineEnding>unix</lineEnding>
+			<filtered>true</filtered>
+		</file>
+	</files>
+
+</assembly>

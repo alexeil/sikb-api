@@ -13,7 +13,7 @@ info:
   version: v1
 
 servers:
-  - url: http://http://ec2-35-180-42-251.eu-west-3.compute.amazonaws.com:8080/sikb/api/v1
+  - url: http://ec2-35-180-42-251.eu-west-3.compute.amazonaws.com:8080/sikb/api/v1
     description: AWS URL
   - url: https://sikb-api.herokuapp.com/api/v1
     description: Heroku URL

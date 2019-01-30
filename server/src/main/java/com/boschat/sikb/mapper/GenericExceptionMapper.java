@@ -1,6 +1,7 @@
 package com.boschat.sikb.mapper;
 
 import com.boschat.sikb.common.exceptions.FunctionalException;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 
 import javax.annotation.Priority;
 import javax.ws.rs.NotAllowedException;
@@ -27,6 +28,8 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
             return logAndBuildResponse(e, SERVICE_NOT_FOUND);
         } else if (e instanceof FunctionalException) {
             return logAndBuildResponse(e, ((FunctionalException) e).getErrorCode());
+        } else if (e instanceof TechnicalException) {
+            return logAndBuildResponse(e, ((TechnicalException) e).getErrorCode());
         }
         // } else if (e instanceof CircuitBreakingException) {
         //    return MapperUtils.buildResponse(CIRCUIT_BREAKER_OPEN);

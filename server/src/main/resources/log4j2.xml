@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="FATAL" monitorInterval="30">
-    <Appenders>
-        <Console name="Console">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %L : %msg%n"/>
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Root level="info">
-            <AppenderRef ref="Console"/>
-        </Root>
-
-        <Logger level="debug" name="com.boschat.sikb" additivity="false">
-            <AppenderRef ref="Console"/>
-        </Logger>
-    </Loggers>
+	<Appenders>
+		<RollingFile name="FileAppender" fileName="target/logs/erable-logger-test.log" filePattern="target/logs/erable-logger-test-%i.log">
+			<PatternLayout Pattern="%m%n" alwaysWriteExceptions="false"/>
+			<Policies>
+				<OnStartupTriggeringPolicy/>
+			</Policies>
+			<DefaultRolloverStrategy max="1"/>
+		</RollingFile>
+		<Console name="ConsoleAppender" target="SYSTEM_OUT" ignoreExceptions="true">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %L : %msg%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="FileAppender"/>
+			<AppenderRef ref="ConsoleAppender"/>
+		</Root>
+	</Loggers>
 </Configuration>
