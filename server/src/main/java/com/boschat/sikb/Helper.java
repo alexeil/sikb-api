@@ -58,16 +58,23 @@ public class Helper {
         return response;
     }
 
+    private static boolean isAdmin(SecurityContext securityContext) {
+        return !"admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName());
+    }
+
     private static void checkAccessToken(CallType callType, String accessToken, SecurityContext securityContext) {
         if (callType.isCheckAccessToken()) {
-            checkRequestHeader(accessToken, HEADER_ACCESS_TOKEN, null);
+            if (!isAdmin(securityContext)) {
+                checkRequestHeader(accessToken, HEADER_ACCESS_TOKEN, null);
+            }
             List<User> users = DAOFactory.getInstance().getUserDAO().fetchByAccesstoken(accessToken);
             if (CollectionUtils.isNotEmpty(users)) {
                 User user = users.get(0);
                 MyThreadLocal.get().setCurrentUser(user);
-            } else if (!"admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName()) &&
-                !"test".equalsIgnoreCase(securityContext.getUserPrincipal().getName())) {
-                throw new FunctionalException(UNAUTHORIZED);
+            } else {
+                if (!isAdmin(securityContext)) {
+                    throw new FunctionalException(UNAUTHORIZED);
+                }
             }
         }
     }

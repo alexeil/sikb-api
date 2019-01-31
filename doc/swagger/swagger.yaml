@@ -29,6 +29,8 @@ paths:
       summary: Find all users
       description: ''
       operationId: findUsers
+      parameters:
+        - $ref: '#/components/parameters/access_token'
       responses:
         200:
           description: find all users
@@ -50,6 +52,8 @@ paths:
       summary: Create a user
       description: ''
       operationId: createUser
+      parameters:
+        - $ref: '#/components/parameters/access_token'
       requestBody:
         content:
           application/json:
@@ -259,6 +263,7 @@ paths:
       description: ''
       operationId: deleteUser
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/userId'
       responses:
         204:
@@ -276,6 +281,8 @@ paths:
       summary: Find all club
       description: ''
       operationId: findClubs
+      parameters:
+        - $ref: '#/components/parameters/access_token'
       responses:
         200:
           description: find all clubs
@@ -297,6 +304,8 @@ paths:
       summary: Create a club
       description: ''
       operationId: createClub
+      parameters:
+        - $ref: '#/components/parameters/access_token'
       requestBody:
         content:
           application/json:
@@ -378,6 +387,7 @@ paths:
       description: ''
       operationId: deleteClub
       parameters:
+        - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
       responses:
         204:

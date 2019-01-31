@@ -1,11 +1,11 @@
-package com.boschat.sikb;
+package com.boschat.sikb.servlet;
 
+import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.common.configuration.ApplicationProperties;
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.configuration.IProperties;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.ClubForUpdate;
-import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,10 +15,10 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.ServletTest.FakeProperties.FAKE_PROPERTY;
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.SERVICE_NOT_FOUND;
+import static com.boschat.sikb.servlet.ServletTest.FakeProperties.FAKE_PROPERTY;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

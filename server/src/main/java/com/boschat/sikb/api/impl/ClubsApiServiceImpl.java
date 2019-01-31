@@ -24,18 +24,18 @@ import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
 public class ClubsApiServiceImpl extends ClubsApiService {
 
     @Override
-    public Response createClub(ClubForCreation clubForCreation, SecurityContext securityContext) {
-        return runService(CLUB_CREATE, null, securityContext, clubForCreation);
+    public Response createClub(String accessToken, ClubForCreation clubForCreation, SecurityContext securityContext) {
+        return runService(CLUB_CREATE, accessToken, securityContext, clubForCreation);
     }
 
     @Override
-    public Response deleteClub(Integer clubId, SecurityContext securityContext) {
-        return runService(CLUB_DELETE, null, securityContext, clubId);
+    public Response deleteClub(String accessToken, Integer clubId, SecurityContext securityContext) {
+        return runService(CLUB_DELETE, accessToken, securityContext, clubId);
     }
 
     @Override
-    public Response findClubs(SecurityContext securityContext) {
-        return runService(CLUB_FIND, null, securityContext);
+    public Response findClubs(String accessToken, SecurityContext securityContext) {
+        return runService(CLUB_FIND, accessToken, securityContext);
     }
 
     @Override

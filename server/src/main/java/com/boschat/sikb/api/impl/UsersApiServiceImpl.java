@@ -27,18 +27,18 @@ import static com.boschat.sikb.api.CallType.USER_UPDATE_PASSWORD;
 public class UsersApiServiceImpl extends UsersApiService {
 
     @Override
-    public Response createUser(UserForCreation userForCreation, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_CREATE, null, securityContext, userForCreation);
+    public Response createUser(String accessToken, UserForCreation userForCreation, SecurityContext securityContext) throws NotFoundException {
+        return runService(USER_CREATE, accessToken, securityContext, userForCreation);
     }
 
     @Override
-    public Response deleteUser(Integer userId, SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_DELETE, null, securityContext, userId);
+    public Response deleteUser(String accessToken, Integer userId, SecurityContext securityContext) throws NotFoundException {
+        return runService(USER_DELETE, accessToken, securityContext, userId);
     }
 
     @Override
-    public Response findUsers(SecurityContext securityContext) throws NotFoundException {
-        return runService(USER_FIND, null, securityContext);
+    public Response findUsers(String accessToken, SecurityContext securityContext) throws NotFoundException {
+        return runService(USER_FIND, accessToken, securityContext);
     }
 
     @Override

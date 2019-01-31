@@ -264,41 +264,41 @@ public abstract class AbstractTest {
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null, null).get();
+        return createRequest(path, null).get();
     }
 
     protected Response affiliationDelete(ApiVersion version, Integer clubId, String season) {
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null, null).delete();
+        return createRequest(path, null).delete();
     }
 
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null, null).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
         String path = buildPath(version, clubId, season);
-        return createRequest(path, null, null).put(entity);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
-        return createRequest(path, null, null).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response userLogout(ApiVersion version, String accessToken) {
         String path = buildPathUser(version, null, false, true, false, false, false);
-        return createRequest(path, null, accessToken).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userLogin(ApiVersion version, Credentials credentials) {
         Entity<Credentials> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, true, false, false, false, false);
-        return createRequest(path, null, null).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected static void checkEmail(String recipient, String title) {
@@ -308,75 +308,73 @@ public abstract class AbstractTest {
     protected Response resetUserPassword(ApiVersion version, Reset reset) {
         Entity<Reset> entity = Entity.json(reset);
         String path = buildPathUser(version, null, false, false, true, false, false);
-        return createRequest(path, null, null).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response userUpdatePassword(ApiVersion version, UpdatePassword credentials, String accessToken) {
         Entity entity = Entity.json(credentials);
         String path = buildPathUser(version, null, false, false, false, false, true);
-        return createRequest(path, null, accessToken).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
         String path = buildPath(version, null, null);
-        return createRequest(path, null, null).post(entity);
+        return createRequest(path, null).post(entity);
     }
 
     protected Response clubGet(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null, null).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userGet(ApiVersion version, Integer userId) {
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null, null).get();
+        return createRequest(path, null).get();
     }
 
     protected Response clubFind(ApiVersion version) {
         String path = buildPath(version, null, null);
-        return createRequest(path, null, null).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userFind(ApiVersion version) {
         String path = buildPathUser(version, null, false, false, false, false, false);
-        return createRequest(path, null, null).get();
+        return createRequest(path, null).get();
     }
 
     protected Response userUpdate(ApiVersion version, Integer userId, UserForUpdate userForUpdate) {
         Entity<UserForUpdate> entity = Entity.json(userForUpdate);
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null, null).put(entity);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null, null).put(entity);
+        return createRequest(path, null).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
         String path = buildPath(version, clubId, null);
-        return createRequest(path, null, null).delete();
+        return createRequest(path, null).delete();
     }
 
     protected Response userDelete(ApiVersion version, Integer userId) {
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null, null).delete();
+        return createRequest(path, null).delete();
     }
 
-    private Invocation.Builder createRequest(String path, String token, String accessToken) {
+    private Invocation.Builder createRequest(String path, String token) {
 
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
 
         if (token != null) {
-            target = target.queryParam("token", token);
+            target = target.queryParam("confirmToken", token);
         }
         Invocation.Builder builder = target.request();
 
-        if (accessToken != null) {
-            builder.header(HEADER_ACCESS_TOKEN, accessToken);
-        }
+        builder.header(HEADER_ACCESS_TOKEN, DEFAULT_USER_ACCESS_TOKEN);
         builder.header(HEADER_AUTHORIZATION, "Basic " + basicEncode("admin", "admin"));
 
         return builder;
@@ -499,6 +497,6 @@ public abstract class AbstractTest {
     protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
         Entity<UpdatePassword> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, false, false, false, true, false);
-        return createRequest(path, token, null).post(entity);
+        return createRequest(path, token).post(entity);
     }
 }
