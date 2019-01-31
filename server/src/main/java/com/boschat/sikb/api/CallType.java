@@ -10,6 +10,7 @@ import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
@@ -36,6 +37,7 @@ import static com.boschat.sikb.service.UserUtils.findUsers;
 import static com.boschat.sikb.service.UserUtils.getUser;
 import static com.boschat.sikb.service.UserUtils.loginUser;
 import static com.boschat.sikb.service.UserUtils.logoutUser;
+import static com.boschat.sikb.service.UserUtils.resetUserPassword;
 import static com.boschat.sikb.service.UserUtils.updateUser;
 import static com.boschat.sikb.service.UserUtils.updateUserPassword;
 
@@ -142,6 +144,18 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[0], true);
+        }
+    },
+    USER_RESET("Ask to reset user password", NO_CONTENT, false) {
+        @Override
+        public Object call() {
+            resetUserPassword();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setReset((Reset) params[0]);
         }
     },
     CLUB_CREATE("Create a club", CREATED, true) {

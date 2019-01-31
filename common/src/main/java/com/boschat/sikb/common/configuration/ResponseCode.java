@@ -29,7 +29,7 @@ public enum ResponseCode {
     SERVICE_NOT_FOUND(ERROR, 404, 0, "Service not found"),
     CLUB_NOT_FOUND(INFO, 404, 1, "Club (Id %s) not found"),
     AFFILIATION_NOT_FOUND(INFO, 404, 2, "Affiliation (clubId %s, season %s) not found"),
-    USER_NOT_FOUND(INFO, 404, 3, "User (id %s) not found"),
+    USER_NOT_FOUND(INFO, 404, 3, "User (%s) not found"),
     CONFIRM_TOKEN_NOT_FOUND(INFO, 404, 4, "Confirm token not found"),
     CONFIRM_TOKEN_EXPIRED(INFO, 404, 5, "Confirm token is no longer available"),
 

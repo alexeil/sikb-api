@@ -3,6 +3,7 @@ package com.boschat.sikb.api.impl;
 import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.UsersApiService;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
@@ -18,6 +19,7 @@ import static com.boschat.sikb.api.CallType.USER_FIND;
 import static com.boschat.sikb.api.CallType.USER_GET;
 import static com.boschat.sikb.api.CallType.USER_LOGIN;
 import static com.boschat.sikb.api.CallType.USER_LOGOUT;
+import static com.boschat.sikb.api.CallType.USER_RESET;
 import static com.boschat.sikb.api.CallType.USER_UPDATE;
 import static com.boschat.sikb.api.CallType.USER_UPDATE_PASSWORD;
 
@@ -65,12 +67,14 @@ public class UsersApiServiceImpl extends UsersApiService {
     }
 
     @Override
-    public Response userReset(String accessToken, SecurityContext securityContext) throws NotFoundException {
-        return null;
+    public Response userReset(Reset reset, SecurityContext securityContext) throws NotFoundException {
+        return runService(USER_RESET, null, securityContext, reset);
+
     }
 
     @Override
-    public Response userUpdatePassword(String accessToken, UpdatePassword updatePassword, SecurityContext securityContext) throws NotFoundException {
+    public Response userUpdatePassword(UpdatePassword updatePassword, String accessToken, String token, SecurityContext securityContext)
+        throws NotFoundException {
         return runService(USER_UPDATE_PASSWORD, accessToken, securityContext, updatePassword);
     }
 

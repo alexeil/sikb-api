@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
@@ -33,6 +34,8 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_P
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_NAME;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_PATH;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_RESET_USER_PASSWORD_NAME;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_RESET_USER_PASSWORD_TITLE;
 import static com.boschat.sikb.common.configuration.ResponseCode.EMAIL_ERROR;
 
 public class MailUtils {
@@ -89,17 +92,22 @@ public class MailUtils {
         return contents.toString();
     }
 
-    public void sendCreateUserEmail(String email, String token) {
-        String link = "test/link?" + token;
-        sendEmail(TEMPLATE_CREATE_USER_NAME.getValue(), TEMPLATE_CREATE_USER_TITLE.getValue(), email, link);
+    public void sendResetPasswordEmail(String email, String token) {
+        Map<String, String> values = new HashMap<>();
+        values.put("link", "test/link?" + token);
+        sendEmail(TEMPLATE_RESET_USER_PASSWORD_NAME.getValue(), TEMPLATE_RESET_USER_PASSWORD_TITLE.getValue(), email, values);
     }
 
-    private void sendEmail(String template, String title, String recipient, String link) {
-        LOGGER.trace("Sending an email with template \"{}\", title \"{}\" TO \"{}\" and with link \"{}\"", template, title, recipient, link);
+    public void sendCreateUserEmail(String email, String token) {
+        Map<String, String> values = new HashMap<>();
+        values.put("link", "test/link?" + token);
+        sendEmail(TEMPLATE_CREATE_USER_NAME.getValue(), TEMPLATE_CREATE_USER_TITLE.getValue(), email, values);
+    }
 
-        Map<String, String> input = new HashMap<>();
-        input.put("link", link);
-
+    private void sendEmail(String template, String title, String recipient, Map<String, String> values) {
+        LOGGER.trace("Sending an email with template \"{}\", title \"{}\" TO \"{}\" and with link \"{}\"", template, title, recipient,
+            values.entrySet().stream().map(s -> s.getKey() + " " + s.getValue()).collect(Collectors.joining()));
+        
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SMTP_LOGIN.getValue()));
@@ -116,7 +124,7 @@ public class MailUtils {
             //HTML mail content
             MimeMultipart multipart = new MimeMultipart();
             BodyPart messageBodyPart = new MimeBodyPart();
-            String htmlText = readEmailFromHtml(template, input);
+            String htmlText = readEmailFromHtml(template, values);
             messageBodyPart.setContent(htmlText, "text/html");
 
             multipart.addBodyPart(messageBodyPart);

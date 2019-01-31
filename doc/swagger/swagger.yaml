@@ -124,8 +124,14 @@ paths:
       summary: Ask to reset a password
       description: ''
       operationId: userReset
-      parameters:
-        - $ref: '#/components/parameters/access_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reset'
+        required:
+          true
+        description: body
       responses:
         204:
           description: A mail will be send allowing user to reset his password
@@ -140,10 +146,16 @@ paths:
   '/users/updatePassword':
     post:
       summary: Update the user password
-      description: ''
+      description: 'You can update either being log (access token is required) or unlog but you will need the resetToken in the mail sent by the reset password API'
       operationId: userUpdatePassword
       parameters:
-        - $ref: '#/components/parameters/access_token'
+        - name: "access_token"
+          required: false
+          schema:
+            type: string
+          in: header
+          description: "Once the user is logged, the user receive an access token and have to send it for each further requests"
+        - $ref: '#/components/parameters/resetToken'
       requestBody:
         content:
           application/json:
@@ -525,13 +537,19 @@ components:
       in: header
       description: "Once the user is logged, the user receive an access token and have to send it for each further requests"
     confirmToken:
-      name: "token"
+      name: "confirmToken"
       schema:
         type: string
       required: true
       in: query
-      description: "Token to confirm email adress"
-
+      description: "Token to confirm email address"
+    resetToken:
+      name: "resetToken"
+      schema:
+        type: string
+      required: false
+      in: query
+      description: "Token to reset password"
   schemas:
     user:
       required:
@@ -681,6 +699,13 @@ components:
       enum:
         - MALE
         - FEMALE
+
+    reset:
+      required:
+        - login
+      properties:
+        login:
+          type: string
 
     credentials:
       required:

@@ -4,6 +4,7 @@ import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.DAOFactory;
@@ -17,6 +18,7 @@ import org.jooq.tools.StringUtils;
 import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.ACTIVATION_TOKEN_EXPIRATION_DAYS;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.RESET_TOKEN_EXPIRATION_DAYS;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_EXPIRED;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CANNOT_BE_SAME;
@@ -31,6 +33,23 @@ public class UserUtils {
 
     private UserUtils() {
 
+    }
+
+    public static void resetUserPassword() {
+        Reset reset = MyThreadLocal.get().getReset();
+
+        User user = DAOFactory.getInstance().getUserDAO().fetchOneByEmail(reset.getLogin());
+        if (user == null) {
+            throw new FunctionalException(USER_NOT_FOUND, reset.getLogin());
+        }
+
+        user.setResettoken(generateToken());
+        user.setResettokenexpirationdate(
+            getTimestampFromOffsetDateTime(DateUtils.now().plusDays(RESET_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
+        user.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
+        DAOFactory.getInstance().getUserDAO().update(user);
+
+        MailUtils.getInstance().sendResetPasswordEmail(reset.getLogin(), user.getResettoken());
     }
 
     public static void updateUserPassword() {

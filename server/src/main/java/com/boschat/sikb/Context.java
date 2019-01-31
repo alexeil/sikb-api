@@ -2,6 +2,7 @@ package com.boschat.sikb;
 
 import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 
@@ -35,6 +36,8 @@ public class Context {
     private UpdatePassword updatePassword;
 
     private User currentUser;
+
+    private Reset reset;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -132,5 +135,13 @@ public class Context {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public Reset getReset() {
+        return reset;
+    }
+
+    public void setReset(Reset reset) {
+        this.reset = reset;
     }
 }

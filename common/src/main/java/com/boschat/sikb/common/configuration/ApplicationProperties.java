@@ -2,6 +2,7 @@ package com.boschat.sikb.common.configuration;
 
 public enum ApplicationProperties implements IProperties {
     ACTIVATION_TOKEN_EXPIRATION_DAYS("activation.token.expirationDays"),
+    RESET_TOKEN_EXPIRATION_DAYS("reset.token.expirationDays"),
     SMTP_HOST("mail.smtp.host"),
     SMTP_PORT("mail.smtp.port"),
     SMTP_LOGIN("mail.smtp.login"),
@@ -10,7 +11,9 @@ public enum ApplicationProperties implements IProperties {
     SMTP_DEBUG("mail.smtp.debug"),
     TEMPLATE_PATH("mail.template.path"),
     TEMPLATE_CREATE_USER_NAME("mail.template.createUser.name"),
-    TEMPLATE_CREATE_USER_TITLE("mail.template.createUser.title");
+    TEMPLATE_CREATE_USER_TITLE("mail.template.createUser.title"),
+    TEMPLATE_RESET_USER_PASSWORD_NAME("mail.template.resetUserPassword.name"),
+    TEMPLATE_RESET_USER_PASSWORD_TITLE("mail.template.resetUserPassword.title");
 
     private String propName;
 

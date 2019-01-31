@@ -10,6 +10,7 @@ import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.UpdatePassword;
@@ -300,10 +301,14 @@ public abstract class AbstractTest {
         return createRequest(path, null, null).post(entity);
     }
 
-    protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
-        Entity<UpdatePassword> entity = Entity.json(credentials);
-        String path = buildPathUser(version, null, false, false, false, true, false);
-        return createRequest(path, token, null).post(entity);
+    protected static void checkEmail(String recipient, String title) {
+        checkEmailWithWiser(wiser, recipient, title);
+    }
+
+    protected Response resetUserPassword(ApiVersion version, Reset reset) {
+        Entity<Reset> entity = Entity.json(reset);
+        String path = buildPathUser(version, null, false, false, true, false, false);
+        return createRequest(path, null, null).post(entity);
     }
 
     protected Response userUpdatePassword(ApiVersion version, UpdatePassword credentials, String accessToken) {
@@ -491,7 +496,9 @@ public abstract class AbstractTest {
             .withSubject(title);
     }
 
-    public static void checkEmail(String recipient, String title) {
-        checkEmailWithWiser(wiser, recipient, title);
+    protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
+        Entity<UpdatePassword> entity = Entity.json(credentials);
+        String path = buildPathUser(version, null, false, false, false, true, false);
+        return createRequest(path, token, null).post(entity);
     }
 }

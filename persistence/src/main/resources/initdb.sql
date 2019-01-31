@@ -1,8 +1,6 @@
 DROP SCHEMA IF EXISTS sikb cascade ;
 CREATE SCHEMA sikb;
 
-DROP TABLE IF EXISTS sikb.sikb;
-
 CREATE TABLE sikb.application (
                                 "id" serial PRIMARY KEY,
                                 "name" text UNIQUE,
@@ -14,17 +12,19 @@ INSERT INTO  sikb.application values (1,'admin','admin','admin');
 INSERT INTO  sikb.application values (2,'website','website','website');
 
 CREATE TABLE sikb.user (
-                         "id" serial PRIMARY KEY,
-                         "email" text UNIQUE,
-                         "password" text,
-                         "salt" text,
-                         "information" json,
-                         "activationToken" text,
+                         "id"                            serial PRIMARY KEY,
+                         "email"                         text UNIQUE,
+                         "password"                      text,
+                         "salt"                          text,
+                         "information"                   json,
+                         "activationToken"               text,
                          "activationTokenExpirationDate" timestamp,
-                         "accessToken" text,
-                         "enabled" boolean default false,
-                         "creationDate" timestamp,
-                         "modificationDate" timestamp
+                         "resetToken"                    text,
+                         "resetTokenExpirationDate"      timestamp,
+                         "accessToken"                   text,
+                         "enabled"                       boolean default false,
+                         "creationDate"                  timestamp,
+                         "modificationDate"              timestamp
 );
 
 CREATE TABLE sikb.club (
