@@ -222,7 +222,6 @@ public abstract class AbstractTest {
                         fail(e);
                     }
                 }
-
                 return new ResourceConfig().packages(
                     "com.boschat.sikb.api",
                     "com.boschat.sikb.servlet",
@@ -305,6 +304,12 @@ public abstract class AbstractTest {
         Entity<UpdatePassword> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, false, false, false, true, false);
         return createRequest(path, token, null).post(entity);
+    }
+
+    protected Response userUpdatePassword(ApiVersion version, UpdatePassword credentials, String accessToken) {
+        Entity entity = Entity.json(credentials);
+        String path = buildPathUser(version, null, false, false, false, false, true);
+        return createRequest(path, null, accessToken).post(entity);
     }
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {

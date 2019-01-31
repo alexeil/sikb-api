@@ -5,6 +5,11 @@ import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
+import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
+
 public class Context {
 
     private CreateOrUpdateAffiliationContext createOrUpdateAffiliationContext;
@@ -108,7 +113,12 @@ public class Context {
         return updatePassword;
     }
 
-    public void setUpdatePassword(UpdatePassword updatePassword) {
+    public void setUpdatePassword(UpdatePassword updatePassword, boolean checkOldPassword) {
+        checkRequestBodyField(updatePassword, BODY_FIELD_UPDATE_PASSWORD);
+        checkRequestBodyField(updatePassword.getNewPassword(), BODY_FIELD_NEW_PASSWORD);
+        if (checkOldPassword) {
+            checkRequestBodyField(updatePassword.getOldPassword(), BODY_FIELD_OLD_PASSWORD);
+        }
         this.updatePassword = updatePassword;
     }
 

@@ -19,6 +19,7 @@ import static com.boschat.sikb.api.CallType.USER_GET;
 import static com.boschat.sikb.api.CallType.USER_LOGIN;
 import static com.boschat.sikb.api.CallType.USER_LOGOUT;
 import static com.boschat.sikb.api.CallType.USER_UPDATE;
+import static com.boschat.sikb.api.CallType.USER_UPDATE_PASSWORD;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-19T12:29:54.648+01:00[Europe/Paris]")
 public class UsersApiServiceImpl extends UsersApiService {
@@ -70,7 +71,7 @@ public class UsersApiServiceImpl extends UsersApiService {
 
     @Override
     public Response userUpdatePassword(String accessToken, UpdatePassword updatePassword, SecurityContext securityContext) throws NotFoundException {
-        return null;
+        return runService(USER_UPDATE_PASSWORD, accessToken, securityContext, updatePassword);
     }
 
 }

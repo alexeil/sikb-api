@@ -14,29 +14,30 @@ import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
 
-import static com.boschat.sikb.Helper.confirmUser;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
-import static com.boschat.sikb.Helper.createAffiliation;
-import static com.boschat.sikb.Helper.createClub;
-import static com.boschat.sikb.Helper.createUser;
-import static com.boschat.sikb.Helper.deleteAffiliation;
-import static com.boschat.sikb.Helper.deleteClub;
-import static com.boschat.sikb.Helper.deleteUser;
-import static com.boschat.sikb.Helper.findClubs;
-import static com.boschat.sikb.Helper.findUsers;
-import static com.boschat.sikb.Helper.getAffiliation;
-import static com.boschat.sikb.Helper.getClub;
-import static com.boschat.sikb.Helper.getUser;
-import static com.boschat.sikb.Helper.loginUser;
-import static com.boschat.sikb.Helper.logoutUser;
-import static com.boschat.sikb.Helper.updateAffiliation;
-import static com.boschat.sikb.Helper.updateClub;
-import static com.boschat.sikb.Helper.updateUser;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
+import static com.boschat.sikb.service.AffiliationUtils.createAffiliation;
+import static com.boschat.sikb.service.AffiliationUtils.deleteAffiliation;
+import static com.boschat.sikb.service.AffiliationUtils.getAffiliation;
+import static com.boschat.sikb.service.AffiliationUtils.updateAffiliation;
+import static com.boschat.sikb.service.ClubUtils.createClub;
+import static com.boschat.sikb.service.ClubUtils.deleteClub;
+import static com.boschat.sikb.service.ClubUtils.findClubs;
+import static com.boschat.sikb.service.ClubUtils.getClub;
+import static com.boschat.sikb.service.ClubUtils.updateClub;
+import static com.boschat.sikb.service.UserUtils.confirmUser;
+import static com.boschat.sikb.service.UserUtils.createUser;
+import static com.boschat.sikb.service.UserUtils.deleteUser;
+import static com.boschat.sikb.service.UserUtils.findUsers;
+import static com.boschat.sikb.service.UserUtils.getUser;
+import static com.boschat.sikb.service.UserUtils.loginUser;
+import static com.boschat.sikb.service.UserUtils.logoutUser;
+import static com.boschat.sikb.service.UserUtils.updateUser;
+import static com.boschat.sikb.service.UserUtils.updateUserPassword;
 
 public enum CallType {
     USER_CREATE("Create a user", CREATED, true) {
@@ -128,7 +129,19 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setToken((String) params[0]);
-            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[1]);
+            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[1], false);
+        }
+    },
+    USER_UPDATE_PASSWORD("Update user password", NO_CONTENT, true) {
+        @Override
+        public Object call() {
+            updateUserPassword();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[0], true);
         }
     },
     CLUB_CREATE("Create a club", CREATED, true) {

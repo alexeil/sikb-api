@@ -46,9 +46,9 @@ public class HashUtils {
         return Base64.getEncoder().encodeToString(md.digest());
     }
 
-    public static boolean isExpectedPassword(final String password, final String salt, final String hash) {
+    public static boolean isExpectedPassword(final String password, final String salt, final String currentPassword) {
         final String hashedPassword = hash(password, salt);
-        return Objects.equals(hashedPassword, hash);
+        return Objects.equals(hashedPassword, currentPassword);
     }
 
     public static String basicEncode(String userName, String password) {
