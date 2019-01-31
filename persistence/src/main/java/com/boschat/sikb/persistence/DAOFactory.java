@@ -56,6 +56,10 @@ public class DAOFactory {
         return instance;
     }
 
+    public static void reset() {
+        instance = null;
+    }
+
     public Configuration getConfiguration() {
         return configuration;
     }

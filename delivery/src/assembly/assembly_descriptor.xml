@@ -11,7 +11,6 @@
 	<dependencySets>
 		<dependencySet>
 			<outputDirectory>${version}/jetty</outputDirectory>
-			<!-- <outputFileNameMapping>${module.rs.code}-${project.version}.${artifact.extension}</outputFileNameMapping>-->
 			<unpack>false</unpack>
 			<includes>
 				<include>sikb:server:war:*</include>
@@ -31,17 +30,30 @@
 
 		<file>
 			<outputDirectory>${project.version}/conf</outputDirectory>
-			<source>${root.basedir}/server/src/main/resources/application.properties</source>
+			<source>${root.basedir}/server/src/main/resources/application-prod.properties</source>
+			<destName>application.properties</destName>
 			<lineEnding>unix</lineEnding>
 			<filtered>true</filtered>
 		</file>
 
 		<file>
 			<outputDirectory>${project.version}/conf</outputDirectory>
-			<source>${root.basedir}/server/src/main/resources/log4j2.xml</source>
+			<source>${root.basedir}/server/src/main/resources/log4j2-prod.xml</source>
+			<destName>log4j2.xml</destName>
 			<lineEnding>unix</lineEnding>
 			<filtered>true</filtered>
 		</file>
 	</files>
 
+	<fileSets>
+		<fileSet>
+			<directory>${root.basedir}/server/src/main/resources/templates</directory>
+			<outputDirectory>${project.version}/conf/templates</outputDirectory>
+			<includes>
+				<include>*</include>
+			</includes>
+			<lineEnding>unix</lineEnding>
+			<filtered>true</filtered>
+		</fileSet>
+	</fileSets>
 </assembly>

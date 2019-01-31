@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServlet;
 import java.util.Arrays;
 
-import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
+import static com.boschat.sikb.servlet.ReloadServlet.reloadEverything;
 
 public class InitServlet extends HttpServlet {
 
@@ -24,7 +24,7 @@ public class InitServlet extends HttpServlet {
         LOGGER.trace("Server starting...");
         printEnvs();
         try {
-            reloadProperties();
+            reloadEverything();
         } catch (Throwable t) {
             LOGGER.error(t.getMessage(), t);
         } finally {

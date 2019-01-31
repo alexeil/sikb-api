@@ -75,7 +75,7 @@ class ServletTest extends AbstractTest {
     class checkProperties {
 
         @AfterEach
-        private void reset() {
+        void reset() {
             System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
             initServlet.destroy();
             initServlet.init();

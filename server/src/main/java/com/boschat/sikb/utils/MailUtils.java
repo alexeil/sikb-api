@@ -16,6 +16,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
@@ -29,13 +30,14 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_H
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_LOGIN;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PASSWORD;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_NAME;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.EMAIL_ERROR;
 
 public class MailUtils {
 
     private static final Logger LOGGER = LogManager.getLogger(MailUtils.class);
-
-    public static final String EMAIL_TITLE_CREATE_USER = "Welcome, ready to set your account ?";
 
     private static MailUtils instance;
 
@@ -76,8 +78,10 @@ public class MailUtils {
     private static String readContentFromFile(String fileName) throws IOException {
         StringBuilder contents = new StringBuilder();
 
+        File newFile = new File(TEMPLATE_PATH.getValue());
+        String fileFullName = newFile.getAbsolutePath() + fileName;
         //use buffering, reading one line at a time
-        try (BufferedReader reader = new BufferedReader(new FileReader(MailUtils.class.getClassLoader().getResource(fileName).getFile()))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileFullName))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 contents.append(line);
@@ -89,7 +93,7 @@ public class MailUtils {
 
     public void sendCreateUserEmail(String email, String token) {
         String link = "test/link?" + token;
-        sendEmail("templates/createUser.html", EMAIL_TITLE_CREATE_USER, email, link);
+        sendEmail(TEMPLATE_CREATE_USER_NAME.getValue(), TEMPLATE_CREATE_USER_TITLE.getValue(), email, link);
     }
 
     private void sendEmail(String template, String title, String recipient, String link) {
