@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.Affiliation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,9 +17,9 @@ class AffiliationGetTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
-        loadClubs();
-        loadAffiliations();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadClubs();
+        PersistenceUtils.loadAffiliations();
     }
 
     @Test

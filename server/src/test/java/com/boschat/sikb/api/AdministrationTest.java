@@ -1,6 +1,7 @@
 package com.boschat.sikb.api;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,10 +24,10 @@ class AdministrationTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
-        loadClubs();
-        loadAffiliations();
-        loadUsers();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadClubs();
+        PersistenceUtils.loadAffiliations();
+        PersistenceUtils.loadUsers();
     }
 
     private Response affiliationGetWithCredentials(String basic, String accessToken) {

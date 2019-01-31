@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.identification;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,8 @@ class UserConfirmTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        loadUsers();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadUsers();
     }
 
     @Test

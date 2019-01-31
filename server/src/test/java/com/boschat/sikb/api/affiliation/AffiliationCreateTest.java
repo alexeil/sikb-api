@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.Board;
@@ -18,8 +19,8 @@ class AffiliationCreateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
-        loadClubs();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadClubs();
     }
 
     @Test
@@ -53,10 +54,10 @@ class AffiliationCreateTest extends AbstractTest {
         checkResponse(response, CREATED);
         Affiliation affiliation = getAffiliation(response);
         checkAffiliation(affiliation, DEFAULT_AFFILIATION_PREFECTURE_NUMBER, DEFAULT_AFFILIATION_PREFECTURE_CITY, DEFAULT_AFFILIATION_SIRET_NUMBER,
-                DEFAULT_AFFILIATION_ADDRESS, DEFAULT_AFFILIATION_POSTAL_CODE, DEFAULT_AFFILIATION_CITY, DEFAULT_AFFILIATION_PHONE_NUMBER,
-                DEFAULT_AFFILIATION_EMAIL, DEFAULT_AFFILIATION_WEBSITE, NOW, null, DEFAULT_AFFILIATION_PRESIDENT, DEFAULT_AFFILIATION_PRESIDENT_SEX,
-                DEFAULT_AFFILIATION_SECRETARY, DEFAULT_AFFILIATION_SECRETARY_SEX, DEFAULT_AFFILIATION_TREASURER, DEFAULT_AFFILIATION_TREASURER_SEX,
-                DEFAULT_AFFILIATION_MEMBERS_NUMBER, DEFAULT_AFFILIATION_ELECTED_DATE);
+            DEFAULT_AFFILIATION_ADDRESS, DEFAULT_AFFILIATION_POSTAL_CODE, DEFAULT_AFFILIATION_CITY, DEFAULT_AFFILIATION_PHONE_NUMBER,
+            DEFAULT_AFFILIATION_EMAIL, DEFAULT_AFFILIATION_WEBSITE, NOW, null, DEFAULT_AFFILIATION_PRESIDENT, DEFAULT_AFFILIATION_PRESIDENT_SEX,
+            DEFAULT_AFFILIATION_SECRETARY, DEFAULT_AFFILIATION_SECRETARY_SEX, DEFAULT_AFFILIATION_TREASURER, DEFAULT_AFFILIATION_TREASURER_SEX,
+            DEFAULT_AFFILIATION_MEMBERS_NUMBER, DEFAULT_AFFILIATION_ELECTED_DATE);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +22,8 @@ class UserFindTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        loadUsers();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadUsers();
     }
 
     @Test
@@ -44,7 +45,7 @@ class UserFindTest extends AbstractTest {
     @Test
     @DisplayName(" no clubs ")
     void unknown() throws Exception {
-        truncateData();
+        PersistenceUtils.truncateData();
         Response response = userFind(V1);
 
         checkResponse(response, OK);

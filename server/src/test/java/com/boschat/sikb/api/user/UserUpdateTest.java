@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForUpdate;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,8 +28,8 @@ class UserUpdateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        loadUsers();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadUsers();
     }
 
     @Test

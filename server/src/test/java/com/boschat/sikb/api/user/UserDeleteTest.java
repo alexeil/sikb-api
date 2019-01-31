@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,8 @@ class UserDeleteTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        loadUsers();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadUsers();
     }
 
     @Test

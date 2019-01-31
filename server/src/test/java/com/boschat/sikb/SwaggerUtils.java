@@ -6,6 +6,10 @@ import java.util.Arrays;
 
 public class SwaggerUtils {
 
+    private SwaggerUtils() {
+
+    }
+
     public static void main(String[] args) {
         Arrays.stream(ResponseCode.values()).forEach(SwaggerUtils::printResponseCode);
     }

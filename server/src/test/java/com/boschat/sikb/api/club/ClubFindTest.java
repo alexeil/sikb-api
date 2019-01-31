@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.club;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.Club;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +22,8 @@ class ClubFindTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        loadClubs();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadClubs();
     }
 
     @Test
@@ -45,7 +46,7 @@ class ClubFindTest extends AbstractTest {
     @Test
     @DisplayName(" no clubs ")
     void unknown() throws Exception {
-        truncateData();
+        PersistenceUtils.truncateData();
         Response response = clubFind(V1);
 
         checkResponse(response, OK);

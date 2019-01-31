@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.club;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.Club;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +19,8 @@ class ClubGetTest extends AbstractTest {
 
     @BeforeAll
     static void loadDataSuite() throws IOException {
-        truncateData();
-        loadClubs();
+        PersistenceUtils.truncateData();
+        PersistenceUtils.loadClubs();
     }
 
     @Test
