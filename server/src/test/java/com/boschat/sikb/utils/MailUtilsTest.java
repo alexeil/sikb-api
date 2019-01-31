@@ -19,8 +19,8 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_D
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
-import static com.boschat.sikb.utils.MailUtils.EMAIL_TITLE_CREATE_USER;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName(" email service ")
@@ -60,7 +60,7 @@ class MailUtilsTest {
         ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
         ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
         MailUtils.getInstance().sendCreateUserEmail(RECIPIENT, TOKEN);
-        checkEmailWithWiser(wiser, RECIPIENT, EMAIL_TITLE_CREATE_USER);
+        checkEmailWithWiser(wiser, RECIPIENT, TEMPLATE_CREATE_USER_TITLE.getValue());
     }
 
     @Test
@@ -70,7 +70,7 @@ class MailUtilsTest {
         ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, DEFAULT_RECIPIENT);
         ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
         MailUtils.getInstance().sendCreateUserEmail(RECIPIENT, TOKEN);
-        checkEmailWithWiser(wiser, DEFAULT_RECIPIENT, EMAIL_TITLE_CREATE_USER);
+        checkEmailWithWiser(wiser, DEFAULT_RECIPIENT, TEMPLATE_CREATE_USER_TITLE.getValue());
     }
 
     @Test
