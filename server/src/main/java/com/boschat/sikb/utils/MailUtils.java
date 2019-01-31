@@ -78,10 +78,8 @@ public class MailUtils {
     private static String readContentFromFile(String fileName) throws IOException {
         StringBuilder contents = new StringBuilder();
 
-        File newFile = new File(TEMPLATE_PATH.getValue());
-        String fileFullName = newFile.getAbsolutePath() + fileName;
         //use buffering, reading one line at a time
-        try (BufferedReader reader = new BufferedReader(new FileReader(fileFullName))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(new File(TEMPLATE_PATH.getValue(), fileName)))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 contents.append(line);

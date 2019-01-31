@@ -6,7 +6,7 @@ public enum ApplicationProperties implements IProperties {
     SMTP_PORT("mail.smtp.port"),
     SMTP_LOGIN("mail.smtp.login"),
     SMTP_PASSWORD("mail.smtp.password"),
-    SMTP_DEFAULT_RECIPIENT("mail.smtp.defaulRecipient"),
+    SMTP_DEFAULT_RECIPIENT("mail.smtp.defaultRecipient"),
     SMTP_DEBUG("mail.smtp.debug"),
     TEMPLATE_PATH("mail.template.path"),
     TEMPLATE_CREATE_USER_NAME("mail.template.createUser.name"),
