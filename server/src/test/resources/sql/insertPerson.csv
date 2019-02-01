@@ -1,0 +1,2 @@
+id;firstName;name;sex;birthDate;address;postalCode;city;phoneNumber;email;nationality;formations;creationDate;modificationDate
+1;MyFirstName;PersonName;MALE;1990-04-04;My address;35000;Rennes;070707070707;person@kin-ball.fr;FRANCE;"[{""id"":1,""name"":""Arbitre Niveau 1"",""date"":""2015-04-04""},{""id"":2,""name"":""Arbitre Niveau 2"",""date"":""2016-04-04""}]";2018-01-18 13:11:00.000000;2018-01-18 13:11:00.000000

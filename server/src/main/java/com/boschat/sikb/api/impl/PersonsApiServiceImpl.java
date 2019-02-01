@@ -1,6 +1,5 @@
 package com.boschat.sikb.api.impl;
 
-import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.PersonsApiService;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.PersonForCreation;
@@ -11,6 +10,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
+import static com.boschat.sikb.api.CallType.PERSON_UPDATE;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-17T10:05:39.503+01:00[Europe/Paris]")
 public class PersonsApiServiceImpl extends PersonsApiService {
@@ -21,8 +21,8 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     }
 
     @Override
-    public Response createPersonFormation(String accessToken, Integer personId, Integer clubId, String season, Licence licence, SecurityContext securityContext)
-        throws NotFoundException {
+    public Response createPersonFormation(String accessToken, Integer personId, Integer clubId, String season, Licence licence,
+        SecurityContext securityContext) {
         return null;
     }
 
@@ -43,6 +43,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response updatePerson(String accessToken, Integer personId, PersonForUpdate personForUpdate, SecurityContext securityContext) {
-        return null;
+        return runService(PERSON_UPDATE, accessToken, securityContext, personId, personForUpdate);
+
     }
 }

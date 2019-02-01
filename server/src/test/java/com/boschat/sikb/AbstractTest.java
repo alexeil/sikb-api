@@ -14,6 +14,7 @@ import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
+import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
@@ -69,6 +70,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    protected static final Integer PERSON_DEFAULT_ID = 1;
 
     protected static final String PERSON_DEFAULT_FIRST_NAME = "MyFirstName";
 
@@ -317,6 +320,12 @@ public abstract class AbstractTest {
         return createRequest(path, null).post(entity);
     }
 
+    protected Response personUpdate(ApiVersion version, Integer personId, PersonForUpdate personForUpdate) {
+        Entity<PersonForUpdate> entity = Entity.json(personForUpdate);
+        String path = buildPathPerson(version, personId);
+        return createRequest(path, null).put(entity);
+    }
+
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
@@ -438,7 +447,7 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    protected String buildPathPerson(ApiVersion version, Integer personId) {
+    private String buildPathPerson(ApiVersion version, Integer personId) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
         if (personId != null) {
             path.append("/");

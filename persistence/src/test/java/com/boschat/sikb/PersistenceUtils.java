@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 
 import static com.boschat.sikb.Tables.AFFILIATION;
+import static com.boschat.sikb.Tables.PERSON;
 import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.tables.Club.CLUB;
 
@@ -51,6 +52,16 @@ public class PersistenceUtils {
 
     }
 
+    public static void loadPersons() throws IOException {
+        loadPersons("sql/insertPerson.csv");
+    }
+
+    public static void loadPersons(String fileName) throws IOException {
+        loadDataSuite(fileName, PERSON, PERSON.ID, PERSON.FIRSTNAME, PERSON.NAME, PERSON.SEX, PERSON.BIRTHDATE, PERSON.ADDRESS, PERSON.POSTALCODE, PERSON.CITY,
+            PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.CREATIONDATE, PERSON.MODIFICATIONDATE);
+
+    }
+
     private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
         URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
         if (url == null) {
@@ -75,5 +86,6 @@ public class PersistenceUtils {
         DAOFactory.getInstance().getAffiliationDAO().truncate();
         DAOFactory.getInstance().getClubDAO().truncate();
         DAOFactory.getInstance().getUserDAO().truncate();
+        DAOFactory.getInstance().getPersonDAO().truncate();
     }
 }
