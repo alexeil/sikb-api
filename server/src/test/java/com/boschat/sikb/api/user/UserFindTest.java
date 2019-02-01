@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +23,7 @@ class UserFindTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        PersistenceUtils.truncateData();
+        truncateData();
         PersistenceUtils.loadUsers();
     }
 
@@ -45,7 +46,7 @@ class UserFindTest extends AbstractTest {
     @Test
     @DisplayName(" no clubs ")
     void unknown() throws Exception {
-        PersistenceUtils.truncateData();
+        truncateData();
         Response response = userFind(V1);
 
         checkResponse(response, OK);

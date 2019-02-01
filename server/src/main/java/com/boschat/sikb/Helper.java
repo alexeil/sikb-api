@@ -108,6 +108,10 @@ public class Helper {
         return responseBuilder.build();
     }
 
+    public static List<com.boschat.sikb.model.Person> convertPersonsBeansToModels(List<Person> personsBean) {
+        return personsBean.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+    
     public static com.boschat.sikb.model.Person convertBeanToModel(Person personBean) {
         com.boschat.sikb.model.Person person = new com.boschat.sikb.model.Person();
         person.setId(personBean.getId());

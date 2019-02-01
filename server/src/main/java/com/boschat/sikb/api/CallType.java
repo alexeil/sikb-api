@@ -20,6 +20,7 @@ import com.boschat.sikb.model.UserForUpdate;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
+import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
@@ -34,6 +35,7 @@ import static com.boschat.sikb.service.ClubUtils.findClubs;
 import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
+import static com.boschat.sikb.service.PersonUtils.findPersons;
 import static com.boschat.sikb.service.PersonUtils.getPerson;
 import static com.boschat.sikb.service.PersonUtils.updatePerson;
 import static com.boschat.sikb.service.UserUtils.confirmUser;
@@ -304,6 +306,17 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
+        }
+    },
+    PERSON_FIND("Find persons", OK, true) {
+        @Override
+        public Object call() {
+            return convertPersonsBeansToModels(findPersons());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
         }
     };
 

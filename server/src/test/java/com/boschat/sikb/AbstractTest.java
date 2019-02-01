@@ -184,6 +184,10 @@ public abstract class AbstractTest {
         return getBody(result, Person.class);
     }
 
+    protected static List<Person> getPersons(Response result) throws IOException {
+        return Arrays.asList(getBody(result, Person[].class));
+    }
+
     protected static Session getSession(Response result) throws IOException {
         return getBody(result, Session.class);
     }
@@ -331,6 +335,12 @@ public abstract class AbstractTest {
         return createRequest(path, null).get();
     }
 
+    protected Response personFind(ApiVersion version) {
+        String path = buildPathPerson(version, null);
+        return createRequest(path, null).get();
+    }
+
+    
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
