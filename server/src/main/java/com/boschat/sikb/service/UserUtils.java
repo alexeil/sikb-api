@@ -3,7 +3,6 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
-import com.boschat.sikb.common.utils.DateUtils;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
@@ -25,8 +24,8 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CA
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
-import static com.boschat.sikb.common.utils.DateUtils.getTimestampFromOffsetDateTime;
-import static com.boschat.sikb.common.utils.DateUtils.nowAsTimestamp;
+import static com.boschat.sikb.common.utils.DateUtils.now;
+import static com.boschat.sikb.common.utils.DateUtils.nowPlusDays;
 import static com.boschat.sikb.utils.HashUtils.generateToken;
 import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
 
@@ -45,8 +44,7 @@ public class UserUtils {
         }
 
         user.setResettoken(generateToken());
-        user.setResettokenexpirationdate(
-            getTimestampFromOffsetDateTime(DateUtils.now().plusDays(RESET_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
+        user.setResettokenexpirationdate(nowPlusDays(RESET_TOKEN_EXPIRATION_DAYS.getIntegerValue()));
         DAOFactory.getInstance().getUserDAO().update(user);
 
         MailUtils.getInstance().sendResetPasswordEmail(reset.getLogin(), user.getResettoken());
@@ -86,7 +84,7 @@ public class UserUtils {
             throw new FunctionalException(CONFIRM_TOKEN_NOT_FOUND);
         } else {
             User user = users.get(0);
-            boolean isExpired = user.getActivationtokenexpirationdate().before(nowAsTimestamp());
+            boolean isExpired = user.getActivationtokenexpirationdate().isBefore(now());
 
             if (isExpired) {
                 throw new FunctionalException(CONFIRM_TOKEN_EXPIRED);
@@ -165,8 +163,7 @@ public class UserUtils {
         } else {
             userBean = new User();
             userBean.setActivationtoken(generateToken());
-            userBean.setActivationtokenexpirationdate(
-                getTimestampFromOffsetDateTime(DateUtils.now().plusDays(ACTIVATION_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
+            userBean.setActivationtokenexpirationdate(nowPlusDays(ACTIVATION_TOKEN_EXPIRATION_DAYS.getIntegerValue()));
         }
 
         if (createContext.getEmail() != null) {

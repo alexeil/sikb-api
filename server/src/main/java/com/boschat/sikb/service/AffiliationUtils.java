@@ -7,7 +7,6 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
-import static com.boschat.sikb.common.utils.DateUtils.getDateFromLocalDate;
 
 public class AffiliationUtils {
 
@@ -100,7 +99,7 @@ public class AffiliationUtils {
             affiliationBean.setMembersnumber(createContext.getMembersNumber());
         }
         if (createContext.getElectedDate() != null) {
-            affiliationBean.setElecteddate(getDateFromLocalDate(createContext.getElectedDate()));
+            affiliationBean.setElecteddate(createContext.getElectedDate());
         }
 
         if (isCreation) {

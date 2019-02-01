@@ -1,6 +1,8 @@
 package com.boschat.sikb.api.impl;
 
+import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.PersonsApiService;
+import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 
@@ -16,6 +18,12 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response createPerson(String accessToken, PersonForCreation personForCreation, SecurityContext securityContext) {
         return runService(PERSON_CREATE, accessToken, securityContext, personForCreation);
+    }
+
+    @Override
+    public Response createPersonFormation(String accessToken, Integer personId, Integer clubId, String season, Licence licence, SecurityContext securityContext)
+        throws NotFoundException {
+        return null;
     }
 
     @Override

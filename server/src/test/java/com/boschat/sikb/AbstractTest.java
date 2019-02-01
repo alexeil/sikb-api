@@ -11,6 +11,7 @@ import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.Reset;
@@ -88,6 +89,10 @@ public abstract class AbstractTest {
     protected static final String PERSON_DEFAULT_EMAIL = "person@kin-ball.fr";
 
     protected static final String PERSON_DEFAULT_NATIONALITY = "FRANCE";
+
+    protected static final List<Formation> PERSON_DEFAULT_FORMATIONS = Arrays.asList(
+        new Formation().id(1).name("Arbitre Niveau 1").date(LocalDate.of(2015, 4, 4)),
+        new Formation().id(2).name("Arbitre Niveau 2").date(LocalDate.of(2016, 4, 4)));
 
     protected static final String DEFAULT_USER_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
 
@@ -518,7 +523,7 @@ public abstract class AbstractTest {
     }
 
     protected void checkPerson(Person person, String firstName, String name, Sex sex, LocalDate birthDate, String address, String postalCode, String city,
-        String phoneNumber, String email, String nationality) {
+        String phoneNumber, String email, String nationality, List<Formation> formations) {
         assertAll("Check person " + person.getFirstName(),
             () -> assertNotNull(person, " User shouldn't be null"),
             () -> assertNotNull(person.getId(), "Id shouldn't be null"),
@@ -531,7 +536,8 @@ public abstract class AbstractTest {
             () -> assertEquals(city, person.getCity(), " city incorrect"),
             () -> assertEquals(phoneNumber, person.getPhoneNumber(), " phoneNumber incorrect"),
             () -> assertEquals(email, person.getEmail(), " email incorrect"),
-            () -> assertEquals(nationality, person.getNationality(), " nationality incorrect")
+            () -> assertEquals(nationality, person.getNationality(), " nationality incorrect"),
+            () -> assertEquals(formations, person.getFormations(), " formations incorrect")
         );
     }
 

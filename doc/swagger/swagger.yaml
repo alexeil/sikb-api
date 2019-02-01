@@ -646,6 +646,40 @@ paths:
       tags:
         - persons
 
+  '/persons/{personId}/{clubId}/{season}/licence':
+    post:
+      summary: Create a person's licence
+      description: ''
+      operationId: createPersonFormation
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/season'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/licence'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/formation'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+
 components:
   securitySchemes:
     basicAuth:
@@ -970,26 +1004,43 @@ components:
           format: email
         nationality:
           type: string
+        formations:
+          type: array
+          items:
+            $ref: "#/components/schemas/formation"
 
     formation:
+      required:
+        - id
+        - name
+        - date
       properties:
+        id:
+          type: integer
+          format: int32
         name:
           type: string
         date:
           type: string
           format: date
       example:
-        - name: 'Arbitre Niveau 1'
+        - id: 1
+          name: 'Arbitre Niveau 1'
           date: '2010-02-01'
-        - name: 'Arbitre Niveau 2'
+        - id: 2
+          name: 'Arbitre Niveau 2'
           date: '2012-02-01'
-        - name: 'Arbitre Niveau 3'
+        - id: 3
+          name: 'Arbitre Niveau 3'
           date: '2013-02-01'
-        - name: 'Formateur Arbitre Niveau 1'
+        - id: 4
+          name: 'Formateur Arbitre Niveau 1'
           date: '2014-02-01'
-        - name: 'Formateur Arbitre Niveau 1'
+        - id: 5
+          name: 'Formateur Arbitre Niveau 1'
           date: '2016-02-01'
-        - name: 'Formateur Arbitre Niveau 1'
+        - id: 6
+          name: 'Formateur Arbitre Niveau 1'
           date: '2019-02-01'
 
     typeLicence:

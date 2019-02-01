@@ -3,10 +3,10 @@ package com.boschat.sikb.persistence.listener;
 import org.jooq.RecordContext;
 import org.jooq.impl.DefaultRecordListener;
 
-import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import static com.boschat.sikb.common.utils.DateUtils.nowAsTimestamp;
+import static com.boschat.sikb.common.utils.DateUtils.now;
 
 public class AuditRecordListener extends DefaultRecordListener {
 
@@ -18,9 +18,9 @@ public class AuditRecordListener extends DefaultRecordListener {
     public void insertStart(RecordContext context) {
         Stream.of(context.record().fields()).forEach(field -> {
             if (field.getName().equals(CREATED_DATE_FIELD)) {
-                context.record().set(field.cast(Timestamp.class), nowAsTimestamp());
+                context.record().set(field.cast(OffsetDateTime.class), now());
             } else if (field.getName().equals(UPDATED_DATE_FIELD)) {
-                context.record().set(field.cast(Timestamp.class), nowAsTimestamp());
+                context.record().set(field.cast(OffsetDateTime.class), now());
             }
         });
     }
@@ -29,7 +29,7 @@ public class AuditRecordListener extends DefaultRecordListener {
     public void updateStart(RecordContext context) {
         Stream.of(context.record().fields()).forEach(field -> {
             if (field.getName().equals(UPDATED_DATE_FIELD)) {
-                context.record().set(field.cast(Timestamp.class), nowAsTimestamp());
+                context.record().set(field.cast(OffsetDateTime.class), now());
             }
         });
     }

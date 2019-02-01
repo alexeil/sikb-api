@@ -40,7 +40,9 @@ public enum ResponseCode {
     INTERNAL_ERROR(ERROR, 500, 1, "Internal Error : %s"),
     CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s"),
     EMAIL_ERROR(ERROR, 500, 3, "Error with emailing"),
-    DATABASE_ERROR(ERROR, 500, 4, "Database Error");
+    DATABASE_ERROR(ERROR, 500, 4, "Database Error"),
+    JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error");
+   
 
     /**
      * http code returned

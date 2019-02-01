@@ -14,7 +14,7 @@ values (1, 'admin', 'admin', 'admin');
 INSERT INTO sikb.application
 values (2, 'website', 'website', 'website');
 INSERT INTO sikb.application
-values (2, 'test', 'test', 'test');
+values (3, 'test', 'test', 'test');
 
 CREATE TABLE sikb.user
 (
@@ -98,6 +98,7 @@ CREATE TABLE sikb.person
   "phoneNumber"      varchar(255),
   "email"            varchar(255),
   "nationality"      varchar(255),
+  "formations"       json,
   "creationDate"     timestamp,
   "modificationDate" timestamp
 );
@@ -112,15 +113,15 @@ CREATE TABLE sikb.typeLicence
 INSERT INTO sikb.typeLicence
 values (1, 'Sénior Compétition', true);
 INSERT INTO sikb.typeLicence
-values (1, 'Sénior Loisir', true);
+values (2, 'Sénior Loisir', true);
 INSERT INTO sikb.typeLicence
-values (1, 'Junior', true);
+values (3, 'Junior', true);
 INSERT INTO sikb.typeLicence
-values (1, 'Entraineur/Coach', false);
+values (4, 'Entraineur/Coach', false);
 INSERT INTO sikb.typeLicence
-values (1, 'Arbitre', true);
+values (5, 'Arbitre', true);
 INSERT INTO sikb.typeLicence
-values (1, 'Dirigeant', false);
+values (6, 'Dirigeant', false);
 
 CREATE TABLE sikb.licence
 (

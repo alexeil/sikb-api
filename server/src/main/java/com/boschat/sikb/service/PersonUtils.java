@@ -9,7 +9,7 @@ import com.boschat.sikb.tables.pojos.Person;
 import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
-import static com.boschat.sikb.common.utils.DateUtils.getDateFromLocalDate;
+import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
 
 public class PersonUtils {
 
@@ -31,51 +31,54 @@ public class PersonUtils {
 
     private static Person savePerson(boolean isModification) {
         CreateOrUpdatePersonContext createContext = MyThreadLocal.get().getCreateOrUpdatePersonContext();
-        Person PersonBean;
+        Person personBean;
         if (isModification) {
-            PersonBean = getPerson();
+            personBean = getPerson();
         } else {
-            PersonBean = new Person();
+            personBean = new Person();
         }
 
         if (createContext.getFirstName() != null) {
-            PersonBean.setFirstname(createContext.getFirstName());
+            personBean.setFirstname(createContext.getFirstName());
         }
         if (createContext.getName() != null) {
-            PersonBean.setName(createContext.getName());
+            personBean.setName(createContext.getName());
         }
         if (createContext.getSex() != null) {
-            PersonBean.setSex(createContext.getSex().toString());
+            personBean.setSex(createContext.getSex().toString());
         }
         if (createContext.getBirthDate() != null) {
-            PersonBean.setBirthdate(getDateFromLocalDate(createContext.getBirthDate()));
+            personBean.setBirthdate(createContext.getBirthDate());
         }
         if (createContext.getAddress() != null) {
-            PersonBean.setAddress(createContext.getAddress());
+            personBean.setAddress(createContext.getAddress());
         }
         if (createContext.getPostalCode() != null) {
-            PersonBean.setPostalcode(createContext.getPostalCode());
+            personBean.setPostalcode(createContext.getPostalCode());
         }
         if (createContext.getCity() != null) {
-            PersonBean.setCity(createContext.getCity());
+            personBean.setCity(createContext.getCity());
         }
         if (createContext.getPhoneNumber() != null) {
-            PersonBean.setPhonenumber(createContext.getPhoneNumber());
+            personBean.setPhonenumber(createContext.getPhoneNumber());
         }
         if (createContext.getEmail() != null) {
-            PersonBean.setEmail(createContext.getEmail());
+            personBean.setEmail(createContext.getEmail());
         }
         if (createContext.getNationality() != null) {
-            PersonBean.setNationality(createContext.getNationality());
+            personBean.setNationality(createContext.getNationality());
+        }
+        if (createContext.getFormations() != null) {
+            personBean.setFormations(formationsToJsonNode(createContext.getFormations()));
         }
 
         if (isModification) {
-            DAOFactory.getInstance().getPersonDAO().update(PersonBean);
+            DAOFactory.getInstance().getPersonDAO().update(personBean);
         } else {
-            DAOFactory.getInstance().getPersonDAO().insert(PersonBean);
+            DAOFactory.getInstance().getPersonDAO().insert(personBean);
         }
 
-        return PersonBean;
+        return personBean;
     }
 
     public static Person getPerson() {

@@ -1,9 +1,7 @@
 package com.boschat.sikb.common.utils;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Clock;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -17,14 +15,8 @@ public class DateUtils {
 
     }
 
-    public static OffsetDateTime now() {
-        return OffsetDateTime.now(getClock());
-    }
-
     /**
      * use ONLY in test
-     *
-     * @param date
      */
     public static void useFixedClockAt(OffsetDateTime date) {
         clock = Clock.fixed(date.toInstant(), currentZoneOffSet);
@@ -38,29 +30,20 @@ public class DateUtils {
         return currentZoneOffSet;
     }
 
-    public static Timestamp nowAsTimestamp() {
-        return getTimestampFromOffsetDateTime(now());
+    public static OffsetDateTime now() {
+        return OffsetDateTime.now(getClock());
+    }
+
+    public static OffsetDateTime nowPlusDays(Integer days) {
+        return now().plusDays(days);
     }
 
     public static Timestamp getTimestampFromOffsetDateTime(OffsetDateTime datetime) {
-        if (datetime != null) {
-            return Timestamp.valueOf(datetime.toLocalDateTime());
-        }
-        return null;
+        return datetime == null ? null : Timestamp.valueOf(datetime.toLocalDateTime());
     }
 
     public static OffsetDateTime getOffsetDateTimeFromTimestamp(Timestamp datetime) {
-        if (datetime != null) {
-            return OffsetDateTime.of(datetime.toLocalDateTime(), currentZoneOffSet);
-        }
-        return null;
-    }
-
-    public static Date getDateFromLocalDate(LocalDate date) {
-        if (date != null) {
-            return Date.valueOf(date);
-        }
-        return null;
+        return datetime == null ? null : OffsetDateTime.of(datetime.toLocalDateTime(), getCurrentZoneOffSet());
     }
 
 }

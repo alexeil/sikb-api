@@ -22,8 +22,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
 		<dependency>
@@ -111,14 +111,36 @@
 
 							<forcedTypes>
 								<forcedType>
+									<userType>java.time.LocalDate</userType>
+									<converter>com.boschat.sikb.persistence.converter.LocalDateConverter</converter>
+									<expression>.*</expression>
+									<types>date</types>
+								</forcedType>
 
+								<forcedType>
+									<userType>java.time.OffsetDateTime</userType>
+									<converter>com.boschat.sikb.persistence.converter.LocalDateTimeConverter</converter>
+									<expression>.*</expression>
+									<types>timestamp</types>
+								</forcedType>
+
+								<forcedType>
 									<!-- Specify the Java type of your custom type. This corresponds to the Binding's <U> type. -->
-									<userType>com.google.gson.JsonElement</userType>
-									<binding>com.boschat.sikb.persistence.binding.PostgresJSONGsonBinding</binding>
-									<expression>information</expression>
-									<types>.*</types>
+									<userType>com.fasterxml.jackson.databind.JsonNode</userType>
+									<binding>com.boschat.sikb.persistence.binding.PostgresJSONJacksonJsonNodeBinding</binding>
+									<expression>.*</expression>
+									<types>json</types>
+								</forcedType>
+
+								<forcedType>
+									<userType>com.fasterxml.jackson.databind.JsonNode</userType>
+									<converter>com.boschat.sikb.persistence.converter.PostgresJSONJacksonJsonNodeConverter</converter>
+									<expression>.*</expression>
+									<types>json</types>
 								</forcedType>
 							</forcedTypes>
+
+
 						</database>
 
 						<generate>

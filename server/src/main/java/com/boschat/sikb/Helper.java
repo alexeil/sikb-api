@@ -12,6 +12,7 @@ import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.User;
+import com.boschat.sikb.utils.JsonUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +25,6 @@ import java.util.stream.Collectors;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
-import static com.boschat.sikb.common.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
 
 public class Helper {
@@ -117,7 +117,7 @@ public class Helper {
             person.setSex(Sex.fromValue(personBean.getSex()));
         }
         if (personBean.getBirthdate() != null) {
-            person.setBirthDate(personBean.getBirthdate().toLocalDate());
+            person.setBirthDate(personBean.getBirthdate());
         }
         person.setAddress(personBean.getAddress());
         person.setPostalCode(personBean.getPostalcode());
@@ -125,6 +125,7 @@ public class Helper {
         person.setPhoneNumber(personBean.getPhonenumber());
         person.setEmail(personBean.getEmail());
         person.setNationality(personBean.getNationality());
+        person.setFormations(JsonUtils.formationsToJsonNode(personBean.getFormations()));
         return person;
     }
 
@@ -151,11 +152,11 @@ public class Helper {
             board.setTreasurer(affiliationBean.getTreasurer());
             board.setTreasurerSex(Sex.fromValue(affiliationBean.getTreasurersex()));
             board.setMembersNumber(affiliationBean.getMembersnumber());
-            board.setElectedDate(affiliationBean.getElecteddate().toLocalDate());
+            board.setElectedDate(affiliationBean.getElecteddate());
             affiliation.setBoard(board);
         }
-        affiliation.setCreationDateTime(getOffsetDateTimeFromTimestamp(affiliationBean.getCreationdate()));
-        affiliation.setModificationDateTime(getOffsetDateTimeFromTimestamp(affiliationBean.getModificationdate()));
+        affiliation.setCreationDateTime(affiliationBean.getCreationdate());
+        affiliation.setModificationDateTime(affiliationBean.getModificationdate());
 
         return affiliation;
     }

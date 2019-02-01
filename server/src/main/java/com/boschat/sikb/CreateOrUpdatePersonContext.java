@@ -31,18 +31,19 @@ public class CreateOrUpdatePersonContext {
 
     private List<Formation> formations = null;
 
-    public static CreateOrUpdatePersonContext create(PersonForUpdate personForUpdate) {
+    public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
         CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
-        createOrUpdateContext.setFirstName(personForUpdate.getFirstName());
-        createOrUpdateContext.setName(personForUpdate.getName());
-        createOrUpdateContext.setSex(personForUpdate.getSex());
-        createOrUpdateContext.setBirthDate(personForUpdate.getBirthDate());
-        createOrUpdateContext.setAddress(personForUpdate.getAddress());
-        createOrUpdateContext.setPostalCode(personForUpdate.getPostalCode());
-        createOrUpdateContext.setCity(personForUpdate.getCity());
-        createOrUpdateContext.setPhoneNumber(personForUpdate.getPhoneNumber());
-        createOrUpdateContext.setEmail(personForUpdate.getEmail());
-        createOrUpdateContext.setNationality(personForUpdate.getNationality());
+        createOrUpdateContext.setFirstName(person.getFirstName());
+        createOrUpdateContext.setName(person.getName());
+        createOrUpdateContext.setSex(person.getSex());
+        createOrUpdateContext.setBirthDate(person.getBirthDate());
+        createOrUpdateContext.setAddress(person.getAddress());
+        createOrUpdateContext.setPostalCode(person.getPostalCode());
+        createOrUpdateContext.setCity(person.getCity());
+        createOrUpdateContext.setPhoneNumber(person.getPhoneNumber());
+        createOrUpdateContext.setEmail(person.getEmail());
+        createOrUpdateContext.setNationality(person.getNationality());
+        createOrUpdateContext.setFormations(person.getFormations());
         return createOrUpdateContext;
     }
 
