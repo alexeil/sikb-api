@@ -326,6 +326,11 @@ public abstract class AbstractTest {
         return createRequest(path, null).put(entity);
     }
 
+    protected Response personGet(ApiVersion version, Integer personId) {
+        String path = buildPathPerson(version, personId);
+        return createRequest(path, null).get();
+    }
+
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);

@@ -34,6 +34,7 @@ import static com.boschat.sikb.service.ClubUtils.findClubs;
 import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
+import static com.boschat.sikb.service.PersonUtils.getPerson;
 import static com.boschat.sikb.service.PersonUtils.updatePerson;
 import static com.boschat.sikb.service.UserUtils.confirmUser;
 import static com.boschat.sikb.service.UserUtils.createUser;
@@ -292,6 +293,17 @@ public enum CallType {
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
             MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((PersonForUpdate) params[1]));
+        }
+    },
+    PERSON_GET("Get a person", OK, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(getPerson());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
         }
     };
 

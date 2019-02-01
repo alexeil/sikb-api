@@ -10,6 +10,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
+import static com.boschat.sikb.api.CallType.PERSON_GET;
 import static com.boschat.sikb.api.CallType.PERSON_UPDATE;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-17T10:05:39.503+01:00[Europe/Paris]")
@@ -38,7 +39,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response getPerson(String accessToken, Integer personId, SecurityContext securityContext) {
-        return null;
+        return runService(PERSON_GET, accessToken, securityContext, personId);
     }
 
     @Override
