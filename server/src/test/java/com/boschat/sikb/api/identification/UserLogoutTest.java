@@ -24,7 +24,7 @@ class UserLogoutTest extends AbstractTest {
     @Test
     @DisplayName(" existing ")
     void existing() throws Exception {
-        Response response = userLogout(V1, DEFAULT_USER_ACCESS_TOKEN);
+        Response response = userLogout(V1, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, NO_CONTENT);
     }
 

@@ -41,31 +41,31 @@ class ClubUpdateTest extends AbstractTest {
     @Test
     @DisplayName(" name ")
     void name() throws Exception {
-        Response response = clubUpdate(V1, DEFAULT_CLUB_ID, buildClubForUpdate("New Club", null, null));
+        Response response = clubUpdate(V1, CLUB_DEFAULT_ID, buildClubForUpdate("New Club", null, null));
 
         checkResponse(response, OK);
         Club club = getClub(response);
-        checkClub(club, "New Club", DEFAULT_CLUB_SHORT_NAME, DEFAULT_CLUB_LOGO);
+        checkClub(club, "New Club", CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
     }
 
     @Test
     @DisplayName(" shortName ")
     void shortName() throws Exception {
-        Response response = clubUpdate(V1, DEFAULT_CLUB_ID, buildClubForUpdate(null, "New shortName", null));
+        Response response = clubUpdate(V1, CLUB_DEFAULT_ID, buildClubForUpdate(null, "New shortName", null));
 
         checkResponse(response, OK);
         Club club = getClub(response);
-        checkClub(club, DEFAULT_CLUB_NAME, "New shortName", DEFAULT_CLUB_LOGO);
+        checkClub(club, CLUB_DEFAULT_NAME, "New shortName", CLUB_DEFAULT_LOGO);
     }
 
     @Test
     @DisplayName(" logo ")
     void logo() throws Exception {
-        Response response = clubUpdate(V1, DEFAULT_CLUB_ID, buildClubForUpdate(null, null, "New Logo"));
+        Response response = clubUpdate(V1, CLUB_DEFAULT_ID, buildClubForUpdate(null, null, "New Logo"));
 
         checkResponse(response, OK);
         Club club = getClub(response);
-        checkClub(club, DEFAULT_CLUB_NAME, DEFAULT_CLUB_SHORT_NAME, "New Logo");
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, "New Logo");
     }
 
     @Test

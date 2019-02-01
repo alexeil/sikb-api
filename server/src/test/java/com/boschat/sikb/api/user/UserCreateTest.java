@@ -30,12 +30,12 @@ class UserCreateTest extends AbstractTest {
     @DisplayName(" with only a email ")
     void withEmailOnly() throws Exception {
         UserForCreation userForCreation = new UserForCreation();
-        userForCreation.setEmail(DEFAULT_AFFILIATION_EMAIL);
+        userForCreation.setEmail(AFFILIATION_DEFAULT_EMAIL);
         Response response = userCreate(V1, userForCreation);
 
         checkResponse(response, CREATED);
         User user = getUser(response);
-        checkUser(user, DEFAULT_AFFILIATION_EMAIL);
+        checkUser(user, AFFILIATION_DEFAULT_EMAIL);
 
         com.boschat.sikb.tables.pojos.User userBean = DAOFactory.getInstance().getUserDAO().findById(user.getId());
         assertAll("Check User Bean",
@@ -46,6 +46,6 @@ class UserCreateTest extends AbstractTest {
             () -> assertNotNull(userBean.getActivationtokenexpirationdate(), "Activationtokenexpirationdate shouldn't be null")
         );
 
-        checkEmail(DEFAULT_AFFILIATION_EMAIL, TEMPLATE_CREATE_USER_TITLE.getValue());
+        checkEmail(AFFILIATION_DEFAULT_EMAIL, TEMPLATE_CREATE_USER_TITLE.getValue());
     }
 }

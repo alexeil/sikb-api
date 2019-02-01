@@ -37,7 +37,7 @@ class UserFindTest extends AbstractTest {
         assertAll("Check users ",
             () -> assertNotNull(users, " users shouldn't be null"),
             () -> assertEquals(4, users.size(), " only 2 users "),
-            () -> checkUser(users.get(0), DEFAULT_USER_EMAIL),
+            () -> checkUser(users.get(0), USER_DEFAULT_EMAIL),
             () -> checkUser(users.get(1), "myEmail2@kin-ball.fr")
         );
     }

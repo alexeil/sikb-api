@@ -94,57 +94,57 @@ public abstract class AbstractTest {
         new Formation().id(1).name("Arbitre Niveau 1").date(LocalDate.of(2015, 4, 4)),
         new Formation().id(2).name("Arbitre Niveau 2").date(LocalDate.of(2016, 4, 4)));
 
-    protected static final String DEFAULT_USER_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
+    protected static final String USER_DEFAULT_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
 
-    protected static final Integer DEFAULT_CLUB_ID = 1;
+    protected static final Integer USER_DEFAULT_ID = 1;
 
-    protected static final Integer DEFAULT_USER_ID = 1;
+    protected static final String USER_DEFAULT_EMAIL = "myEmail@kin-ball.fr";
 
-    protected static final String DEFAULT_USER_EMAIL = "myEmail@kin-ball.fr";
+    protected static final String USER_DEFAULT_PASSWORD = "test";
 
-    protected static final String DEFAULT_USER_PASSWORD = "test";
+    protected static final String SEASON_DEFAULT_SHORT_NAME = "20182019";
 
-    protected static final String DEFAULT_SEASON = "20182019";
+    protected static final Integer CLUB_DEFAULT_ID = 1;
 
-    protected static final String DEFAULT_CLUB_NAME = "Kin-ball Association Rennes";
+    protected static final String CLUB_DEFAULT_NAME = "Kin-ball Association Rennes";
 
-    protected static final String DEFAULT_CLUB_SHORT_NAME = "KBAR";
+    protected static final String CLUB_DEFAULT_SHORT_NAME = "KBAR";
 
-    protected static final String DEFAULT_CLUB_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
+    protected static final String CLUB_DEFAULT_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
 
-    protected static final String DEFAULT_AFFILIATION_PREFECTURE_NUMBER = "W333333333";
+    protected static final String AFFILIATION_DEFAULT_PREFECTURE_NUMBER = "W333333333";
 
-    protected static final String DEFAULT_AFFILIATION_PREFECTURE_CITY = "Rennes";
+    protected static final String AFFILIATION_DEFAULT_PREFECTURE_CITY = "Rennes";
 
-    protected static final String DEFAULT_AFFILIATION_SIRET_NUMBER = "786539137163134";
+    protected static final String AFFILIATION_DEFAULT_SIRET_NUMBER = "786539137163134";
 
-    protected static final String DEFAULT_AFFILIATION_ADDRESS = "My club Address";
+    protected static final String AFFILIATION_DEFAULT_ADDRESS = "My club Address";
 
-    protected static final String DEFAULT_AFFILIATION_POSTAL_CODE = "35000";
+    protected static final String AFFILIATION_DEFAULT_POSTAL_CODE = "35000";
 
-    protected static final String DEFAULT_AFFILIATION_CITY = "Rennes";
+    protected static final String AFFILIATION_DEFAULT_CITY = "Rennes";
 
-    protected static final String DEFAULT_AFFILIATION_PHONE_NUMBER = "0709864324";
+    protected static final String AFFILIATION_DEFAULT_PHONE_NUMBER = "0709864324";
 
-    protected static final String DEFAULT_AFFILIATION_EMAIL = "myEmail@kin-ball.fr";
+    protected static final String AFFILIATION_DEFAULT_EMAIL = "myEmail@kin-ball.fr";
 
-    protected static final String DEFAULT_AFFILIATION_WEBSITE = "myWebsite.kin-ball.fr";
+    protected static final String AFFILIATION_DEFAULT_WEBSITE = "myWebsite.kin-ball.fr";
 
-    protected static final String DEFAULT_AFFILIATION_PRESIDENT = "Mrs president";
+    protected static final String AFFILIATION_DEFAULT_PRESIDENT = "Mrs president";
 
-    protected static final Sex DEFAULT_AFFILIATION_PRESIDENT_SEX = FEMALE;
+    protected static final Sex AFFILIATION_DEFAULT_PRESIDENT_SEX = FEMALE;
 
-    protected static final String DEFAULT_AFFILIATION_SECRETARY = "Mr Secretary";
+    protected static final String AFFILIATION_DEFAULT_SECRETARY = "Mr Secretary";
 
-    protected static final Sex DEFAULT_AFFILIATION_SECRETARY_SEX = MALE;
+    protected static final Sex AFFILIATION_DEFAULT_SECRETARY_SEX = MALE;
 
-    protected static final String DEFAULT_AFFILIATION_TREASURER = "Mrs Treasurer";
+    protected static final String AFFILIATION_DEFAULT_TREASURER = "Mrs Treasurer";
 
-    protected static final Sex DEFAULT_AFFILIATION_TREASURER_SEX = FEMALE;
+    protected static final Sex AFFILIATION_DEFAULT_TREASURER_SEX = FEMALE;
 
-    protected static final Integer DEFAULT_AFFILIATION_MEMBERS_NUMBER = 7;
+    protected static final Integer AFFILIATION_DEFAULT_MEMBERS_NUMBER = 7;
 
-    protected static final LocalDate DEFAULT_AFFILIATION_ELECTED_DATE = LocalDate.of(2018, 6, 29);
+    protected static final LocalDate AFFILIATION_DEFAULT_ELECTED_DATE = LocalDate.of(2018, 6, 29);
 
     protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
@@ -407,7 +407,7 @@ public abstract class AbstractTest {
         }
         Invocation.Builder builder = target.request();
 
-        builder.header(HEADER_ACCESS_TOKEN, DEFAULT_USER_ACCESS_TOKEN);
+        builder.header(HEADER_ACCESS_TOKEN, USER_DEFAULT_ACCESS_TOKEN);
         builder.header(HEADER_AUTHORIZATION, "Basic " + basicEncode("admin", "admin"));
 
         return builder;

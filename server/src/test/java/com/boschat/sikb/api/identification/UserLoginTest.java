@@ -27,8 +27,8 @@ class UserLoginTest extends AbstractTest {
     @DisplayName(" existing ")
     void existing() throws Exception {
         Credentials credentials = new Credentials();
-        credentials.setLogin(DEFAULT_USER_EMAIL);
-        credentials.setPassword(DEFAULT_USER_PASSWORD);
+        credentials.setLogin(USER_DEFAULT_EMAIL);
+        credentials.setPassword(USER_DEFAULT_PASSWORD);
         Response response = userLogin(V1, credentials);
 
         checkResponse(response, CREATED);

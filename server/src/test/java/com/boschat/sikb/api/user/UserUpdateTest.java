@@ -35,7 +35,7 @@ class UserUpdateTest extends AbstractTest {
     @Test
     @DisplayName(" email ")
     void name() throws Exception {
-        Response response = userUpdate(V1, DEFAULT_CLUB_ID, buildUserForUpdate("newEmail@kin-ball.fr"));
+        Response response = userUpdate(V1, CLUB_DEFAULT_ID, buildUserForUpdate("newEmail@kin-ball.fr"));
 
         checkResponse(response, OK);
         User user = getUser(response);

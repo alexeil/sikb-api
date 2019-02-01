@@ -26,11 +26,11 @@ class ClubGetTest extends AbstractTest {
     @Test
     @DisplayName(" (default) ")
     void getDefaultClub() throws Exception {
-        Response response = clubGet(V1, DEFAULT_CLUB_ID);
+        Response response = clubGet(V1, CLUB_DEFAULT_ID);
 
         checkResponse(response, OK);
         Club club = getClub(response);
-        checkClub(club, DEFAULT_CLUB_NAME, DEFAULT_CLUB_SHORT_NAME, DEFAULT_CLUB_LOGO);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
     }
 
     @Test

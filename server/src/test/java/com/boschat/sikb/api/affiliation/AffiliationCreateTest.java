@@ -28,36 +28,36 @@ class AffiliationCreateTest extends AbstractTest {
     void withAName() throws Exception {
         AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
 
-        affiliationForCreation.setPrefectureNumber(DEFAULT_AFFILIATION_PREFECTURE_NUMBER);
-        affiliationForCreation.setPrefectureCity(DEFAULT_AFFILIATION_PREFECTURE_CITY);
-        affiliationForCreation.setSiretNumber(DEFAULT_AFFILIATION_SIRET_NUMBER);
-        affiliationForCreation.setAddress(DEFAULT_AFFILIATION_ADDRESS);
-        affiliationForCreation.setPostalCode(DEFAULT_AFFILIATION_POSTAL_CODE);
-        affiliationForCreation.setCity(DEFAULT_AFFILIATION_CITY);
-        affiliationForCreation.setPhoneNumber(DEFAULT_AFFILIATION_PHONE_NUMBER);
-        affiliationForCreation.setEmail(DEFAULT_AFFILIATION_EMAIL);
-        affiliationForCreation.setWebSite(DEFAULT_AFFILIATION_WEBSITE);
+        affiliationForCreation.setPrefectureNumber(AFFILIATION_DEFAULT_PREFECTURE_NUMBER);
+        affiliationForCreation.setPrefectureCity(AFFILIATION_DEFAULT_PREFECTURE_CITY);
+        affiliationForCreation.setSiretNumber(AFFILIATION_DEFAULT_SIRET_NUMBER);
+        affiliationForCreation.setAddress(AFFILIATION_DEFAULT_ADDRESS);
+        affiliationForCreation.setPostalCode(AFFILIATION_DEFAULT_POSTAL_CODE);
+        affiliationForCreation.setCity(AFFILIATION_DEFAULT_CITY);
+        affiliationForCreation.setPhoneNumber(AFFILIATION_DEFAULT_PHONE_NUMBER);
+        affiliationForCreation.setEmail(AFFILIATION_DEFAULT_EMAIL);
+        affiliationForCreation.setWebSite(AFFILIATION_DEFAULT_WEBSITE);
 
         Board board = new Board();
-        board.setPresident(DEFAULT_AFFILIATION_PRESIDENT);
-        board.setPresidentSex(DEFAULT_AFFILIATION_PRESIDENT_SEX);
-        board.setSecretary(DEFAULT_AFFILIATION_SECRETARY);
-        board.setSecretarySex(DEFAULT_AFFILIATION_SECRETARY_SEX);
-        board.setTreasurer(DEFAULT_AFFILIATION_TREASURER);
-        board.setTreasurerSex(DEFAULT_AFFILIATION_TREASURER_SEX);
-        board.setMembersNumber(DEFAULT_AFFILIATION_MEMBERS_NUMBER);
-        board.setElectedDate(DEFAULT_AFFILIATION_ELECTED_DATE);
+        board.setPresident(AFFILIATION_DEFAULT_PRESIDENT);
+        board.setPresidentSex(AFFILIATION_DEFAULT_PRESIDENT_SEX);
+        board.setSecretary(AFFILIATION_DEFAULT_SECRETARY);
+        board.setSecretarySex(AFFILIATION_DEFAULT_SECRETARY_SEX);
+        board.setTreasurer(AFFILIATION_DEFAULT_TREASURER);
+        board.setTreasurerSex(AFFILIATION_DEFAULT_TREASURER_SEX);
+        board.setMembersNumber(AFFILIATION_DEFAULT_MEMBERS_NUMBER);
+        board.setElectedDate(AFFILIATION_DEFAULT_ELECTED_DATE);
         affiliationForCreation.setBoard(board);
 
-        Response response = affiliationCreate(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON, affiliationForCreation);
+        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME, affiliationForCreation);
 
         checkResponse(response, CREATED);
         Affiliation affiliation = getAffiliation(response);
-        checkAffiliation(affiliation, DEFAULT_AFFILIATION_PREFECTURE_NUMBER, DEFAULT_AFFILIATION_PREFECTURE_CITY, DEFAULT_AFFILIATION_SIRET_NUMBER,
-            DEFAULT_AFFILIATION_ADDRESS, DEFAULT_AFFILIATION_POSTAL_CODE, DEFAULT_AFFILIATION_CITY, DEFAULT_AFFILIATION_PHONE_NUMBER,
-            DEFAULT_AFFILIATION_EMAIL, DEFAULT_AFFILIATION_WEBSITE, NOW, NOW, DEFAULT_AFFILIATION_PRESIDENT, DEFAULT_AFFILIATION_PRESIDENT_SEX,
-            DEFAULT_AFFILIATION_SECRETARY, DEFAULT_AFFILIATION_SECRETARY_SEX, DEFAULT_AFFILIATION_TREASURER, DEFAULT_AFFILIATION_TREASURER_SEX,
-            DEFAULT_AFFILIATION_MEMBERS_NUMBER, DEFAULT_AFFILIATION_ELECTED_DATE);
+        checkAffiliation(affiliation, AFFILIATION_DEFAULT_PREFECTURE_NUMBER, AFFILIATION_DEFAULT_PREFECTURE_CITY, AFFILIATION_DEFAULT_SIRET_NUMBER,
+            AFFILIATION_DEFAULT_ADDRESS, AFFILIATION_DEFAULT_POSTAL_CODE, AFFILIATION_DEFAULT_CITY, AFFILIATION_DEFAULT_PHONE_NUMBER,
+            AFFILIATION_DEFAULT_EMAIL, AFFILIATION_DEFAULT_WEBSITE, NOW, NOW, AFFILIATION_DEFAULT_PRESIDENT, AFFILIATION_DEFAULT_PRESIDENT_SEX,
+            AFFILIATION_DEFAULT_SECRETARY, AFFILIATION_DEFAULT_SECRETARY_SEX, AFFILIATION_DEFAULT_TREASURER, AFFILIATION_DEFAULT_TREASURER_SEX,
+            AFFILIATION_DEFAULT_MEMBERS_NUMBER, AFFILIATION_DEFAULT_ELECTED_DATE);
     }
 
 }

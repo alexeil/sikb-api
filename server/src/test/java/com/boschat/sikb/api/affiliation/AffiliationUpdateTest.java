@@ -29,15 +29,15 @@ class AffiliationUpdateTest extends AbstractTest {
     void defaultAffiliation() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME, affiliationForUpdate);
 
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);
-        checkAffiliation(affiliation, "New Prefecture Number", DEFAULT_AFFILIATION_PREFECTURE_CITY, DEFAULT_AFFILIATION_SIRET_NUMBER,
-                DEFAULT_AFFILIATION_ADDRESS, DEFAULT_AFFILIATION_POSTAL_CODE, DEFAULT_AFFILIATION_CITY, DEFAULT_AFFILIATION_PHONE_NUMBER,
-                DEFAULT_AFFILIATION_EMAIL, DEFAULT_AFFILIATION_WEBSITE, NOW, NOW, DEFAULT_AFFILIATION_PRESIDENT, DEFAULT_AFFILIATION_PRESIDENT_SEX,
-                DEFAULT_AFFILIATION_SECRETARY, DEFAULT_AFFILIATION_SECRETARY_SEX, DEFAULT_AFFILIATION_TREASURER, DEFAULT_AFFILIATION_TREASURER_SEX,
-                DEFAULT_AFFILIATION_MEMBERS_NUMBER, DEFAULT_AFFILIATION_ELECTED_DATE);
+        checkAffiliation(affiliation, "New Prefecture Number", AFFILIATION_DEFAULT_PREFECTURE_CITY, AFFILIATION_DEFAULT_SIRET_NUMBER,
+            AFFILIATION_DEFAULT_ADDRESS, AFFILIATION_DEFAULT_POSTAL_CODE, AFFILIATION_DEFAULT_CITY, AFFILIATION_DEFAULT_PHONE_NUMBER,
+            AFFILIATION_DEFAULT_EMAIL, AFFILIATION_DEFAULT_WEBSITE, NOW, NOW, AFFILIATION_DEFAULT_PRESIDENT, AFFILIATION_DEFAULT_PRESIDENT_SEX,
+            AFFILIATION_DEFAULT_SECRETARY, AFFILIATION_DEFAULT_SECRETARY_SEX, AFFILIATION_DEFAULT_TREASURER, AFFILIATION_DEFAULT_TREASURER_SEX,
+            AFFILIATION_DEFAULT_MEMBERS_NUMBER, AFFILIATION_DEFAULT_ELECTED_DATE);
     }
 
     @Test
@@ -45,8 +45,8 @@ class AffiliationUpdateTest extends AbstractTest {
     void clubNotFound() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, 999, DEFAULT_SEASON, affiliationForUpdate);
-        checkResponse(response, AFFILIATION_NOT_FOUND, 999, DEFAULT_SEASON);
+        Response response = affiliationUpdate(V1, 999, SEASON_DEFAULT_SHORT_NAME, affiliationForUpdate);
+        checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_SHORT_NAME);
     }
 
     @Test
@@ -54,8 +54,8 @@ class AffiliationUpdateTest extends AbstractTest {
     void seasonNotFound() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, DEFAULT_CLUB_ID, "20002001", affiliationForUpdate);
-        checkResponse(response, AFFILIATION_NOT_FOUND, DEFAULT_CLUB_ID, "20002001");
+        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, "20002001", affiliationForUpdate);
+        checkResponse(response, AFFILIATION_NOT_FOUND, CLUB_DEFAULT_ID, "20002001");
     }
 
 }

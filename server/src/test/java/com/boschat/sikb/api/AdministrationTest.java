@@ -31,7 +31,7 @@ class AdministrationTest extends AbstractTest {
     }
 
     private Response affiliationGetWithCredentials(String basic, String accessToken) {
-        String path = buildPath(V1, DEFAULT_CLUB_ID, DEFAULT_SEASON);
+        String path = buildPath(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME);
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
         Invocation.Builder builder = target.request();
         if (basic != null) {
@@ -67,7 +67,7 @@ class AdministrationTest extends AbstractTest {
     @Test
     @DisplayName(" website ")
     void website() throws Exception {
-        Response response = affiliationGetWithCredentials(basicEncode("website", "website"), DEFAULT_USER_ACCESS_TOKEN);
+        Response response = affiliationGetWithCredentials(basicEncode("website", "website"), USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, OK);
     }
 

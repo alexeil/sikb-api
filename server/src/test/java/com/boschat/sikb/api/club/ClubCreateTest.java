@@ -25,27 +25,27 @@ class ClubCreateTest extends AbstractTest {
     @DisplayName(" with only a name ")
     void withAName() throws Exception {
         ClubForCreation clubForCreation = new ClubForCreation();
-        clubForCreation.setName(DEFAULT_CLUB_NAME);
+        clubForCreation.setName(CLUB_DEFAULT_NAME);
         Response response = clubCreate(V1, clubForCreation);
 
         checkResponse(response, CREATED);
         Club club = getClub(response);
-        checkClub(club, DEFAULT_CLUB_NAME, null, null);
+        checkClub(club, CLUB_DEFAULT_NAME, null, null);
     }
 
     @Test
     @DisplayName(" with all information ")
     void withAllInformation() throws Exception {
         ClubForCreation clubForCreation = new ClubForCreation();
-        clubForCreation.setName(DEFAULT_CLUB_NAME);
-        clubForCreation.setShortName(DEFAULT_CLUB_SHORT_NAME);
-        clubForCreation.setLogo(DEFAULT_CLUB_LOGO);
+        clubForCreation.setName(CLUB_DEFAULT_NAME);
+        clubForCreation.setShortName(CLUB_DEFAULT_SHORT_NAME);
+        clubForCreation.setLogo(CLUB_DEFAULT_LOGO);
 
         Response response = clubCreate(V1, clubForCreation);
 
         checkResponse(response, CREATED);
         Club club = getClub(response);
-        checkClub(club, DEFAULT_CLUB_NAME, DEFAULT_CLUB_SHORT_NAME, DEFAULT_CLUB_LOGO);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
     }
 
 }

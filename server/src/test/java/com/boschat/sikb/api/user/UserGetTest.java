@@ -26,11 +26,11 @@ class UserGetTest extends AbstractTest {
     @Test
     @DisplayName(" (default) ")
     void getDefaultUser() throws Exception {
-        Response response = userGet(V1, DEFAULT_CLUB_ID);
+        Response response = userGet(V1, CLUB_DEFAULT_ID);
 
         checkResponse(response, OK);
         User user = getUser(response);
-        checkUser(user, DEFAULT_USER_EMAIL);
+        checkUser(user, USER_DEFAULT_EMAIL);
     }
 
     @Test

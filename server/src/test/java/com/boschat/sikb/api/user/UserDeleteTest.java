@@ -25,7 +25,7 @@ class UserDeleteTest extends AbstractTest {
     @Test
     @DisplayName(" default user ")
     void name() throws Exception {
-        Response response = userDelete(V1, DEFAULT_USER_ID);
+        Response response = userDelete(V1, USER_DEFAULT_ID);
         checkResponse(response, NO_CONTENT);
     }
 

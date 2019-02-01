@@ -33,7 +33,7 @@ class UserConfirmTest extends AbstractTest {
     @DisplayName(" existing ")
     void existing() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
         Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA");
 
         checkResponse(response, NO_CONTENT);
@@ -52,7 +52,7 @@ class UserConfirmTest extends AbstractTest {
     @DisplayName(" unknown token ")
     void unknownToken() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
         Response response = userConfirm(V1, updatePassword, "test");
 
         checkResponse(response, CONFIRM_TOKEN_NOT_FOUND);
@@ -62,7 +62,7 @@ class UserConfirmTest extends AbstractTest {
     @DisplayName(" no token ")
     void noToken() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
         Response response = userConfirm(V1, updatePassword, null);
 
         checkResponse(response, CONFIRM_TOKEN_NOT_FOUND);
@@ -72,7 +72,7 @@ class UserConfirmTest extends AbstractTest {
     @DisplayName(" expired ")
     void expired() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
         Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA==");
 
         checkResponse(response, CONFIRM_TOKEN_EXPIRED);

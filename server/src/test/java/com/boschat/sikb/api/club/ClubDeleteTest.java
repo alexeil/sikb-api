@@ -25,7 +25,7 @@ class ClubDeleteTest extends AbstractTest {
     @Test
     @DisplayName(" default club ")
     void name() throws Exception {
-        Response response = clubDelete(V1, DEFAULT_CLUB_ID);
+        Response response = clubDelete(V1, CLUB_DEFAULT_ID);
 
         checkResponse(response, NO_CONTENT);
     }

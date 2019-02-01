@@ -28,11 +28,11 @@ class UserResetPasswordTest extends AbstractTest {
     @DisplayName(" existing ")
     void existing() throws Exception {
         Reset reset = new Reset();
-        reset.setLogin(DEFAULT_USER_EMAIL);
+        reset.setLogin(USER_DEFAULT_EMAIL);
         Response response = resetUserPassword(V1, reset);
         checkResponse(response, NO_CONTENT);
 
-        checkEmail(DEFAULT_USER_EMAIL, TEMPLATE_RESET_USER_PASSWORD_TITLE.getValue());
+        checkEmail(USER_DEFAULT_EMAIL, TEMPLATE_RESET_USER_PASSWORD_TITLE.getValue());
     }
 
     @Test

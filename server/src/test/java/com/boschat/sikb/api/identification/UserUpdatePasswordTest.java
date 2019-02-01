@@ -31,7 +31,7 @@ class UserUpdatePasswordTest extends AbstractTest {
     @Test
     @DisplayName(" missing passwords ")
     void missingPasswords() throws Exception {
-        Response response = userUpdatePassword(V1, null, DEFAULT_USER_ACCESS_TOKEN);
+        Response response = userUpdatePassword(V1, null, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_UPDATE_PASSWORD);
     }
 
@@ -39,8 +39,8 @@ class UserUpdatePasswordTest extends AbstractTest {
     @DisplayName(" missing old password ")
     void missingOldPassword() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
-        Response response = userUpdatePassword(V1, updatePassword, DEFAULT_USER_ACCESS_TOKEN);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_OLD_PASSWORD);
 
     }
@@ -49,8 +49,8 @@ class UserUpdatePasswordTest extends AbstractTest {
     @DisplayName(" missing new password ")
     void missingNewPassword() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setOldPassword(DEFAULT_USER_PASSWORD);
-        Response response = userUpdatePassword(V1, updatePassword, DEFAULT_USER_ACCESS_TOKEN);
+        updatePassword.setOldPassword(USER_DEFAULT_PASSWORD);
+        Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_NEW_PASSWORD);
 
     }
@@ -59,9 +59,9 @@ class UserUpdatePasswordTest extends AbstractTest {
     @DisplayName(" same password ")
     void samePassword() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setOldPassword(DEFAULT_USER_PASSWORD);
-        updatePassword.setNewPassword(DEFAULT_USER_PASSWORD);
-        Response response = userUpdatePassword(V1, updatePassword, DEFAULT_USER_ACCESS_TOKEN);
+        updatePassword.setOldPassword(USER_DEFAULT_PASSWORD);
+        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, NEW_PASSWORD_CANNOT_BE_SAME);
     }
 
@@ -69,9 +69,9 @@ class UserUpdatePasswordTest extends AbstractTest {
     @DisplayName(" right case ")
     void existing() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setOldPassword(DEFAULT_USER_PASSWORD);
+        updatePassword.setOldPassword(USER_DEFAULT_PASSWORD);
         updatePassword.setNewPassword("Test2");
-        Response response = userUpdatePassword(V1, updatePassword, DEFAULT_USER_ACCESS_TOKEN);
+        Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, NO_CONTENT);
     }
 
@@ -81,7 +81,7 @@ class UserUpdatePasswordTest extends AbstractTest {
         UpdatePassword updatePassword = new UpdatePassword();
         updatePassword.setOldPassword("Test5");
         updatePassword.setNewPassword("Test2");
-        Response response = userUpdatePassword(V1, updatePassword, DEFAULT_USER_ACCESS_TOKEN);
+        Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, WRONG_OLD_PASSWORD);
     }
 }
