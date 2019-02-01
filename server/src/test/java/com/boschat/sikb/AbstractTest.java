@@ -335,6 +335,11 @@ public abstract class AbstractTest {
         return createRequest(path, null).get();
     }
 
+    protected Response personDelete(ApiVersion version, Integer personId) {
+        String path = buildPathPerson(version, personId);
+        return createRequest(path, null).delete();
+    }
+
     protected Response personFind(ApiVersion version) {
         String path = buildPathPerson(version, null);
         return createRequest(path, null).get();

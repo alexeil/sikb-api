@@ -10,6 +10,7 @@ import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
+import static com.boschat.sikb.api.CallType.PERSON_DELETE;
 import static com.boschat.sikb.api.CallType.PERSON_FIND;
 import static com.boschat.sikb.api.CallType.PERSON_GET;
 import static com.boschat.sikb.api.CallType.PERSON_UPDATE;
@@ -30,7 +31,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response deletePerson(String accessToken, Integer personId, SecurityContext securityContext) {
-        return null;
+        return runService(PERSON_DELETE, accessToken, securityContext, personId);
     }
 
     @Override

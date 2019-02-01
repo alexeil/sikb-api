@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DisplayName(" Update a person ")
+@DisplayName(" Find persons ")
 class PersonFindTest extends AbstractTest {
 
     @BeforeEach
