@@ -1,6 +1,7 @@
 package com.boschat.sikb.persistence;
 
 import com.boschat.sikb.common.exceptions.TechnicalException;
+import com.boschat.sikb.persistence.listener.AuditRecordListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
@@ -8,6 +9,7 @@ import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
+import org.jooq.impl.DefaultRecordListenerProvider;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -42,6 +44,7 @@ public class DAOFactory {
         LOGGER.trace(URL);
         Connection connection = DriverManager.getConnection(URL, POSTGRES_USER.getValue(), POSTGRES_PASSWORD.getValue());
         configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
+        configuration.set(new DefaultRecordListenerProvider(new AuditRecordListener()));
         dslContext = DSL.using(connection, SQLDialect.POSTGRES);
     }
 

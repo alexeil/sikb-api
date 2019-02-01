@@ -5,11 +5,9 @@ import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
-import com.boschat.sikb.utils.DateUtils;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
-import static com.boschat.sikb.utils.DateUtils.getDateFromLocalDate;
-import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
+import static com.boschat.sikb.common.utils.DateUtils.getDateFromLocalDate;
 
 public class AffiliationUtils {
 
@@ -49,10 +47,8 @@ public class AffiliationUtils {
             affiliationBean = new Affiliation();
             affiliationBean.setSeason(MyThreadLocal.get().getSeason());
             affiliationBean.setClubid(MyThreadLocal.get().getClubId());
-            affiliationBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         } else {
             affiliationBean = getAffiliation();
-            affiliationBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         }
 
         if (createContext.getPrefectureNumber() != null) {

@@ -23,6 +23,18 @@ servers:
 security:
   - basicAuth: []
 
+tags:
+  - name: users
+    description: accounts to log into the system
+  - name: identification
+    description: APIs related to user connection
+  - name: clubs
+    description: APIs to Clubs management
+  - name: affiliations
+    description: APIs to affiliations management
+  - name: persons
+    description: APIs to persons management (a Person can be a Player, Referee etc.)
+
 paths:
   '/users':
     get:
@@ -104,7 +116,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - Identification
+        - identification
   '/users/logout':
     get:
       summary: Log out a user (Revoke access Token)
@@ -122,7 +134,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - Identification
+        - identification
   '/users/reset':
     post:
       summary: Ask to reset a password
@@ -146,7 +158,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - Identification
+        - identification
   '/users/updatePassword':
     post:
       summary: Update the user password
@@ -178,7 +190,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - Identification
+        - identification
   '/users/confirm':
     post:
       summary: Confirm user email
@@ -204,7 +216,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - Identification
+        - identification
   '/users/{userId}':
     get:
       summary: get a user
@@ -508,6 +520,132 @@ paths:
       tags:
         - affiliations
 
+  '/persons':
+    get:
+      summary: Find all persons
+      description: ''
+      operationId: findPersons
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      responses:
+        200:
+          description: find all persons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/person'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+    post:
+      summary: Create a person
+      description: ''
+      operationId: createPerson
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/personForCreation'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+
+  '/persons/{personId}':
+    get:
+      summary: get a person
+      description: ''
+      operationId: getPerson
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+      responses:
+        200:
+          description: get back a person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+    put:
+      summary: Update a person
+      description: ''
+      operationId: updatePerson
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/personForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly updated person
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/person'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+    delete:
+      summary: Delete a person
+      description: ''
+      operationId: deletePerson
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+      responses:
+        204:
+          description: The person is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+
 components:
   securitySchemes:
     basicAuth:
@@ -529,6 +667,13 @@ components:
       required: true
       in: path
       description: "Id of a user"
+    personId:
+      name: "personId"
+      schema:
+        type: integer
+      required: true
+      in: path
+      description: "Id of a person"
     season:
       name: "season"
       schema:
@@ -750,6 +895,185 @@ components:
           type: string
           format: password
           minLength: 1
+
+    person:
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        name:
+          type: string
+        sex:
+          $ref: '#/components/schemas/sex'
+        birthDate:
+          type: string
+          format: date
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        nationality:
+          type: string
+        creationDateTime:
+          type: string
+          format: date-time
+        modificationDateTime:
+          type: string
+          format: date-time
+        formations:
+          type: array
+          items:
+            $ref: "#/components/schemas/formation"
+        licences:
+          type: array
+          items:
+            $ref: "#/components/schemas/licence"
+
+    personForCreation:
+      required:
+        - firstName
+        - name
+        - sex
+        - email
+      properties:
+        firstName:
+          type: string
+        name:
+          type: string
+        sex:
+          $ref: '#/components/schemas/sex'
+        birthDate:
+          type: string
+          format: date
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        nationality:
+          type: string
+        creationDateTime:
+          type: string
+          format: date-time
+        modificationDateTime:
+          type: string
+          format: date-time
+        formations:
+          type: array
+          items:
+            $ref: "#/components/schemas/formation"
+
+    personForUpdate:
+      properties:
+        firstName:
+          type: string
+        name:
+          type: string
+        sex:
+          $ref: '#/components/schemas/sex'
+        birthDate:
+          type: string
+          format: date
+        address:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        nationality:
+          type: string
+        creationDateTime:
+          type: string
+          format: date-time
+        modificationDateTime:
+          type: string
+          format: date-time
+        formations:
+          type: array
+          items:
+            $ref: "#/components/schemas/formation"
+
+    formation:
+      properties:
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+      example:
+        - name: 'Arbitre Niveau 1'
+          date: '2010-02-01'
+        - name: 'Arbitre Niveau 2'
+          date: '2012-02-01'
+        - name: 'Arbitre Niveau 3'
+          date: '2013-02-01'
+        - name: 'Formateur Arbitre Niveau 1'
+          date: '2014-02-01'
+        - name: 'Formateur Arbitre Niveau 1'
+          date: '2016-02-01'
+        - name: 'Formateur Arbitre Niveau 1'
+          date: '2019-02-01'
+
+    typeLicence:
+      properties:
+        name:
+          type: string
+        medicalCertificateRequired:
+          type: boolean
+      example:
+        - name: 'Sénior Compétition'
+          medicalCertificateRequired: true
+        - name: 'Sénior Loisir'
+          medicalCertificateRequired: true
+        - name: 'Junior'
+          medicalCertificateRequired: true
+        - name: 'Entraineur/Coach'
+          medicalCertificateRequired: false
+        - name: 'Arbitre'
+          medicalCertificateRequired: true
+        - name: 'Dirigeant'
+          medicalCertificateRequired: false
+
+
+    licence:
+      properties:
+        typeLicences:
+          type: array
+          items:
+            $ref: "#/components/schemas/typeLicence"
+        season:
+          type: string
+        medicalCertificate:
+          type: string
+        formationNeed:
+          type: array
+          items:
+            type: string
+        club:
+          $ref: "#/components/schemas/club"
+
     ZError:
       required:
         - code

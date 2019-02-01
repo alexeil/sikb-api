@@ -5,12 +5,10 @@ import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.Club;
-import com.boschat.sikb.utils.DateUtils;
 
 import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
-import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
 
 public class ClubUtils {
 
@@ -49,10 +47,8 @@ public class ClubUtils {
         Club clubBean;
         if (isModification) {
             clubBean = new Club();
-            clubBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         } else {
             clubBean = getClub();
-            clubBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         }
 
         if (createContext.getName() != null) {

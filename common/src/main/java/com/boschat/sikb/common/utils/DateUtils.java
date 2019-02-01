@@ -1,4 +1,4 @@
-package com.boschat.sikb.utils;
+package com.boschat.sikb.common.utils;
 
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -36,6 +36,10 @@ public class DateUtils {
 
     public static ZoneOffset getCurrentZoneOffSet() {
         return currentZoneOffSet;
+    }
+
+    public static Timestamp nowAsTimestamp() {
+        return getTimestampFromOffsetDateTime(now());
     }
 
     public static Timestamp getTimestampFromOffsetDateTime(OffsetDateTime datetime) {

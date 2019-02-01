@@ -3,13 +3,13 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
+import com.boschat.sikb.common.utils.DateUtils;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.DAOFactory;
 import com.boschat.sikb.tables.pojos.User;
-import com.boschat.sikb.utils.DateUtils;
 import com.boschat.sikb.utils.HashUtils;
 import com.boschat.sikb.utils.MailUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,7 +25,8 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CA
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
-import static com.boschat.sikb.utils.DateUtils.getTimestampFromOffsetDateTime;
+import static com.boschat.sikb.common.utils.DateUtils.getTimestampFromOffsetDateTime;
+import static com.boschat.sikb.common.utils.DateUtils.nowAsTimestamp;
 import static com.boschat.sikb.utils.HashUtils.generateToken;
 import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
 
@@ -46,7 +47,6 @@ public class UserUtils {
         user.setResettoken(generateToken());
         user.setResettokenexpirationdate(
             getTimestampFromOffsetDateTime(DateUtils.now().plusDays(RESET_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
-        user.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         DAOFactory.getInstance().getUserDAO().update(user);
 
         MailUtils.getInstance().sendResetPasswordEmail(reset.getLogin(), user.getResettoken());
@@ -86,14 +86,13 @@ public class UserUtils {
             throw new FunctionalException(CONFIRM_TOKEN_NOT_FOUND);
         } else {
             User user = users.get(0);
-            boolean isExpired = user.getActivationtokenexpirationdate().before(getTimestampFromOffsetDateTime(DateUtils.now()));
+            boolean isExpired = user.getActivationtokenexpirationdate().before(nowAsTimestamp());
 
             if (isExpired) {
                 throw new FunctionalException(CONFIRM_TOKEN_EXPIRED);
             } else {
                 setSaltAndPassword(user, updatePassword);
                 user.setEnabled(true);
-                user.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
                 user.setActivationtoken(null);
                 user.setActivationtokenexpirationdate(null);
                 DAOFactory.getInstance().getUserDAO().update(user);
@@ -163,13 +162,11 @@ public class UserUtils {
         User userBean;
         if (isModification) {
             userBean = getUser();
-            userBean.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         } else {
             userBean = new User();
             userBean.setActivationtoken(generateToken());
             userBean.setActivationtokenexpirationdate(
                 getTimestampFromOffsetDateTime(DateUtils.now().plusDays(ACTIVATION_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
-            userBean.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         }
 
         if (createContext.getEmail() != null) {
