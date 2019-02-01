@@ -59,7 +59,7 @@ public class Helper {
     }
 
     private static boolean isAdmin(SecurityContext securityContext) {
-        return !"admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName());
+        return "admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName());
     }
 
     private static void checkAccessToken(CallType callType, String accessToken, SecurityContext securityContext) {
