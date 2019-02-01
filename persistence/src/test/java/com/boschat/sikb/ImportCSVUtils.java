@@ -1,6 +1,6 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 
 import java.io.IOException;
 

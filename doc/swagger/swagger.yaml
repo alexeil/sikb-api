@@ -716,12 +716,13 @@ components:
           format: int32
         email:
           type: string
+
     userForCreation:
+      allOf:
+        - $ref: '#/components/schemas/userForUpdate'
       required:
         - email
-      properties:
-        email:
-          type: string
+
     userForUpdate:
       properties:
         email:
@@ -747,15 +748,11 @@ components:
             $ref: "#/components/schemas/affiliation"
 
     clubForCreation:
+      allOf:
+        - $ref: '#/components/schemas/clubForUpdate'
       required:
         - name
-      properties:
-        name:
-          type: string
-        shortName:
-          type: string
-        logo:
-          type: string
+
     clubForUpdate:
       properties:
         name:
@@ -941,44 +938,13 @@ components:
             $ref: "#/components/schemas/licence"
 
     personForCreation:
+      allOf:
+        - $ref: '#/components/schemas/personForUpdate'
       required:
         - firstName
         - name
-        - sex
         - email
-      properties:
-        firstName:
-          type: string
-        name:
-          type: string
-        sex:
-          $ref: '#/components/schemas/sex'
-        birthDate:
-          type: string
-          format: date
-        address:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        phoneNumber:
-          type: string
-        email:
-          type: string
-          format: email
-        nationality:
-          type: string
-        creationDateTime:
-          type: string
-          format: date-time
-        modificationDateTime:
-          type: string
-          format: date-time
-        formations:
-          type: array
-          items:
-            $ref: "#/components/schemas/formation"
+
 
     personForUpdate:
       properties:
@@ -1004,16 +970,6 @@ components:
           format: email
         nationality:
           type: string
-        creationDateTime:
-          type: string
-          format: date-time
-        modificationDateTime:
-          type: string
-          format: date-time
-        formations:
-          type: array
-          items:
-            $ref: "#/components/schemas/formation"
 
     formation:
       properties:

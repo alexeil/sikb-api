@@ -1,4 +1,4 @@
-package com.boschat.sikb.persistence;
+package com.boschat.sikb.persistence.dao;
 
 import com.boschat.sikb.tables.daos.ApplicationDao;
 import com.boschat.sikb.tables.pojos.Application;

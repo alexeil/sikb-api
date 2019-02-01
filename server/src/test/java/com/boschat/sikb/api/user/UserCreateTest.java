@@ -4,7 +4,7 @@ import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForCreation;
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

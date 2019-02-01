@@ -3,7 +3,7 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;

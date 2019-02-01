@@ -2,6 +2,7 @@ package com.boschat.sikb.api;
 
 import com.boschat.sikb.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.CreateOrUpdateClubContext;
+import com.boschat.sikb.CreateOrUpdatePersonContext;
 import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.configuration.ResponseCode;
@@ -10,6 +11,7 @@ import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
@@ -30,6 +32,7 @@ import static com.boschat.sikb.service.ClubUtils.deleteClub;
 import static com.boschat.sikb.service.ClubUtils.findClubs;
 import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
+import static com.boschat.sikb.service.PersonUtils.createPerson;
 import static com.boschat.sikb.service.UserUtils.confirmUser;
 import static com.boschat.sikb.service.UserUtils.createUser;
 import static com.boschat.sikb.service.UserUtils.deleteUser;
@@ -264,6 +267,17 @@ public enum CallType {
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
             MyThreadLocal.get().setSeason((String) params[1]);
+        }
+    },
+    PERSON_CREATE("Person a user", CREATED, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createPerson());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((PersonForCreation) params[0]));
         }
     };
 

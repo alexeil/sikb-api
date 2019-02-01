@@ -1,41 +1,97 @@
 package com.boschat.sikb.service;
 
-import com.boschat.sikb.CreateOrUpdateUserContext;
+import com.boschat.sikb.CreateOrUpdatePersonContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
-import com.boschat.sikb.common.utils.DateUtils;
-import com.boschat.sikb.model.Credentials;
-import com.boschat.sikb.model.Reset;
-import com.boschat.sikb.model.Session;
-import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.dao.DAOFactory;
-import com.boschat.sikb.tables.pojos.User;
-import com.boschat.sikb.utils.HashUtils;
-import com.boschat.sikb.utils.MailUtils;
-import org.apache.commons.collections4.CollectionUtils;
-import org.jooq.tools.StringUtils;
+import com.boschat.sikb.tables.pojos.Person;
 
 import java.util.List;
 
-import static com.boschat.sikb.common.configuration.ApplicationProperties.ACTIVATION_TOKEN_EXPIRATION_DAYS;
-import static com.boschat.sikb.common.configuration.ApplicationProperties.RESET_TOKEN_EXPIRATION_DAYS;
-import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_EXPIRED;
-import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_NOT_FOUND;
-import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CANNOT_BE_SAME;
-import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
-import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
-import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
-import static com.boschat.sikb.common.utils.DateUtils.getTimestampFromOffsetDateTime;
-import static com.boschat.sikb.common.utils.DateUtils.nowAsTimestamp;
-import static com.boschat.sikb.utils.HashUtils.generateToken;
-import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
+import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
+import static com.boschat.sikb.common.utils.DateUtils.getDateFromLocalDate;
 
-public class UserUtils {
+public class PersonUtils {
 
-    private UserUtils() {
+    private PersonUtils() {
 
     }
 
+    public static Person updatePerson() {
+        return savePerson(true);
+    }
+
+    public static void deletePerson() {
+        DAOFactory.getInstance().getPersonDAO().delete(getPerson());
+    }
+
+    public static Person createPerson() {
+        return savePerson(false);
+    }
+
+    private static Person savePerson(boolean isModification) {
+        CreateOrUpdatePersonContext createContext = MyThreadLocal.get().getCreateOrUpdatePersonContext();
+        Person PersonBean;
+        if (isModification) {
+            PersonBean = getPerson();
+        } else {
+            PersonBean = new Person();
+        }
+
+        if (createContext.getFirstName() != null) {
+            PersonBean.setFirstname(createContext.getFirstName());
+        }
+        if (createContext.getName() != null) {
+            PersonBean.setName(createContext.getName());
+        }
+        if (createContext.getSex() != null) {
+            PersonBean.setSex(createContext.getSex().toString());
+        }
+        if (createContext.getBirthDate() != null) {
+            PersonBean.setBirthdate(getDateFromLocalDate(createContext.getBirthDate()));
+        }
+        if (createContext.getAddress() != null) {
+            PersonBean.setAddress(createContext.getAddress());
+        }
+        if (createContext.getPostalCode() != null) {
+            PersonBean.setPostalcode(createContext.getPostalCode());
+        }
+        if (createContext.getCity() != null) {
+            PersonBean.setCity(createContext.getCity());
+        }
+        if (createContext.getPhoneNumber() != null) {
+            PersonBean.setPhonenumber(createContext.getPhoneNumber());
+        }
+        if (createContext.getEmail() != null) {
+            PersonBean.setEmail(createContext.getEmail());
+        }
+        if (createContext.getNationality() != null) {
+            PersonBean.setNationality(createContext.getNationality());
+        }
+
+        if (isModification) {
+            DAOFactory.getInstance().getPersonDAO().update(PersonBean);
+        } else {
+            DAOFactory.getInstance().getPersonDAO().insert(PersonBean);
+        }
+
+        return PersonBean;
+    }
+
+    public static Person getPerson() {
+        Integer personId = MyThreadLocal.get().getPersonId();
+        Person person = DAOFactory.getInstance().getPersonDAO().fetchOneById(personId);
+
+        if (person == null) {
+            throw new FunctionalException(PERSON_NOT_FOUND, personId);
+        }
+        return person;
+    }
+
+    public static List<Person> findPersons() {
+        return DAOFactory.getInstance().getPersonDAO().findAll();
+    }
+/*
     public static void resetUserPassword() {
         Reset reset = MyThreadLocal.get().getReset();
 
@@ -47,6 +103,7 @@ public class UserUtils {
         user.setResettoken(generateToken());
         user.setResettokenexpirationdate(
             getTimestampFromOffsetDateTime(DateUtils.now().plusDays(RESET_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
+        user.setCreationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
         DAOFactory.getInstance().getUserDAO().update(user);
 
         MailUtils.getInstance().sendResetPasswordEmail(reset.getLogin(), user.getResettoken());
@@ -86,13 +143,14 @@ public class UserUtils {
             throw new FunctionalException(CONFIRM_TOKEN_NOT_FOUND);
         } else {
             User user = users.get(0);
-            boolean isExpired = user.getActivationtokenexpirationdate().before(nowAsTimestamp());
+            boolean isExpired = user.getActivationtokenexpirationdate().before(getTimestampFromOffsetDateTime(DateUtils.now()));
 
             if (isExpired) {
                 throw new FunctionalException(CONFIRM_TOKEN_EXPIRED);
             } else {
                 setSaltAndPassword(user, updatePassword);
                 user.setEnabled(true);
+                user.setModificationdate(getTimestampFromOffsetDateTime(DateUtils.now()));
                 user.setActivationtoken(null);
                 user.setActivationtokenexpirationdate(null);
                 DAOFactory.getInstance().getUserDAO().update(user);
@@ -131,55 +189,9 @@ public class UserUtils {
         }
     }
 
-    public static User getUser() {
-        Integer userId = MyThreadLocal.get().getUserId();
-        User user = DAOFactory.getInstance().getUserDAO().fetchOneById(userId);
+ 
 
-        if (user == null) {
-            throw new FunctionalException(USER_NOT_FOUND, userId);
-        }
-        return user;
-    }
 
-    public static List<User> findUsers() {
-        return DAOFactory.getInstance().getUserDAO().findAll();
-    }
 
-    public static User updateUser() {
-        return saveUser(true);
-    }
-
-    public static void deleteUser() {
-        DAOFactory.getInstance().getUserDAO().delete(getUser());
-    }
-
-    public static User createUser() {
-        return saveUser(false);
-    }
-
-    private static User saveUser(boolean isModification) {
-        CreateOrUpdateUserContext createContext = MyThreadLocal.get().getCreateOrUpdateUserContext();
-        User userBean;
-        if (isModification) {
-            userBean = getUser();
-        } else {
-            userBean = new User();
-            userBean.setActivationtoken(generateToken());
-            userBean.setActivationtokenexpirationdate(
-                getTimestampFromOffsetDateTime(DateUtils.now().plusDays(ACTIVATION_TOKEN_EXPIRATION_DAYS.getIntegerValue())));
-        }
-
-        if (createContext.getEmail() != null) {
-            userBean.setEmail(createContext.getEmail());
-        }
-
-        if (isModification) {
-            DAOFactory.getInstance().getUserDAO().update(userBean);
-        } else {
-            DAOFactory.getInstance().getUserDAO().insert(userBean);
-            MailUtils.getInstance().sendCreateUserEmail(userBean.getEmail(), userBean.getActivationtoken());
-        }
-
-        return userBean;
-    }
+    */
 }

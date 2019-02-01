@@ -1,7 +1,7 @@
 package com.boschat.sikb.servlet;
 
 import com.boschat.sikb.common.configuration.ConfigLoader;
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.utils.MailUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

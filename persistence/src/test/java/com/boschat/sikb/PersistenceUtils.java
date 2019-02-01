@@ -1,6 +1,6 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Loader;

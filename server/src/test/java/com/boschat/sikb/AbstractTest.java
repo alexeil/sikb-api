@@ -2,6 +2,7 @@ package com.boschat.sikb;
 
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.configuration.ResponseCode;
+import com.boschat.sikb.common.utils.DateUtils;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
@@ -10,6 +11,8 @@ import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Person;
+import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
@@ -20,9 +23,6 @@ import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.servlet.InitServlet;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
-import com.boschat.sikb.utils.DateUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.AfterAll;
@@ -68,6 +68,26 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    protected static final String PERSON_DEFAULT_FIRST_NAME = "MyFirstName";
+
+    protected static final String PERSON_DEFAULT_NAME = "PersonName";
+
+    protected static final Sex PERSON_DEFAULT_SEX = Sex.MALE;
+
+    protected static final LocalDate PERSON_DEFAULT_BIRTH_DATE = LocalDate.of(1990, 4, 4);
+
+    protected static final String PERSON_DEFAULT_ADDRESS = "My address";
+
+    protected static final String PERSON_DEFAULT_POSTAL_CODE = "35000";
+
+    protected static final String PERSON_DEFAULT_CITY = "Rennes";
+
+    protected static final String PERSON_DEFAULT_PHONE_NUMBER = "070707070707";
+
+    protected static final String PERSON_DEFAULT_EMAIL = "person@kin-ball.fr";
+
+    protected static final String PERSON_DEFAULT_NATIONALITY = "FRANCE";
 
     protected static final String DEFAULT_USER_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
 
@@ -123,8 +143,6 @@ public abstract class AbstractTest {
 
     protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
-    private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
-
     private static Wiser wiser;
 
     private static String serverPort;
@@ -152,6 +170,10 @@ public abstract class AbstractTest {
 
     protected static User getUser(Response result) throws IOException {
         return getBody(result, User.class);
+    }
+
+    protected static Person getPerson(Response result) throws IOException {
+        return getBody(result, Person.class);
     }
 
     protected static Session getSession(Response result) throws IOException {
@@ -284,6 +306,12 @@ public abstract class AbstractTest {
         return createRequest(path, null).put(entity);
     }
 
+    protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {
+        Entity<PersonForCreation> entity = Entity.json(personForCreation);
+        String path = buildPathPerson(version, null);
+        return createRequest(path, null).post(entity);
+    }
+
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
@@ -405,6 +433,15 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
+    protected String buildPathPerson(ApiVersion version, Integer personId) {
+        StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
+        if (personId != null) {
+            path.append("/");
+            path.append(personId);
+        }
+        return path.toString();
+    }
+
     protected String buildPath(ApiVersion version, Integer clubId, String season) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
         if (clubId != null) {
@@ -477,6 +514,24 @@ public abstract class AbstractTest {
             () -> assertNotNull(user, " User shouldn't be null"),
             () -> assertNotNull(user.getId(), "Id shouldn't be null"),
             () -> assertEquals(email, user.getEmail(), " email incorrect")
+        );
+    }
+
+    protected void checkPerson(Person person, String firstName, String name, Sex sex, LocalDate birthDate, String address, String postalCode, String city,
+        String phoneNumber, String email, String nationality) {
+        assertAll("Check person " + person.getFirstName(),
+            () -> assertNotNull(person, " User shouldn't be null"),
+            () -> assertNotNull(person.getId(), "Id shouldn't be null"),
+            () -> assertEquals(firstName, person.getFirstName(), " firstName incorrect"),
+            () -> assertEquals(name, person.getName(), " name incorrect"),
+            () -> assertEquals(sex, person.getSex(), " sex incorrect"),
+            () -> assertEquals(birthDate, person.getBirthDate(), " birthDate incorrect"),
+            () -> assertEquals(address, person.getAddress(), " address incorrect"),
+            () -> assertEquals(postalCode, person.getPostalCode(), " postalCode incorrect"),
+            () -> assertEquals(city, person.getCity(), " city incorrect"),
+            () -> assertEquals(phoneNumber, person.getPhoneNumber(), " phoneNumber incorrect"),
+            () -> assertEquals(email, person.getEmail(), " email incorrect"),
+            () -> assertEquals(nationality, person.getNationality(), " nationality incorrect")
         );
     }
 

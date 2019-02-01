@@ -1,4 +1,4 @@
-package com.boschat.sikb.persistence;
+package com.boschat.sikb.persistence.exception;
 
 public class DatabaseException extends RuntimeException {
 

@@ -3,7 +3,7 @@ package com.boschat.sikb.servlet;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.model.ApplicationBean;
 import com.boschat.sikb.model.Credentials;
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Application;
 
 import javax.ws.rs.WebApplicationException;

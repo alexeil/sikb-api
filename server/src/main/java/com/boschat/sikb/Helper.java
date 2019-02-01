@@ -7,9 +7,10 @@ import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.ZError;
-import com.boschat.sikb.persistence.DAOFactory;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
+import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -23,8 +24,8 @@ import java.util.stream.Collectors;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.common.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
-import static com.boschat.sikb.utils.DateUtils.getOffsetDateTimeFromTimestamp;
 
 public class Helper {
 
@@ -105,6 +106,26 @@ public class Helper {
             responseBuilder.entity(entity);
         }
         return responseBuilder.build();
+    }
+
+    public static com.boschat.sikb.model.Person convertBeanToModel(Person personBean) {
+        com.boschat.sikb.model.Person person = new com.boschat.sikb.model.Person();
+        person.setId(personBean.getId());
+        person.setFirstName(personBean.getFirstname());
+        person.setName(personBean.getName());
+        if (personBean.getSex() != null) {
+            person.setSex(Sex.fromValue(personBean.getSex()));
+        }
+        if (personBean.getBirthdate() != null) {
+            person.setBirthDate(personBean.getBirthdate().toLocalDate());
+        }
+        person.setAddress(personBean.getAddress());
+        person.setPostalCode(personBean.getPostalcode());
+        person.setCity(personBean.getCity());
+        person.setPhoneNumber(personBean.getPhonenumber());
+        person.setEmail(personBean.getEmail());
+        person.setNationality(personBean.getNationality());
+        return person;
     }
 
     public static com.boschat.sikb.model.Affiliation convertBeanToModel(Affiliation affiliationBean) {

@@ -1,4 +1,4 @@
-package com.boschat.sikb.persistence;
+package com.boschat.sikb.persistence.dao;
 
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.persistence.listener.AuditRecordListener;
@@ -32,6 +32,8 @@ public class DAOFactory {
     private ClubDAOExtended clubDAO = null;
 
     private UserDAOExtended userDAO = null;
+
+    private PersonDAOExtended personDAO = null;
 
     private ApplicationDAOExtended applicationDAO = null;
 
@@ -86,6 +88,13 @@ public class DAOFactory {
             userDAO = new UserDAOExtended(configuration);
         }
         return userDAO;
+    }
+
+    public PersonDAOExtended getPersonDAO() {
+        if (personDAO == null) {
+            personDAO = new PersonDAOExtended(configuration);
+        }
+        return personDAO;
     }
 
     public ApplicationDAOExtended getApplicationDAO() {

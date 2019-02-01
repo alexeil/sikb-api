@@ -32,6 +32,7 @@ public enum ResponseCode {
     USER_NOT_FOUND(INFO, 404, 3, "User (%s) not found"),
     CONFIRM_TOKEN_NOT_FOUND(INFO, 404, 4, "Confirm token not found"),
     CONFIRM_TOKEN_EXPIRED(INFO, 404, 5, "Confirm token is no longer available"),
+    PERSON_NOT_FOUND(INFO, 404, 6, "Person (%s) not found"),
 
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 

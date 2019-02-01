@@ -1,11 +1,11 @@
-package com.boschat.sikb.persistence;
+package com.boschat.sikb.persistence.dao;
 
-import com.boschat.sikb.tables.daos.ClubDao;
+import com.boschat.sikb.tables.daos.PersonDao;
 import org.jooq.Configuration;
 
-public class ClubDAOExtended extends ClubDao {
+public class PersonDAOExtended extends PersonDao {
 
-    public ClubDAOExtended(Configuration configuration) {
+    public PersonDAOExtended(Configuration configuration) {
         super(configuration);
     }
 

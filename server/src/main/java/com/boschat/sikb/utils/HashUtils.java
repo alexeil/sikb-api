@@ -1,5 +1,6 @@
 package com.boschat.sikb.utils;
 
+import com.boschat.sikb.common.utils.DateUtils;
 import com.boschat.sikb.model.Credentials;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;

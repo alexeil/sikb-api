@@ -1,6 +1,5 @@
 package com.boschat.sikb;
 
-import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 
 public class CreateOrUpdateClubContext {
@@ -10,14 +9,6 @@ public class CreateOrUpdateClubContext {
     private String shortName;
 
     private String logo;
-
-    public static CreateOrUpdateClubContext create(ClubForCreation clubForCreation) {
-        CreateOrUpdateClubContext createOrUpdateContext = new CreateOrUpdateClubContext();
-        createOrUpdateContext.setName(clubForCreation.getName());
-        createOrUpdateContext.setShortName(clubForCreation.getShortName());
-        createOrUpdateContext.setLogo(clubForCreation.getLogo());
-        return createOrUpdateContext;
-    }
 
     public static CreateOrUpdateClubContext create(ClubForUpdate clubForUpdate) {
         CreateOrUpdateClubContext createOrUpdateContext = new CreateOrUpdateClubContext();

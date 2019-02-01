@@ -27,6 +27,8 @@ public class Context {
 
     private CreateOrUpdateUserContext createOrUpdateUserContext;
 
+    private CreateOrUpdatePersonContext createOrUpdatePersonContext;
+
     private Integer userId;
 
     private Credentials credentials;
@@ -38,6 +40,8 @@ public class Context {
     private User currentUser;
 
     private Reset reset;
+
+    private Integer personId;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -143,5 +147,21 @@ public class Context {
 
     public void setReset(Reset reset) {
         this.reset = reset;
+    }
+
+    public CreateOrUpdatePersonContext getCreateOrUpdatePersonContext() {
+        return createOrUpdatePersonContext;
+    }
+
+    public void setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext createOrUpdatePersonContext) {
+        this.createOrUpdatePersonContext = createOrUpdatePersonContext;
+    }
+
+    public Integer getPersonId() {
+        return personId;
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
     }
 }
