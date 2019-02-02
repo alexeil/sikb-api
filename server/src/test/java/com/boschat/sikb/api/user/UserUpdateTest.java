@@ -1,7 +1,6 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForUpdate;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +11,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.PersistenceUtils.loadUsers;
+import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
 
@@ -28,18 +29,28 @@ class UserUpdateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadUsers();
+        truncateData();
+        loadUsers();
     }
 
     @Test
     @DisplayName(" email ")
-    void name() throws Exception {
-        Response response = userUpdate(V1, CLUB_DEFAULT_ID, buildUserForUpdate("newEmail@kin-ball.fr"));
+    void email() throws Exception {
+        Response response = userUpdate(V1, USER_DEFAULT_ID, buildUserForUpdate("newEmail@kin-ball.fr"));
 
         checkResponse(response, OK);
         User user = getUser(response);
         checkUser(user, "newEmail@kin-ball.fr");
+    }
+
+    @Test
+    @DisplayName(" with nothing ")
+    void nothing() throws Exception {
+        Response response = userUpdate(V1, USER_DEFAULT_ID, buildUserForUpdate(null));
+
+        checkResponse(response, OK);
+        User user = getUser(response);
+        checkUser(user, USER_DEFAULT_EMAIL);
     }
 
     @Test
