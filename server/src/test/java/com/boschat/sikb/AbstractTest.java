@@ -77,7 +77,7 @@ public abstract class AbstractTest {
 
     protected static final String PERSON_DEFAULT_NAME = "PersonName";
 
-    protected static final Sex PERSON_DEFAULT_SEX = Sex.MALE;
+    protected static final Sex PERSON_DEFAULT_SEX = MALE;
 
     protected static final LocalDate PERSON_DEFAULT_BIRTH_DATE = LocalDate.of(1990, 4, 4);
 

@@ -9,7 +9,6 @@ import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.User;
-import com.boschat.sikb.utils.HashUtils;
 import com.boschat.sikb.utils.MailUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.jooq.tools.StringUtils;
@@ -26,7 +25,9 @@ import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
 import static com.boschat.sikb.common.utils.DateUtils.now;
 import static com.boschat.sikb.common.utils.DateUtils.nowPlusDays;
+import static com.boschat.sikb.utils.HashUtils.generateSalt;
 import static com.boschat.sikb.utils.HashUtils.generateToken;
+import static com.boschat.sikb.utils.HashUtils.hash;
 import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
 
 public class UserUtils {
@@ -61,7 +62,7 @@ public class UserUtils {
         if (oldPassword.equals(newPassword)) {
             throw new FunctionalException(NEW_PASSWORD_CANNOT_BE_SAME);
         }
-        if (HashUtils.isExpectedPassword(oldPassword, salt, user.getPassword())) {
+        if (isExpectedPassword(oldPassword, salt, user.getPassword())) {
             setSaltAndPassword(user, updatePassword);
             DAOFactory.getInstance().getUserDAO().update(user);
         } else {
@@ -70,8 +71,8 @@ public class UserUtils {
     }
 
     private static void setSaltAndPassword(User user, UpdatePassword updatePassword) {
-        String salt = HashUtils.generateSalt();
-        user.setPassword(HashUtils.hash(updatePassword.getNewPassword(), salt));
+        String salt = generateSalt();
+        user.setPassword(hash(updatePassword.getNewPassword(), salt));
         user.setSalt(salt);
     }
 

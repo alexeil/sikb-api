@@ -1,11 +1,14 @@
 package com.boschat.sikb.persistence.converter;
 
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import org.jooq.Converter;
 
 import java.io.IOException;
+
+import static com.boschat.sikb.common.configuration.ResponseCode.JSON_PARSE_ERROR;
 
 public class PostgresJSONJacksonJsonNodeConverter implements Converter<Object, JsonNode> {
 
@@ -16,7 +19,7 @@ public class PostgresJSONJacksonJsonNodeConverter implements Converter<Object, J
                 ? NullNode.instance
                 : new ObjectMapper().readTree(t + "");
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TechnicalException(JSON_PARSE_ERROR, e);
         }
     }
 
@@ -27,7 +30,7 @@ public class PostgresJSONJacksonJsonNodeConverter implements Converter<Object, J
                 ? null
                 : new ObjectMapper().writeValueAsString(u);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TechnicalException(JSON_PARSE_ERROR, e);
         }
     }
 

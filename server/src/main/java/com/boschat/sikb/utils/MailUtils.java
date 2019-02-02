@@ -44,7 +44,7 @@ public class MailUtils {
 
     private static MailUtils instance;
 
-    private static Session session;
+    private Session session;
 
     private MailUtils() {
         Properties props = new Properties();
@@ -107,7 +107,7 @@ public class MailUtils {
     private void sendEmail(String template, String title, String recipient, Map<String, String> values) {
         LOGGER.trace("Sending an email with template \"{}\", title \"{}\" TO \"{}\" and with link \"{}\"", template, title, recipient,
             values.entrySet().stream().map(s -> s.getKey() + " " + s.getValue()).collect(Collectors.joining()));
-        
+
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(SMTP_LOGIN.getValue()));

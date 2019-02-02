@@ -16,9 +16,9 @@ Anyone wanting to consume these APIs need to send an email to thierry.boschat@ki
 
 ![Worflow](doc/schema/workflow.png)
 
- 1. A club need to send an email to thierry.boschat@kin-ball.fr to get their account initialized
- 2. Then after confirming his identity and update password, the club can log into the platform
- 3. Then the club is free to update jis information and create an affiliation
+1. A club need to send an email to thierry.boschat@kin-ball.fr to get their account initialized
+2. Then after confirming his identity and update password, the club can log into the platform
+3. Then the club is free to update jis information and create an affiliation
 
 ## Tools
 
