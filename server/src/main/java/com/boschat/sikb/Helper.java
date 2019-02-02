@@ -12,7 +12,6 @@ import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.User;
-import com.boschat.sikb.utils.JsonUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,6 +25,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
+import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
 
 public class Helper {
 
@@ -111,7 +111,7 @@ public class Helper {
     public static List<com.boschat.sikb.model.Person> convertPersonsBeansToModels(List<Person> personsBean) {
         return personsBean.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
-    
+
     public static com.boschat.sikb.model.Person convertBeanToModel(Person personBean) {
         com.boschat.sikb.model.Person person = new com.boschat.sikb.model.Person();
         person.setId(personBean.getId());
@@ -129,7 +129,10 @@ public class Helper {
         person.setPhoneNumber(personBean.getPhonenumber());
         person.setEmail(personBean.getEmail());
         person.setNationality(personBean.getNationality());
-        person.setFormations(JsonUtils.formationsToJsonNode(personBean.getFormations()));
+
+        if (!personBean.getFormations().isNull()) {
+            person.setFormations(formationsToJsonNode(personBean.getFormations()));
+        }
         return person;
     }
 
