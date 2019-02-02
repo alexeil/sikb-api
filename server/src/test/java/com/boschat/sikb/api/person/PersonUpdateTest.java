@@ -40,6 +40,19 @@ class PersonUpdateTest extends AbstractTest {
     }
 
     @Test
+    @DisplayName(" with no field ")
+    void noField() throws Exception {
+        PersonForUpdate personForUpdate = new PersonForUpdate();
+        Response response = personUpdate(V1, PERSON_DEFAULT_ID, personForUpdate);
+
+        checkResponse(response, OK);
+        Person person = getPerson(response);
+        checkPerson(person, PERSON_DEFAULT_FIRST_NAME, PERSON_DEFAULT_NAME, PERSON_DEFAULT_SEX, PERSON_DEFAULT_BIRTH_DATE, PERSON_DEFAULT_ADDRESS,
+            PERSON_DEFAULT_POSTAL_CODE, PERSON_DEFAULT_CITY, PERSON_DEFAULT_PHONE_NUMBER, PERSON_DEFAULT_EMAIL, PERSON_DEFAULT_NATIONALITY,
+            PERSON_DEFAULT_FORMATIONS);
+    }
+
+    @Test
     @DisplayName(" unknown person ")
     void unknownPerson() throws Exception {
         PersonForUpdate personForUpdate = new PersonForUpdate();
