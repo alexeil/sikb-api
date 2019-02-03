@@ -30,11 +30,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
             return logAndBuildResponse(e, ((FunctionalException) e).getErrorCode());
         } else if (e instanceof TechnicalException) {
             return logAndBuildResponse(e, ((TechnicalException) e).getErrorCode());
-        }
-        // } else if (e instanceof CircuitBreakingException) {
-        //    return MapperUtils.buildResponse(CIRCUIT_BREAKER_OPEN);
-        // }
-        else {
+        } else {
             return logAndBuildResponse(e, INTERNAL_ERROR, e.getClass().getName());
         }
     }
