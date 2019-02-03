@@ -161,7 +161,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>${root.basedir}/doc/swagger/swagger.yaml</inputSpec>
+							<inputSpec>${root.basedir}/docs/swagger/swagger.yaml</inputSpec>
 							<!-- language file, like e.g. JavaJaxRSCodegen shipped with swagger -->
 							<generatorName>jaxrs-jersey</generatorName>
 							<!--   <templateDirectory>src/gen/main/java</templateDirectory>-->
@@ -291,7 +291,7 @@
 							<targetPath>swagger-ui</targetPath>
 						</resource>
 						<resource>
-							<directory>${root.basedir}/doc/swagger</directory>
+							<directory>${root.basedir}/docs/swagger</directory>
 							<includes>
 								<include>**/*.*</include>
 							</includes>

@@ -14,7 +14,7 @@ Anyone wanting to consume these APIs need to send an email to thierry.boschat@ki
 
 ### Workflow
 
-![Worflow](doc/schema/workflow.png)
+![Worflow](docs/schema/workflow.png)
 
 1. A club need to send an email to thierry.boschat@kin-ball.fr to get their account initialized
 2. Then after confirming his identity and update password, the club can log into the platform
@@ -22,5 +22,5 @@ Anyone wanting to consume these APIs need to send an email to thierry.boschat@ki
 
 ## Tools
 
-* You can modify sequence diagrams (doc/schema/*.plantuml) with [planttext](https://www.planttext.com/)
-* You can view and modify Swagger (doc/swagger/) with [Swagger Editor](https://editor.swagger.io/)  
+* You can modify sequence diagrams (docs/schema/*.plantuml) with [planttext](https://www.planttext.com/)
+* You can view and modify Swagger (docs/swagger/) with [Swagger Editor](https://editor.swagger.io/)  
