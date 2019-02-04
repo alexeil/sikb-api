@@ -12,6 +12,7 @@ import java.net.URL;
 
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.PERSON;
+import static com.boschat.sikb.Tables.SEASON;
 import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.tables.Club.CLUB;
 
@@ -30,11 +31,14 @@ public class PersistenceUtils {
 
     public static void loadClubs(String fileName) throws IOException {
         loadDataSuite(fileName, CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
-
     }
 
     public static void loadClubs() throws IOException {
         loadClubs("sql/insertClub.csv");
+    }
+
+    public static void loadSeasons() throws IOException {
+        loadDataSuite("sql/insertSeason.csv", SEASON, SEASON.ID, SEASON.EXTERNALID, SEASON.DESCRIPTION, SEASON.BEGIN, SEASON.END);
     }
 
     public static void loadAffiliations() throws IOException {
@@ -87,5 +91,6 @@ public class PersistenceUtils {
         DAOFactory.getInstance().getClubDAO().truncate();
         DAOFactory.getInstance().getUserDAO().truncate();
         DAOFactory.getInstance().getPersonDAO().truncate();
+        DAOFactory.getInstance().getSeasonDAO().truncate();
     }
 }

@@ -23,6 +23,7 @@ public enum ResponseCode {
     WRONG_LOGIN_OR_PASSWORD(INFO, 400, 10, "Wrong login/password"),
     WRONG_OLD_PASSWORD(INFO, 400, 11, "Wrong old Password"),
     NEW_PASSWORD_CANNOT_BE_SAME(INFO, 400, 12, "New and old passwords cannot be the same"),
+    SEASON_ALREADY_EXISTS(INFO, 400, 13, "The season %s Already Exists"),
 
     UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
 
@@ -33,6 +34,7 @@ public enum ResponseCode {
     CONFIRM_TOKEN_NOT_FOUND(INFO, 404, 4, "Confirm token not found"),
     CONFIRM_TOKEN_EXPIRED(INFO, 404, 5, "Confirm token is no longer available"),
     PERSON_NOT_FOUND(INFO, 404, 6, "Person (%s) not found"),
+    SEASON_NOT_FOUND(INFO, 404, 7, "Season (%s) not found"),
 
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
@@ -42,7 +44,6 @@ public enum ResponseCode {
     EMAIL_ERROR(ERROR, 500, 3, "Error with emailing"),
     DATABASE_ERROR(ERROR, 500, 4, "Database Error"),
     JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error");
-   
 
     /**
      * http code returned

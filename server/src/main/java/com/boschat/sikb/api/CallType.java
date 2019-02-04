@@ -3,6 +3,7 @@ package com.boschat.sikb.api;
 import com.boschat.sikb.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.CreateOrUpdateClubContext;
 import com.boschat.sikb.CreateOrUpdatePersonContext;
+import com.boschat.sikb.CreateOrUpdateSeasonContext;
 import com.boschat.sikb.CreateOrUpdateUserContext;
 import com.boschat.sikb.MyThreadLocal;
 import com.boschat.sikb.common.configuration.ResponseCode;
@@ -14,6 +15,8 @@ import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
+import com.boschat.sikb.model.SeasonForCreation;
+import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
@@ -21,6 +24,7 @@ import com.boschat.sikb.model.UserForUpdate;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
+import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
@@ -39,6 +43,10 @@ import static com.boschat.sikb.service.PersonUtils.deletePerson;
 import static com.boschat.sikb.service.PersonUtils.findPersons;
 import static com.boschat.sikb.service.PersonUtils.getPerson;
 import static com.boschat.sikb.service.PersonUtils.updatePerson;
+import static com.boschat.sikb.service.SeasonUtils.createSeason;
+import static com.boschat.sikb.service.SeasonUtils.deleteSeason;
+import static com.boschat.sikb.service.SeasonUtils.findSeasons;
+import static com.boschat.sikb.service.SeasonUtils.updateSeason;
 import static com.boschat.sikb.service.UserUtils.confirmUser;
 import static com.boschat.sikb.service.UserUtils.createUser;
 import static com.boschat.sikb.service.UserUtils.deleteUser;
@@ -330,10 +338,54 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
+        }
+    },
+    SEASON_CREATE("Create a season", CREATED, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createSeason());
+        }
 
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext.create((SeasonForCreation) params[0]));
+        }
+    },
+    SEASON_UPDATE("Update a season", OK, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(updateSeason());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setSeasonId((String) params[0]);
+            MyThreadLocal.get().setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext.create((SeasonForUpdate) params[1]));
+        }
+    },
+    SEASON_FIND("Find Seasons", OK, true) {
+        @Override
+        public Object call() {
+            return convertSeasonsBeansToModels(findSeasons());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
+        }
+    },
+    SEASON_DELETE("Delete a Season", NO_CONTENT, true) {
+        @Override
+        public Object call() {
+            deleteSeason();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setSeasonId((String) params[0]);
         }
     };
-
     /**
      * info log message to display
      */

@@ -11,6 +11,7 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.Person;
+import com.boschat.sikb.tables.pojos.Season;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.logging.log4j.LogManager;
@@ -110,6 +111,19 @@ public class Helper {
 
     public static List<com.boschat.sikb.model.Person> convertPersonsBeansToModels(List<Person> personsBean) {
         return personsBean.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static List<com.boschat.sikb.model.Season> convertSeasonsBeansToModels(List<Season> seasonBean) {
+        return seasonBean.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static com.boschat.sikb.model.Season convertBeanToModel(Season seasonBean) {
+        com.boschat.sikb.model.Season season = new com.boschat.sikb.model.Season();
+        season.setId(seasonBean.getExternalid());
+        season.setDescription(seasonBean.getDescription());
+        season.setBegin(seasonBean.getBegin());
+        season.setEnd(seasonBean.getEnd());
+        return season;
     }
 
     public static com.boschat.sikb.model.Person convertBeanToModel(Person personBean) {

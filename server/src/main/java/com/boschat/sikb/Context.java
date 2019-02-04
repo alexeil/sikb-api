@@ -43,6 +43,10 @@ public class Context {
 
     private Integer personId;
 
+    private String seasonId;
+
+    private CreateOrUpdateSeasonContext createOrUpdateSeasonContext;
+
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
         this.accessToken = accessToken;
@@ -163,5 +167,21 @@ public class Context {
 
     public void setPersonId(Integer personId) {
         this.personId = personId;
+    }
+
+    public String getSeasonId() {
+        return seasonId;
+    }
+
+    public void setSeasonId(String seasonId) {
+        this.seasonId = seasonId;
+    }
+
+    public CreateOrUpdateSeasonContext getCreateOrUpdateSeasonContext() {
+        return createOrUpdateSeasonContext;
+    }
+
+    public void setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext createOrUpdateSeasonContext) {
+        this.createOrUpdateSeasonContext = createOrUpdateSeasonContext;
     }
 }

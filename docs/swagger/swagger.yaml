@@ -34,6 +34,8 @@ tags:
     description: APIs to affiliations management
   - name: persons
     description: APIs to persons management (a Person can be a Player, Referee etc.)
+  - name: parameters
+    description: APIs to manage application parameters
 
 paths:
   '/users':
@@ -412,7 +414,7 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - clubs
-  '/clubs/{clubId}/{season}/affiliations':
+  '/clubs/{clubId}/{seasonId}/affiliations':
     post:
       summary: Create the club affiliation for a season
       description: ''
@@ -420,7 +422,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
-        - $ref: '#/components/parameters/season'
+        - $ref: '#/components/parameters/seasonId'
       requestBody:
         content:
           application/json:
@@ -451,7 +453,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
-        - $ref: '#/components/parameters/season'
+        - $ref: '#/components/parameters/seasonId'
       responses:
         200:
           description: get the club affiliation for the season
@@ -474,7 +476,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
-        - $ref: '#/components/parameters/season'
+        - $ref: '#/components/parameters/seasonId'
       requestBody:
         content:
           application/json:
@@ -507,7 +509,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/clubId'
-        - $ref: '#/components/parameters/season'
+        - $ref: '#/components/parameters/seasonId'
       responses:
         204:
           description: the club affiliation is deleted
@@ -646,7 +648,7 @@ paths:
       tags:
         - persons
 
-  '/persons/{personId}/{clubId}/{season}/licence':
+  '/persons/{personId}/{clubId}/{seasonId}/licence':
     post:
       summary: Create a person's licence
       description: ''
@@ -655,7 +657,7 @@ paths:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/personId'
         - $ref: '#/components/parameters/clubId'
-        - $ref: '#/components/parameters/season'
+        - $ref: '#/components/parameters/seasonId'
       requestBody:
         content:
           application/json:
@@ -679,6 +681,109 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - persons
+
+  '/seasons':
+    get:
+      summary: Find all seasons
+      description: ''
+      operationId: findSeasons
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      responses:
+        200:
+          description: find all seasons
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/season'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - parameters
+    post:
+      summary: Create a season
+      description: ''
+      operationId: createSeason
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/seasonForCreation'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/season'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - parameters
+  '/seasons/{seasonId}':
+    put:
+      summary: Update a season
+      description: ''
+      operationId: updateSeason
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/seasonId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/seasonForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly updated season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/season'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - parameters
+    delete:
+      summary: Delete a season
+      description: ''
+      operationId: deleteSeason
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/seasonId'
+      responses:
+        204:
+          description: The season is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - parameters
 
 components:
   securitySchemes:
@@ -708,8 +813,8 @@ components:
       required: true
       in: path
       description: "Id of a person"
-    season:
-      name: "season"
+    seasonId:
+      name: "seasonId"
       schema:
         type: string
         minLength: 8
@@ -717,7 +822,7 @@ components:
         pattern: "^([0-9]){8}$"
       required: true
       in: path
-      description: "Name of the season"
+      description: "Identification of the season"
     access_token:
       name: "access_token"
       required: true
@@ -1008,6 +1113,56 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/formation"
+
+    season:
+      required:
+        - id
+        - description
+        - begin
+        - end
+      properties:
+        id:
+          type: string
+        description:
+          type: string
+        begin:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
+      example:
+        - id: "20172018"
+          description: 'Season 2017/2018'
+          begin: '2017-09-01'
+          end: '2018-08-31'
+        - id: "20162017"
+          description: 'Season 2016/2017'
+          begin: '2016-09-01'
+          end: '2017-08-31'
+        - id: "20152016"
+          description: 'Season 2015/2016'
+          begin: '2015-09-01'
+          end: '2016-08-31'
+
+    seasonForCreation:
+      allOf:
+        - $ref: '#/components/schemas/seasonForUpdate'
+      required:
+        - description
+        - begin
+        - end
+
+    seasonForUpdate:
+      properties:
+        description:
+          type: string
+        begin:
+          type: string
+          format: date
+        end:
+          type: string
+          format: date
 
     formation:
       required:

@@ -16,6 +16,9 @@ import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
+import com.boschat.sikb.model.Season;
+import com.boschat.sikb.model.SeasonForCreation;
+import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.UpdatePassword;
@@ -70,6 +73,14 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    protected static final String SEASON_DEFAULT_ID = "20182019";
+
+    protected static final String SEASON_DEFAULT_DESCRIPTION = "Saison 2018/2019";
+
+    protected static final LocalDate SEASON_DEFAULT_BEGIN = LocalDate.of(2018, 9, 1);
+
+    protected static final LocalDate SEASON_DEFAULT_END = LocalDate.of(2019, 8, 31);
 
     protected static final Integer PERSON_DEFAULT_ID = 1;
 
@@ -194,6 +205,14 @@ public abstract class AbstractTest {
 
     protected static List<User> getUsers(Response result) throws IOException {
         return Arrays.asList(getBody(result, User[].class));
+    }
+
+    protected static Season getSeason(Response result) throws IOException {
+        return getBody(result, Season.class);
+    }
+
+    protected static List<Season> getSeasons(Response result) throws IOException {
+        return Arrays.asList(getBody(result, Season[].class));
     }
 
     protected static Club getClub(Response result) throws IOException {
@@ -345,11 +364,15 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
-    
     protected Response userCreate(ApiVersion version, UserForCreation userForCreation) {
         Entity<UserForCreation> entity = Entity.json(userForCreation);
         String path = buildPathUser(version, null, false, false, false, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response userDelete(ApiVersion version, Integer userId) {
+        String path = buildPathUser(version, userId, false, false, false, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response userLogout(ApiVersion version, String accessToken) {
@@ -379,24 +402,8 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
-    protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
-        Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPath(version, null, null);
-        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
-    }
-
-    protected Response clubGet(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null);
-        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
-    }
-
     protected Response userGet(ApiVersion version, Integer userId) {
         String path = buildPathUser(version, userId, false, false, false, false, false);
-        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
-    }
-
-    protected Response clubFind(ApiVersion version) {
-        String path = buildPath(version, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
@@ -411,6 +418,22 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
+    protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
+        Entity<ClubForCreation> entity = Entity.json(clubForCreation);
+        String path = buildPath(version, null, null);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response clubGet(ApiVersion version, Integer clubId) {
+        String path = buildPath(version, clubId, null);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response clubFind(ApiVersion version) {
+        String path = buildPath(version, null, null);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
         String path = buildPath(version, clubId, null);
@@ -422,8 +445,25 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
-    protected Response userDelete(ApiVersion version, Integer userId) {
-        String path = buildPathUser(version, userId, false, false, false, false, false);
+    protected Response seasonCreate(ApiVersion version, SeasonForCreation seasonForCreation) {
+        Entity<SeasonForCreation> entity = Entity.json(seasonForCreation);
+        String path = buildPathSeason(version, null);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response seasonFind(ApiVersion version) {
+        String path = buildPathSeason(version, null);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response seasonUpdate(ApiVersion version, String SeasonId, SeasonForUpdate bean) {
+        Entity<SeasonForUpdate> entity = Entity.json(bean);
+        String path = buildPathSeason(version, SeasonId);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
+    }
+
+    protected Response seasonDelete(ApiVersion version, String seasonId) {
+        String path = buildPathSeason(version, seasonId);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
@@ -490,6 +530,15 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
+    protected String buildPathSeason(ApiVersion version, String seasonId) {
+        StringBuilder path = new StringBuilder("/" + version.getName() + "/seasons");
+        if (seasonId != null) {
+            path.append("/");
+            path.append(seasonId);
+        }
+        return path.toString();
+    }
+
     protected void checkAffiliation(Affiliation affiliation, String prefectureNumber, String prefectureCity, String siretNumber, String address,
         String postalCode, String city, String phoneNumber, String email, String webSite, OffsetDateTime creationDateTime,
         OffsetDateTime modificationDateTime, String president, Sex presidentSex, String secretary, Sex secretarySex,
@@ -540,6 +589,16 @@ public abstract class AbstractTest {
             () -> assertEquals(name, club.getName(), " name incorrect"),
             () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
             () -> assertEquals(logo, club.getLogo(), " logo incorrect")
+        );
+    }
+
+    protected void checkSeason(Season season, String id, String description, LocalDate begin, LocalDate end) {
+        assertAll("Check Season " + season.getId(),
+            () -> assertNotNull(season, " season shouldn't be null"),
+            () -> assertEquals(id, season.getId(), "id incorrect"),
+            () -> assertEquals(description, season.getDescription(), " description incorrect"),
+            () -> assertEquals(begin, season.getBegin(), " begin incorrect"),
+            () -> assertEquals(end, season.getEnd(), " end incorrect")
         );
     }
 

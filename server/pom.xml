@@ -235,6 +235,10 @@
 									<token>/persons</token>
 									<value>/v1/persons</value>
 								</replacement>
+								<replacement>
+									<token>/seasons</token>
+									<value>/v1/seasons</value>
+								</replacement>
 							</replacements>
 						</configuration>
 					</execution>

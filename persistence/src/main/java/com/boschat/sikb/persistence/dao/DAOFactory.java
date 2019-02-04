@@ -35,6 +35,8 @@ public class DAOFactory {
 
     private PersonDAOExtended personDAO = null;
 
+    private SeasonDAOExtended seasonDAO = null;
+
     private ApplicationDAOExtended applicationDAO = null;
 
     private Configuration configuration;
@@ -81,6 +83,13 @@ public class DAOFactory {
             clubDAO = new ClubDAOExtended(configuration);
         }
         return clubDAO;
+    }
+
+    public SeasonDAOExtended getSeasonDAO() {
+        if (seasonDAO == null) {
+            seasonDAO = new SeasonDAOExtended(configuration);
+        }
+        return seasonDAO;
     }
 
     public UserDAOExtended getUserDAO() {

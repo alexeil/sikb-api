@@ -73,17 +73,17 @@ CREATE TABLE sikb.affiliation
 
 CREATE TABLE sikb.season
 (
-  "id"        serial PRIMARY KEY,
-  "name"      varchar(255),
-  "shortName" varchar(255),
-  "begin"     date,
-  "end"       date
+  "id"          serial PRIMARY KEY,
+  "externalId"  varchar(8) unique,
+  "description" varchar(255),
+  "begin"       date,
+  "end"         date
 );
 
 INSERT INTO sikb.season
-values (1, 'Saison 2017/2018', '20172018', '2017-09-01', '2018-08-31');
+values (1, '20172018', 'Saison 2017/2018', '2017-09-01', '2018-08-31');
 INSERT INTO sikb.season
-values (2, 'Saison 2018/2019', '20182019', '2018-09-01', '2019-08-31');
+values (2, '20182019', 'Saison 2018/2019', '2018-09-01', '2019-08-31');
 
 CREATE TABLE sikb.person
 (
