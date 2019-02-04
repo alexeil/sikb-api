@@ -78,4 +78,5 @@ public class SeasonUtils {
     public static List<Season> findSeasons() {
         return DAOFactory.getInstance().getSeasonDAO().findAll();
     }
+
 }

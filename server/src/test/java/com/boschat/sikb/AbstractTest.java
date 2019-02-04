@@ -12,6 +12,8 @@ import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Formation;
+import com.boschat.sikb.model.FormationType;
+import com.boschat.sikb.model.LicenceType;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
@@ -213,6 +215,14 @@ public abstract class AbstractTest {
 
     protected static List<Season> getSeasons(Response result) throws IOException {
         return Arrays.asList(getBody(result, Season[].class));
+    }
+
+    protected static List<FormationType> getFormationTypes(Response result) throws IOException {
+        return Arrays.asList(getBody(result, FormationType[].class));
+    }
+
+    protected static List<LicenceType> getLicenceTypes(Response result) throws IOException {
+        return Arrays.asList(getBody(result, LicenceType[].class));
     }
 
     protected static Club getClub(Response result) throws IOException {
@@ -445,25 +455,35 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
+    protected Response licenceTypesFind(ApiVersion version) {
+        String path = buildPathConfiguration(version, null, false, false, true);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response formationTypesFind(ApiVersion version) {
+        String path = buildPathConfiguration(version, null, false, true, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+    
     protected Response seasonCreate(ApiVersion version, SeasonForCreation seasonForCreation) {
         Entity<SeasonForCreation> entity = Entity.json(seasonForCreation);
-        String path = buildPathSeason(version, null);
+        String path = buildPathConfiguration(version, null, true, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
     protected Response seasonFind(ApiVersion version) {
-        String path = buildPathSeason(version, null);
+        String path = buildPathConfiguration(version, null, true, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response seasonUpdate(ApiVersion version, String SeasonId, SeasonForUpdate bean) {
         Entity<SeasonForUpdate> entity = Entity.json(bean);
-        String path = buildPathSeason(version, SeasonId);
+        String path = buildPathConfiguration(version, SeasonId, true, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response seasonDelete(ApiVersion version, String seasonId) {
-        String path = buildPathSeason(version, seasonId);
+        String path = buildPathConfiguration(version, seasonId, true, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
@@ -530,11 +550,21 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    protected String buildPathSeason(ApiVersion version, String seasonId) {
-        StringBuilder path = new StringBuilder("/" + version.getName() + "/seasons");
-        if (seasonId != null) {
+    private String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType) {
+        StringBuilder path = new StringBuilder("/" + version.getName() + "/configurations");
+        if (isSeason) {
+            path.append("/seasons");
+        }
+        if (isFormationType) {
+            path.append("/formationTypes");
+        }
+        if (isLicenceType) {
+            path.append("/licenceTypes");
+        }
+
+        if (id != null) {
             path.append("/");
-            path.append(seasonId);
+            path.append(id);
         }
         return path.toString();
     }

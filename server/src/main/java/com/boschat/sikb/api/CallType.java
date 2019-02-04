@@ -23,6 +23,8 @@ import com.boschat.sikb.model.UserForUpdate;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
+import static com.boschat.sikb.Helper.convertFormationTypesBeansToModels;
+import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
 import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
@@ -38,6 +40,8 @@ import static com.boschat.sikb.service.ClubUtils.deleteClub;
 import static com.boschat.sikb.service.ClubUtils.findClubs;
 import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
+import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
+import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
 import static com.boschat.sikb.service.PersonUtils.deletePerson;
 import static com.boschat.sikb.service.PersonUtils.findPersons;
@@ -385,7 +389,30 @@ public enum CallType {
         public void fillContext(Object... params) {
             MyThreadLocal.get().setSeasonId((String) params[0]);
         }
+    },
+    FORMATION_TYPE_FIND("Find formation types", OK, true) {
+        @Override
+        public Object call() {
+            return convertFormationTypesBeansToModels(findFormationTypes());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
+        }
+    },
+    LICENCE_TYPE_FIND("Find licence types", OK, true) {
+        @Override
+        public Object call() {
+            return convertLicenceTypesBeansToModels(findLicenceTypes());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
+        }
     };
+
     /**
      * info log message to display
      */

@@ -30,12 +30,12 @@ public class ImportCSVUtils {
     }
 
     private static void truncateAndImportClub() throws IOException {
-        DAOFactory.getInstance().getClubDAO().truncate();
+        DAOFactory.getInstance().truncateClub();
         loadClubs("data/prod/insertClub.csv");
     }
 
     private static void truncateAndImportAffiliation() throws IOException {
-        DAOFactory.getInstance().getAffiliationDAO().truncate();
+        DAOFactory.getInstance().truncateAffiliation();
         loadAffiliations("data/prod/insertAffiliation.csv");
     }
 }

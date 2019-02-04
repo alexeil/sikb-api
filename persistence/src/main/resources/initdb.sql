@@ -9,12 +9,7 @@ CREATE TABLE sikb.application
   "password" text
 );
 
-INSERT INTO sikb.application
-values (1, 'admin', 'admin', 'admin');
-INSERT INTO sikb.application
-values (2, 'website', 'website', 'website');
-INSERT INTO sikb.application
-values (3, 'test', 'test', 'test');
+
 
 CREATE TABLE sikb.user
 (
@@ -99,7 +94,7 @@ CREATE TABLE sikb.person
   "modificationDate" timestamp
 );
 
-CREATE TABLE sikb.typeLicence
+CREATE TABLE sikb.licenceType
 (
   "id"                         serial PRIMARY KEY,
   "name"                       varchar(255),

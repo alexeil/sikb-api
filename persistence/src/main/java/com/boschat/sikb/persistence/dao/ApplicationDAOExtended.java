@@ -24,7 +24,4 @@ public class ApplicationDAOExtended extends ApplicationDao {
         return record == null ? null : mapper().map(record);
     }
 
-    public void truncate() {
-        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).cascade().execute();
-    }
 }

@@ -2,11 +2,18 @@ package com.boschat.sikb.persistence.dao;
 
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.persistence.listener.AuditRecordListener;
+import com.boschat.sikb.tables.daos.ClubDao;
+import com.boschat.sikb.tables.daos.FormationtypeDao;
+import com.boschat.sikb.tables.daos.LicencetypeDao;
+import com.boschat.sikb.tables.daos.PersonDao;
+import com.boschat.sikb.tables.daos.UserDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Record;
 import org.jooq.SQLDialect;
+import org.jooq.Table;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.jooq.impl.DefaultRecordListenerProvider;
@@ -20,6 +27,11 @@ import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PASSWORD;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PORT;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_USER;
 import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
+import static com.boschat.sikb.tables.Affiliation.AFFILIATION;
+import static com.boschat.sikb.tables.Club.CLUB;
+import static com.boschat.sikb.tables.Person.PERSON;
+import static com.boschat.sikb.tables.Season.SEASON;
+import static com.boschat.sikb.tables.User.USER;
 
 public class DAOFactory {
 
@@ -29,13 +41,17 @@ public class DAOFactory {
 
     private AffiliationDAOExtended affiliationDAO = null;
 
-    private ClubDAOExtended clubDAO = null;
+    private ClubDao clubDAO = null;
 
-    private UserDAOExtended userDAO = null;
+    private UserDao userDAO = null;
 
-    private PersonDAOExtended personDAO = null;
+    private PersonDao personDAO = null;
 
     private SeasonDAOExtended seasonDAO = null;
+
+    private FormationtypeDao formationtypeDao = null;
+
+    private LicencetypeDao licencetypeDao = null;
 
     private ApplicationDAOExtended applicationDAO = null;
 
@@ -78,9 +94,9 @@ public class DAOFactory {
         return affiliationDAO;
     }
 
-    public ClubDAOExtended getClubDAO() {
+    public ClubDao getClubDAO() {
         if (clubDAO == null) {
-            clubDAO = new ClubDAOExtended(configuration);
+            clubDAO = new ClubDao(configuration);
         }
         return clubDAO;
     }
@@ -92,18 +108,32 @@ public class DAOFactory {
         return seasonDAO;
     }
 
-    public UserDAOExtended getUserDAO() {
+    public UserDao getUserDAO() {
         if (userDAO == null) {
-            userDAO = new UserDAOExtended(configuration);
+            userDAO = new UserDao(configuration);
         }
         return userDAO;
     }
 
-    public PersonDAOExtended getPersonDAO() {
+    public PersonDao getPersonDAO() {
         if (personDAO == null) {
-            personDAO = new PersonDAOExtended(configuration);
+            personDAO = new PersonDao(configuration);
         }
         return personDAO;
+    }
+
+    public FormationtypeDao getFormationTypeDAO() {
+        if (formationtypeDao == null) {
+            formationtypeDao = new FormationtypeDao(configuration);
+        }
+        return formationtypeDao;
+    }
+
+    public LicencetypeDao getLicenceTypeDAO() {
+        if (licencetypeDao == null) {
+            licencetypeDao = new LicencetypeDao(configuration);
+        }
+        return licencetypeDao;
     }
 
     public ApplicationDAOExtended getApplicationDAO() {
@@ -115,5 +145,29 @@ public class DAOFactory {
 
     public DSLContext getDslContext() {
         return dslContext;
+    }
+
+    private <R extends Record> void truncate(Table<R> table) {
+        getDslContext().truncate(table).cascade().execute();
+    }
+
+    public void truncateClub() {
+        truncate(CLUB);
+    }
+
+    public void truncateAffiliation() {
+        truncate(AFFILIATION);
+    }
+
+    public void truncateUser() {
+        truncate(USER);
+    }
+
+    public void truncateSeason() {
+        truncate(SEASON);
+    }
+
+    public void truncatePerson() {
+        truncate(PERSON);
     }
 }

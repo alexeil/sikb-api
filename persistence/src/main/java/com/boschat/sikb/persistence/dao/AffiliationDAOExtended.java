@@ -16,15 +16,12 @@ public class AffiliationDAOExtended extends AffiliationDao {
 
     public Affiliation fetchByIdClubIdSeason(Integer clubId, String season) {
         AffiliationRecord record = using(this.configuration())
-                .selectFrom(this.getTable())
-                .where(AFFILIATION.CLUBID.equal(clubId))
-                .and(AFFILIATION.SEASON.equal(season))
-                .fetchOne();
+            .selectFrom(this.getTable())
+            .where(AFFILIATION.CLUBID.equal(clubId))
+            .and(AFFILIATION.SEASON.equal(season))
+            .fetchOne();
 
         return record == null ? null : mapper().map(record);
     }
 
-    public void truncate() {
-        using(this.configuration()).truncate(this.getTable()).cascade().execute();
-    }
 }

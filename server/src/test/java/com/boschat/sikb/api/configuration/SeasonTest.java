@@ -1,4 +1,4 @@
-package com.boschat.sikb.api.parameters;
+package com.boschat.sikb.api.configuration;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.model.Season;
@@ -135,7 +135,7 @@ class SeasonTest extends AbstractTest {
 
         @Test
         @DisplayName(" right case ")
-        void updateDescription() throws Exception {
+        void findAll() throws Exception {
             Response response = seasonFind(V1);
             checkResponse(response, OK);
             List<Season> seasons = getSeasons(response);

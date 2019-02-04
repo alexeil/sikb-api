@@ -87,10 +87,10 @@ public class PersistenceUtils {
     }
 
     public static void truncateData() {
-        DAOFactory.getInstance().getAffiliationDAO().truncate();
-        DAOFactory.getInstance().getClubDAO().truncate();
-        DAOFactory.getInstance().getUserDAO().truncate();
-        DAOFactory.getInstance().getPersonDAO().truncate();
-        DAOFactory.getInstance().getSeasonDAO().truncate();
+        DAOFactory.getInstance().truncateAffiliation();
+        DAOFactory.getInstance().truncateClub();
+        DAOFactory.getInstance().truncateUser();
+        DAOFactory.getInstance().truncatePerson();
+        DAOFactory.getInstance().truncateSeason();
     }
 }

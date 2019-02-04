@@ -15,10 +15,6 @@ public class SeasonDAOExtended extends SeasonDao {
         super(configuration);
     }
 
-    public void truncate() {
-        DAOFactory.getInstance().getDslContext().truncate(this.getTable()).cascade().execute();
-    }
-
     @Override
     public List<Season> findAll() {
         return DSL.using(this.configuration())

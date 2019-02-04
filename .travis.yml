@@ -31,6 +31,7 @@ before_install:
   - psql -c 'create database sikb;' -U postgres
   # init database with structure
   - psql -U postgres -d sikb -a -f /home/travis/build/alexeil/sikb-api/persistence/src/main/resources/initdb.sql
+  - psql -U postgres -d sikb -a -f /home/travis/build/alexeil/sikb-api/persistence/src/main/resources/initData.sql
   # list all databases
   - psql -l
 

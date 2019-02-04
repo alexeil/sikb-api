@@ -10,6 +10,8 @@ import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
+import com.boschat.sikb.tables.pojos.Formationtype;
+import com.boschat.sikb.tables.pojos.Licencetype;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.Season;
 import com.boschat.sikb.tables.pojos.User;
@@ -111,6 +113,28 @@ public class Helper {
 
     public static List<com.boschat.sikb.model.Person> convertPersonsBeansToModels(List<Person> personsBean) {
         return personsBean.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static List<com.boschat.sikb.model.LicenceType> convertLicenceTypesBeansToModels(List<Licencetype> beans) {
+        return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static com.boschat.sikb.model.LicenceType convertBeanToModel(Licencetype bean) {
+        com.boschat.sikb.model.LicenceType formationType = new com.boschat.sikb.model.LicenceType();
+        formationType.setId(bean.getId());
+        formationType.setName(bean.getName());
+        return formationType;
+    }
+
+    public static List<com.boschat.sikb.model.FormationType> convertFormationTypesBeansToModels(List<Formationtype> beans) {
+        return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static com.boschat.sikb.model.FormationType convertBeanToModel(Formationtype bean) {
+        com.boschat.sikb.model.FormationType formationType = new com.boschat.sikb.model.FormationType();
+        formationType.setId(bean.getId());
+        formationType.setName(bean.getName());
+        return formationType;
     }
 
     public static List<com.boschat.sikb.model.Season> convertSeasonsBeansToModels(List<Season> seasonBean) {
