@@ -49,6 +49,16 @@ class UserLoginTest extends AbstractTest {
     }
 
     @Test
+    @DisplayName(" notYetConfirmed ")
+    void notYetConfirmed() throws Exception {
+        Credentials credentials = new Credentials();
+        credentials.setLogin("myEmail2@kin-ball.fr");
+        credentials.setPassword(USER_DEFAULT_PASSWORD);
+        Response response = userLogin(V1, credentials);
+        checkResponse(response, WRONG_LOGIN_OR_PASSWORD);
+    }
+
+    @Test
     @DisplayName(" wrong password ")
     void wrongPassword() throws Exception {
         Credentials credentials = new Credentials();
