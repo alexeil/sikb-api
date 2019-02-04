@@ -144,7 +144,7 @@ public class Helper {
 
     public static com.boschat.sikb.model.Season convertBeanToModel(Season seasonBean) {
         com.boschat.sikb.model.Season season = new com.boschat.sikb.model.Season();
-        season.setId(seasonBean.getExternalid());
+        season.setId(seasonBean.getId());
         season.setDescription(seasonBean.getDescription());
         season.setBegin(seasonBean.getBegin());
         season.setEnd(seasonBean.getEnd());

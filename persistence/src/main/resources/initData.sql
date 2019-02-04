@@ -6,9 +6,9 @@ INSERT INTO sikb.application
 values (3, 'test', 'test', 'test');
 
 INSERT INTO sikb.season
-values (1, '20172018', 'Saison 2017/2018', '2017-09-01', '2018-08-31');
+values ('20172018', 'Saison 2017/2018', '2017-09-01', '2018-08-31');
 INSERT INTO sikb.season
-values (2, '20182019', 'Saison 2018/2019', '2018-09-01', '2019-08-31');
+values ('20182019', 'Saison 2018/2019', '2018-09-01', '2019-08-31');
 
 
 INSERT INTO sikb.licencetype

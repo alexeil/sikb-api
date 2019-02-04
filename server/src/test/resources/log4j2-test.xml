@@ -10,13 +10,18 @@
             <AppenderRef ref="Console"/>
         </Root>
 
-      <Logger level="trace" name="com.boschat.sikb" additivity="false">
+		<Logger level="INFO" name="com.boschat.sikb" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 
         <!-- LOGGER JOOQ DB -->
-        <Logger level="trace" name="org.jooq" additivity="false">
+		<Logger level="WARN" name="org.jooq" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
+
+		<!-- MAIL -->
+		<Logger level="WARN" name="org.subethamail.smtp" additivity="false">
+			<AppenderRef ref="Console"/>
+		</Logger>
     </Loggers>
 </Configuration>

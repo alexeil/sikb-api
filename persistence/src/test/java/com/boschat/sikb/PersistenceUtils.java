@@ -38,7 +38,7 @@ public class PersistenceUtils {
     }
 
     public static void loadSeasons() throws IOException {
-        loadDataSuite("sql/insertSeason.csv", SEASON, SEASON.ID, SEASON.EXTERNALID, SEASON.DESCRIPTION, SEASON.BEGIN, SEASON.END);
+        loadDataSuite("sql/insertSeason.csv", SEASON, SEASON.ID, SEASON.DESCRIPTION, SEASON.BEGIN, SEASON.END);
     }
 
     public static void loadAffiliations() throws IOException {
@@ -82,7 +82,7 @@ public class PersistenceUtils {
             int stored = loader.stored();
             int ignored = loader.ignored();
 
-            LOGGER.info(" processed {} - stored {} - ignored {}", processed, stored, ignored);
+            LOGGER.trace(" processed {} - stored {} - ignored {}", processed, stored, ignored);
         }
     }
 

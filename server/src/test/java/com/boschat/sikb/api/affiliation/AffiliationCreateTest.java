@@ -12,7 +12,11 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.api.ApiVersion.V1;
+import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_QUERY_STRING_PARAMETER;
+import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 
 @DisplayName(" Create an affiliation ")
 class AffiliationCreateTest extends AbstractTest {
@@ -20,6 +24,7 @@ class AffiliationCreateTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws Exception {
         PersistenceUtils.truncateData();
+        PersistenceUtils.loadSeasons();
         PersistenceUtils.loadClubs();
     }
 
@@ -49,7 +54,7 @@ class AffiliationCreateTest extends AbstractTest {
         board.setElectedDate(AFFILIATION_DEFAULT_ELECTED_DATE);
         affiliationForCreation.setBoard(board);
 
-        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME, affiliationForCreation);
+        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForCreation);
 
         checkResponse(response, CREATED);
         Affiliation affiliation = getAffiliation(response);
@@ -60,4 +65,27 @@ class AffiliationCreateTest extends AbstractTest {
             AFFILIATION_DEFAULT_MEMBERS_NUMBER, AFFILIATION_DEFAULT_ELECTED_DATE);
     }
 
+    @Test
+    @DisplayName(" unknown season ")
+    void unknownSeason() throws Exception {
+        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, "10001000", affiliationForCreation);
+        checkResponse(response, SEASON_NOT_FOUND, "10001000");
+    }
+
+    @Test
+    @DisplayName(" incorrect season ")
+    void incorrectSeason() throws Exception {
+        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, "IncorrectValue", affiliationForCreation);
+        checkResponse(response, INVALID_QUERY_STRING_PARAMETER, QUERY_STRING_SEASON_ID, "IncorrectValue");
+    }
+
+    @Test
+    @DisplayName(" unknown club ")
+    void unknownClub() throws Exception {
+        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        Response response = affiliationCreate(V1, 999, SEASON_DEFAULT_ID, affiliationForCreation);
+        checkResponse(response, CLUB_NOT_FOUND, 999);
+    }
 }

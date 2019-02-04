@@ -6,10 +6,13 @@ import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 
+import static com.boschat.sikb.common.configuration.ApplicationProperties.CHECK_QUERY_STRING_SEASON_ID_REGEXP;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
+import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
+import static com.boschat.sikb.utils.CheckUtils.checkRequestQueryStringParam;
 
 public class Context {
 
@@ -22,8 +25,6 @@ public class Context {
     private String accessToken;
 
     private Integer clubId;
-
-    private String season;
 
     private CreateOrUpdateUserContext createOrUpdateUserContext;
 
@@ -78,14 +79,6 @@ public class Context {
 
     public void setClubId(Integer clubId) {
         this.clubId = clubId;
-    }
-
-    public String getSeason() {
-        return season;
-    }
-
-    public void setSeason(String season) {
-        this.season = season;
     }
 
     public CreateOrUpdateUserContext getCreateOrUpdateUserContext() {
@@ -174,6 +167,7 @@ public class Context {
     }
 
     public void setSeasonId(String seasonId) {
+        checkRequestQueryStringParam(seasonId, QUERY_STRING_SEASON_ID, CHECK_QUERY_STRING_SEASON_ID_REGEXP.getValue());
         this.seasonId = seasonId;
     }
 

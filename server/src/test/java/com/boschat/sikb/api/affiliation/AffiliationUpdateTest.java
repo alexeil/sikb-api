@@ -29,7 +29,7 @@ class AffiliationUpdateTest extends AbstractTest {
     void defaultAffiliation() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
 
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);
@@ -44,7 +44,7 @@ class AffiliationUpdateTest extends AbstractTest {
     @DisplayName(" no field ")
     void noField() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
-        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
 
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);
@@ -60,8 +60,8 @@ class AffiliationUpdateTest extends AbstractTest {
     void affiliationNotFound() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, 999, SEASON_DEFAULT_SHORT_NAME, affiliationForUpdate);
-        checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_SHORT_NAME);
+        Response response = affiliationUpdate(V1, 999, SEASON_DEFAULT_ID, affiliationForUpdate);
+        checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_ID);
     }
 
     @Test

@@ -1,12 +1,12 @@
 package com.boschat.sikb.api;
 
+import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.context.CreateOrUpdateClubContext;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
 import com.boschat.sikb.context.CreateOrUpdateUserContext;
 import com.boschat.sikb.context.MyThreadLocal;
-import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
@@ -245,7 +245,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
-            MyThreadLocal.get().setSeason((String) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
         }
     },
@@ -258,7 +258,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
-            MyThreadLocal.get().setSeason((String) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
     AFFILIATION_UPDATE("Update an affiliation", OK, true) {
@@ -270,7 +270,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
-            MyThreadLocal.get().setSeason((String) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForUpdate) params[2]));
         }
     },
@@ -284,7 +284,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setClubId((Integer) params[0]);
-            MyThreadLocal.get().setSeason((String) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
     PERSON_CREATE("Create a person", CREATED, true) {

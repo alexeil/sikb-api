@@ -12,6 +12,8 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_OLD_PASSWORD = "oldPassword";
 
+    public static final String QUERY_STRING_SEASON_ID = "seasonId";
+
     private SikbConstants() {
 
     }

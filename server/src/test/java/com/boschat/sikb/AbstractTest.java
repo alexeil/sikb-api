@@ -119,8 +119,6 @@ public abstract class AbstractTest {
 
     protected static final String USER_DEFAULT_PASSWORD = "test";
 
-    protected static final String SEASON_DEFAULT_SHORT_NAME = "20182019";
-
     protected static final Integer CLUB_DEFAULT_ID = 1;
 
     protected static final String CLUB_DEFAULT_NAME = "Kin-ball Association Rennes";
@@ -465,7 +463,7 @@ public abstract class AbstractTest {
         String path = buildPathConfiguration(version, null, false, true, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
-    
+
     protected Response seasonCreate(ApiVersion version, SeasonForCreation seasonForCreation) {
         Entity<SeasonForCreation> entity = Entity.json(seasonForCreation);
         String path = buildPathConfiguration(version, null, true, false, false);

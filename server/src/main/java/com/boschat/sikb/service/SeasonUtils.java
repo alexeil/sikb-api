@@ -1,8 +1,8 @@
 package com.boschat.sikb.service;
 
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
 import com.boschat.sikb.context.MyThreadLocal;
-import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Season;
 
@@ -39,10 +39,10 @@ public class SeasonUtils {
             MyThreadLocal.get().setSeasonId(externalId);
             seasonBean = getSeason(false);
             if (seasonBean != null) {
-                throw new FunctionalException(SEASON_ALREADY_EXISTS, seasonBean.getExternalid());
+                throw new FunctionalException(SEASON_ALREADY_EXISTS, seasonBean.getId());
             } else {
                 seasonBean = new Season();
-                seasonBean.setExternalid(externalId);
+                seasonBean.setId(externalId);
             }
         }
 
@@ -67,7 +67,7 @@ public class SeasonUtils {
 
     private static Season getSeason(boolean raiseNotFound) {
         String seasonId = MyThreadLocal.get().getSeasonId();
-        Season season = DAOFactory.getInstance().getSeasonDAO().fetchOneByExternalid(seasonId);
+        Season season = DAOFactory.getInstance().getSeasonDAO().fetchOneById(seasonId);
 
         if (raiseNotFound && season == null) {
             throw new FunctionalException(SEASON_NOT_FOUND, seasonId);

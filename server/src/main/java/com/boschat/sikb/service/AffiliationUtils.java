@@ -1,12 +1,14 @@
 package com.boschat.sikb.service;
 
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.context.MyThreadLocal;
-import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUND;
 
 public class AffiliationUtils {
 
@@ -20,7 +22,7 @@ public class AffiliationUtils {
 
     public static Affiliation getAffiliation() {
         Integer clubId = MyThreadLocal.get().getClubId();
-        String season = MyThreadLocal.get().getSeason();
+        String season = MyThreadLocal.get().getSeasonId();
 
         Affiliation affiliation = DAOFactory.getInstance().getAffiliationDAO().fetchByIdClubIdSeason(clubId, season);
 
@@ -44,8 +46,18 @@ public class AffiliationUtils {
         Affiliation affiliationBean;
         if (isCreation) {
             affiliationBean = new Affiliation();
-            affiliationBean.setSeason(MyThreadLocal.get().getSeason());
+            String seasonId = MyThreadLocal.get().getSeasonId();
+            Integer clubId = MyThreadLocal.get().getClubId();
+            affiliationBean.setSeason(seasonId);
             affiliationBean.setClubid(MyThreadLocal.get().getClubId());
+
+            if (!DAOFactory.getInstance().getSeasonDAO().existsById(seasonId)) {
+                throw new FunctionalException(SEASON_NOT_FOUND, seasonId);
+            }
+            if (!DAOFactory.getInstance().getClubDAO().existsById(clubId)) {
+                throw new FunctionalException(CLUB_NOT_FOUND, clubId);
+            }
+
         } else {
             affiliationBean = getAffiliation();
         }

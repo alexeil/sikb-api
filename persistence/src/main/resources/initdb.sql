@@ -38,6 +38,14 @@ CREATE TABLE sikb.club
   "modificationDate" timestamp
 );
 
+CREATE TABLE sikb.season
+(
+  "id"          varchar(8) PRIMARY KEY,
+  "description" varchar(255),
+  "begin"       date,
+  "end"         date
+);
+
 CREATE TABLE sikb.affiliation
 (
   "id"               serial PRIMARY KEY,
@@ -62,18 +70,10 @@ CREATE TABLE sikb.affiliation
 
   "creationDate"     timestamp,
   "modificationDate" timestamp,
-  "season"           varchar(8),
+  "season"           varchar(8) REFERENCES sikb.season (id),
   "clubId"           integer REFERENCES sikb.club (id) ON DELETE CASCADE
 );
 
-CREATE TABLE sikb.season
-(
-  "id"          serial PRIMARY KEY,
-  "externalId"  varchar(8) unique,
-  "description" varchar(255),
-  "begin"       date,
-  "end"         date
-);
 
 
 CREATE TABLE sikb.person
@@ -104,7 +104,7 @@ CREATE TABLE sikb.licenceType
 CREATE TABLE sikb.licence
 (
   "id"                 serial PRIMARY KEY,
-  "season"             varchar(8),
+  "season"             varchar(8) REFERENCES sikb.season (id),
   "medicalCertificate" varchar(255), -- à voir stocker un URL ou Bytes
   "formationsRequired" json,
   "types"              json,

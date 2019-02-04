@@ -13,7 +13,9 @@ public enum ApplicationProperties implements IProperties {
     TEMPLATE_CREATE_USER_NAME("mail.template.createUser.name"),
     TEMPLATE_CREATE_USER_TITLE("mail.template.createUser.title"),
     TEMPLATE_RESET_USER_PASSWORD_NAME("mail.template.resetUserPassword.name"),
-    TEMPLATE_RESET_USER_PASSWORD_TITLE("mail.template.resetUserPassword.title");
+    TEMPLATE_RESET_USER_PASSWORD_TITLE("mail.template.resetUserPassword.title"),
+
+    CHECK_QUERY_STRING_SEASON_ID_REGEXP("check.queryString.seasonId.regexp");
 
     private String propName;
 

@@ -25,15 +25,15 @@ class AffiliationDeleteTest extends AbstractTest {
     @Test
     @DisplayName(" (default) ")
     void defaultAffiliation() throws Exception {
-        Response response = affiliationDelete(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_SHORT_NAME);
+        Response response = affiliationDelete(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID);
         checkResponse(response, NO_CONTENT);
     }
 
     @Test
     @DisplayName(" club not found ")
     void clubNotFound() throws Exception {
-        Response response = affiliationDelete(V1, 999, SEASON_DEFAULT_SHORT_NAME);
-        checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_SHORT_NAME);
+        Response response = affiliationDelete(V1, 999, SEASON_DEFAULT_ID);
+        checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_ID);
     }
 
     @Test
