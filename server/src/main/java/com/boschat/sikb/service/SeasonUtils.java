@@ -22,7 +22,7 @@ public class SeasonUtils {
     }
 
     public static void deleteSeason() {
-        DAOFactory.getInstance().getSeasonDAO().delete(getSeason(false));
+        DAOFactory.getInstance().getSeasonDAO().delete(getSeason(true));
     }
 
     public static Season createSeason() {

@@ -125,7 +125,7 @@ class SeasonTest extends AbstractTest {
         @DisplayName(" unknown ")
         void updateUnknown() throws Exception {
             Response response = seasonDelete(V1, "19901991");
-            checkResponse(response, NO_CONTENT);
+            checkResponse(response, SEASON_NOT_FOUND, "19901991");
         }
     }
 
