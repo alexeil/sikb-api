@@ -5,7 +5,6 @@ import com.boschat.sikb.api.ConfigurationsApiService;
 import com.boschat.sikb.api.factories.ConfigurationsApiServiceFactory;
 
 import io.swagger.annotations.ApiParam;
-import io.swagger.jaxrs.*;
 
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.LicenceType;
@@ -35,7 +34,7 @@ import javax.validation.Valid;
 
 
 @io.swagger.annotations.Api(description = "the configurations API")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-02-04T19:08:35.710753300+01:00[Europe/Paris]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-02-04T20:29:23.529408900+01:00[Europe/Paris]")
 public class ConfigurationsApi  {
    private final ConfigurationsApiService delegate;
 

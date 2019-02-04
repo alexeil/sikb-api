@@ -18,6 +18,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+			<scope>compile</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
@@ -87,6 +92,10 @@
 			<artifactId>swagger-jaxrs2</artifactId>
 		</dependency>
 
+		<!--	<dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-annotations</artifactId>
+            </dependency>-->
 
 		<dependency>
 			<groupId>javax.ws.rs</groupId>

@@ -18,6 +18,13 @@
 		<maven>3.6.0</maven>
 	</prerequisites>
 
+	<repositories>
+		<repository>
+			<id>jvnet-nexus-staging</id>
+			<url>http://maven.java.net/content/repositories/staging/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 
 	<properties>
 		<application.code>sikb-api</application.code>
@@ -65,6 +72,7 @@
 		<swagger-ui.version>3.17.0</swagger-ui.version>
 		<swagger-core-version>1.5.21</swagger-core-version>
 
+		<jaxb-runtime.version>2.4.0-b180830.0438</jaxb-runtime.version>
 	</properties>
 
 	<dependencyManagement>
@@ -72,22 +80,44 @@
 
 			<dependency>
 				<groupId>io.swagger</groupId>
-				<artifactId>swagger-jersey2-jaxrs</artifactId>
+				<artifactId>swagger-annotations</artifactId>
 				<scope>compile</scope>
 				<version>${swagger-core-version}</version>
+				<!--	<exclusions>
+                        <exclusion>
+                            <groupId>io.swagger</groupId>
+                            <artifactId>swagger-core</artifactId>
+                        </exclusion>
+                    </exclusions>-->
+			</dependency>
+
+			<dependency>
+				<groupId>org.glassfish.jaxb</groupId>
+				<artifactId>jaxb-runtime</artifactId>
+				<version>${jaxb-runtime.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>io.swagger.core.v3</groupId>
 				<artifactId>swagger-jaxrs2</artifactId>
 				<version>${swagger.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>io.swagger.core.v3</groupId>
+						<artifactId>swagger-annotations</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>io.swagger.core.v3</groupId>
 				<artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
 				<version>${swagger.version}</version>
 			</dependency>
-
+			<!--	<dependency>
+                    <groupId>io.swagger.core.v3</groupId>
+                    <artifactId>swagger-annotations</artifactId>
+                    <version>${swagger.version}</version>
+                </dependency>-->
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
