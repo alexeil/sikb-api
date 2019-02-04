@@ -15,11 +15,6 @@ import javax.ws.rs.ext.Provider;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.utils.HashUtils.basicDecode;
 
-/**
- * Jersey HTTP Basic Auth filter
- *
- * @author Deisss (LGPLv3)
- */
 @Provider
 @PreMatching
 public class AuthFilter implements ContainerRequestFilter {
