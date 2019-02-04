@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;

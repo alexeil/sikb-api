@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_RESET_USER_PASSWORD_TITLE;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;

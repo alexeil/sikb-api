@@ -1,7 +1,7 @@
 package com.boschat.sikb.service;
 
-import com.boschat.sikb.CreateOrUpdateSeasonContext;
-import com.boschat.sikb.MyThreadLocal;
+import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
+import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Season;

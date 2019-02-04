@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static org.junit.jupiter.api.Assertions.assertAll;

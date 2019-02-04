@@ -1,5 +1,6 @@
 package com.boschat.sikb;
 
+import com.boschat.sikb.api.ApiVersion;
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.common.utils.DateUtils;

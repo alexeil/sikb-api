@@ -1,7 +1,7 @@
 package com.boschat.sikb.service;
 
-import com.boschat.sikb.CreateOrUpdateUserContext;
-import com.boschat.sikb.MyThreadLocal;
+import com.boschat.sikb.context.CreateOrUpdateUserContext;
+import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;

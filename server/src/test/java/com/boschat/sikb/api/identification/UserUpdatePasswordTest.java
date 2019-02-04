@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CANNOT_BE_SAME;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;

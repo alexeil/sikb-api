@@ -1,4 +1,4 @@
-package com.boschat.sikb;
+package com.boschat.sikb.context;
 
 import com.boschat.sikb.model.SeasonForUpdate;
 

@@ -1,4 +1,4 @@
-package com.boschat.sikb;
+package com.boschat.sikb.api;
 
 public enum ApiVersion {
     V1("v1");

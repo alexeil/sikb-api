@@ -11,7 +11,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;

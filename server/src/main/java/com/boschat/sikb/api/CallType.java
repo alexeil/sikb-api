@@ -1,11 +1,11 @@
 package com.boschat.sikb.api;
 
-import com.boschat.sikb.CreateOrUpdateAffiliationContext;
-import com.boschat.sikb.CreateOrUpdateClubContext;
-import com.boschat.sikb.CreateOrUpdatePersonContext;
-import com.boschat.sikb.CreateOrUpdateSeasonContext;
-import com.boschat.sikb.CreateOrUpdateUserContext;
-import com.boschat.sikb.MyThreadLocal;
+import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
+import com.boschat.sikb.context.CreateOrUpdateClubContext;
+import com.boschat.sikb.context.CreateOrUpdatePersonContext;
+import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
+import com.boschat.sikb.context.CreateOrUpdateUserContext;
+import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;

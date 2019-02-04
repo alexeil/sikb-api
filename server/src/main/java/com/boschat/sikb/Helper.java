@@ -4,6 +4,7 @@ import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
+import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.ZError;

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.ApiVersion.V1;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
