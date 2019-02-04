@@ -1,7 +1,6 @@
 package com.boschat.sikb.api;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +10,11 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+import static com.boschat.sikb.PersistenceUtils.loadAffiliations;
+import static com.boschat.sikb.PersistenceUtils.loadClubs;
+import static com.boschat.sikb.PersistenceUtils.loadSeasons;
+import static com.boschat.sikb.PersistenceUtils.loadUsers;
+import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
@@ -24,10 +28,11 @@ class AdministrationTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadClubs();
-        PersistenceUtils.loadAffiliations();
-        PersistenceUtils.loadUsers();
+        truncateData();
+        loadSeasons();
+        loadClubs();
+        loadAffiliations();
+        loadUsers();
     }
 
     private Response affiliationGetWithCredentials(String basic, String accessToken) {

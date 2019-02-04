@@ -1,7 +1,6 @@
 package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.Board;
@@ -11,6 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
 
+import static com.boschat.sikb.PersistenceUtils.loadClubs;
+import static com.boschat.sikb.PersistenceUtils.loadSeasons;
+import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
@@ -23,9 +25,9 @@ class AffiliationCreateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadSeasons();
-        PersistenceUtils.loadClubs();
+        truncateData();
+        loadSeasons();
+        loadClubs();
     }
 
     @Test
