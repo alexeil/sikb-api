@@ -2,6 +2,8 @@ package com.boschat.sikb.context;
 
 import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Licence;
+import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
@@ -47,6 +49,12 @@ public class Context {
     private String seasonId;
 
     private CreateOrUpdateSeasonContext createOrUpdateSeasonContext;
+
+    private Licence licence;
+
+    private Integer licenceId;
+
+    private LicenceForCreation licenceForCreation;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -177,5 +185,29 @@ public class Context {
 
     public void setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext createOrUpdateSeasonContext) {
         this.createOrUpdateSeasonContext = createOrUpdateSeasonContext;
+    }
+
+    public Licence getLicence() {
+        return licence;
+    }
+
+    public void setLicence(Licence licence) {
+        this.licence = licence;
+    }
+
+    public Integer getLicenceId() {
+        return licenceId;
+    }
+
+    public void setLicenceId(Integer licenceId) {
+        this.licenceId = licenceId;
+    }
+
+    public LicenceForCreation getLicenceForCreation() {
+        return licenceForCreation;
+    }
+
+    public void setLicenceForCreation(LicenceForCreation licenceForCreation) {
+        this.licenceForCreation = licenceForCreation;
     }
 }

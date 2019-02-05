@@ -1,8 +1,8 @@
 package com.boschat.sikb.service;
 
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.MyThreadLocal;
-import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Person;
 
@@ -93,5 +93,11 @@ public class PersonUtils {
 
     public static List<Person> findPersons() {
         return DAOFactory.getInstance().getPersonDAO().findAll();
+    }
+
+    public static void checkPersonExists(Integer personId) {
+        if (!DAOFactory.getInstance().getPersonDAO().existsById(personId)) {
+            throw new FunctionalException(PERSON_NOT_FOUND, personId);
+        }
     }
 }

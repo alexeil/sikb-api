@@ -104,10 +104,10 @@ CREATE TABLE sikb.licenceType
 CREATE TABLE sikb.licence
 (
   "id"                 serial PRIMARY KEY,
-  "season"             varchar(8) REFERENCES sikb.season (id),
   "medicalCertificate" varchar(255), -- à voir stocker un URL ou Bytes
-  "formationsRequired" json,
+  "formationsNeed"     json,
   "types"              json,
+  "season"             varchar(8) REFERENCES sikb.season (id),
   "clubId"             integer REFERENCES sikb.club (id),
   "personId"           integer REFERENCES sikb.person (id) ON DELETE CASCADE
 );

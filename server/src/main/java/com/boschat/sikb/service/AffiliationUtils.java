@@ -7,8 +7,8 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
-import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
-import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUND;
+import static com.boschat.sikb.service.ClubUtils.checkClubExists;
+import static com.boschat.sikb.service.SeasonUtils.checkSeasonExists;
 
 public class AffiliationUtils {
 
@@ -48,15 +48,11 @@ public class AffiliationUtils {
             affiliationBean = new Affiliation();
             String seasonId = MyThreadLocal.get().getSeasonId();
             Integer clubId = MyThreadLocal.get().getClubId();
+
+            checkSeasonExists(seasonId);
+            checkClubExists(clubId);
             affiliationBean.setSeason(seasonId);
             affiliationBean.setClubid(MyThreadLocal.get().getClubId());
-
-            if (!DAOFactory.getInstance().getSeasonDAO().existsById(seasonId)) {
-                throw new FunctionalException(SEASON_NOT_FOUND, seasonId);
-            }
-            if (!DAOFactory.getInstance().getClubDAO().existsById(clubId)) {
-                throw new FunctionalException(CLUB_NOT_FOUND, clubId);
-            }
 
         } else {
             affiliationBean = getAffiliation();

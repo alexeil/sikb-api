@@ -652,7 +652,7 @@ paths:
     post:
       summary: Create a person's licence
       description: ''
-      operationId: createPersonFormation
+      operationId: createPersonLicence
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/personId'
@@ -662,17 +662,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/licence'
+              $ref: '#/components/schemas/licenceForCreation'
         required:
           true
         description: body
       responses:
         201:
-          description: Newly created person
+          description: Newly created person's licence
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/formation'
+                $ref: '#/components/schemas/licence'
         default:
           description: Default error sample response
           content:
@@ -1300,9 +1300,33 @@ components:
         formationNeed:
           type: array
           items:
-            type: string
-        club:
-          $ref: "#/components/schemas/club"
+            $ref: "#/components/schemas/formationType"
+        clubId:
+          type: integer
+          format: int32
+
+    licenceForCreation:
+      allOf:
+        - $ref: '#/components/schemas/licenceForUpdate'
+      required:
+        - typeLicences
+
+    licenceForUpdate:
+      properties:
+        typeLicences:
+          description: ids of licence types
+          type: array
+          items:
+            type: integer
+            format: int32
+        medicalCertificate:
+          type: string
+        formationNeed:
+          description: ids of formation types needed
+          type: array
+          items:
+            type: integer
+            format: int32
 
     ZError:
       required:

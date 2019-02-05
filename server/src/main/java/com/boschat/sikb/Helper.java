@@ -12,6 +12,7 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
 import com.boschat.sikb.tables.pojos.Club;
 import com.boschat.sikb.tables.pojos.Formationtype;
+import com.boschat.sikb.tables.pojos.Licence;
 import com.boschat.sikb.tables.pojos.Licencetype;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.Season;
@@ -29,7 +30,9 @@ import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
-import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
+import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormationNeed;
+import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormations;
+import static com.boschat.sikb.utils.JsonUtils.jsonNodeToLicenceTypes;
 
 public class Helper {
 
@@ -120,11 +123,27 @@ public class Helper {
         return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
 
+    public static com.boschat.sikb.model.Licence convertBeanToModel(Licence bean) {
+        com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
+
+        licence.setTypeLicences(jsonNodeToLicenceTypes(bean.getTypes()));
+        licence.setMedicalCertificate(bean.getMedicalcertificate());
+
+        if (!bean.getFormationsneed().isNull()) {
+            licence.setFormationNeed(jsonNodeToFormationNeed(bean.getFormationsneed()));
+        }
+
+        licence.setClubId(bean.getClubid());
+        licence.setSeason(bean.getSeason());
+        return licence;
+    }
+
     public static com.boschat.sikb.model.LicenceType convertBeanToModel(Licencetype bean) {
-        com.boschat.sikb.model.LicenceType formationType = new com.boschat.sikb.model.LicenceType();
-        formationType.setId(bean.getId());
-        formationType.setName(bean.getName());
-        return formationType;
+        com.boschat.sikb.model.LicenceType licenceType = new com.boschat.sikb.model.LicenceType();
+        licenceType.setId(bean.getId());
+        licenceType.setName(bean.getName());
+        licenceType.setMedicalCertificateRequired(bean.getMedicalcertificaterequired());
+        return licenceType;
     }
 
     public static List<com.boschat.sikb.model.FormationType> convertFormationTypesBeansToModels(List<Formationtype> beans) {
@@ -170,7 +189,7 @@ public class Helper {
         person.setNationality(personBean.getNationality());
 
         if (!personBean.getFormations().isNull()) {
-            person.setFormations(formationsToJsonNode(personBean.getFormations()));
+            person.setFormations(jsonNodeToFormations(personBean.getFormations()));
         }
         return person;
     }

@@ -12,6 +12,7 @@ import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
@@ -42,6 +43,7 @@ import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
+import static com.boschat.sikb.service.LicenceUtils.createLicence;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
 import static com.boschat.sikb.service.PersonUtils.deletePerson;
 import static com.boschat.sikb.service.PersonUtils.findPersons;
@@ -410,6 +412,20 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             // no params
+        }
+    },
+    LICENCE_CREATE("Create a licence", CREATED, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createLicence());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setClubId((Integer) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[2]);
+            MyThreadLocal.get().setLicenceForCreation((LicenceForCreation) params[3]);
         }
     };
 

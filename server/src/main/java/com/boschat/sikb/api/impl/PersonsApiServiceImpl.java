@@ -1,7 +1,7 @@
 package com.boschat.sikb.api.impl;
 
 import com.boschat.sikb.api.PersonsApiService;
-import com.boschat.sikb.model.Licence;
+import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 
@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
 import static com.boschat.sikb.Helper.runService;
+import static com.boschat.sikb.api.CallType.LICENCE_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_DELETE;
 import static com.boschat.sikb.api.CallType.PERSON_FIND;
@@ -24,9 +25,9 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     }
 
     @Override
-    public Response createPersonFormation(String accessToken, Integer personId, Integer clubId, String season, Licence licence,
+    public Response createPersonLicence(String accessToken, Integer personId, Integer clubId, String season, LicenceForCreation licence,
         SecurityContext securityContext) {
-        return null;
+        return runService(LICENCE_CREATE, accessToken, securityContext, personId, clubId, season, licence);
     }
 
     @Override

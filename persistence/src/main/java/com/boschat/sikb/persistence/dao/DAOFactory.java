@@ -4,6 +4,7 @@ import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.persistence.listener.AuditRecordListener;
 import com.boschat.sikb.tables.daos.ClubDao;
 import com.boschat.sikb.tables.daos.FormationtypeDao;
+import com.boschat.sikb.tables.daos.LicenceDao;
 import com.boschat.sikb.tables.daos.LicencetypeDao;
 import com.boschat.sikb.tables.daos.PersonDao;
 import com.boschat.sikb.tables.daos.UserDao;
@@ -46,6 +47,8 @@ public class DAOFactory {
     private UserDao userDAO = null;
 
     private PersonDao personDAO = null;
+
+    private LicenceDao licenceDAO = null;
 
     private SeasonDAOExtended seasonDAO = null;
 
@@ -106,6 +109,13 @@ public class DAOFactory {
             seasonDAO = new SeasonDAOExtended(configuration);
         }
         return seasonDAO;
+    }
+
+    public LicenceDao getLicenceDAO() {
+        if (licenceDAO == null) {
+            licenceDAO = new LicenceDao(configuration);
+        }
+        return licenceDAO;
     }
 
     public UserDao getUserDAO() {

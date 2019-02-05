@@ -14,6 +14,8 @@ import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
+import com.boschat.sikb.model.Licence;
+import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceType;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
@@ -76,6 +78,21 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    protected static final List<Integer> LICENCE_DEFAULT_TYPE_LICENCE_ID = Arrays.asList(1, 5, 6);
+
+    protected static final List<LicenceType> LICENCE_DEFAULT_TYPE_LICENCE = Arrays.asList(
+        new LicenceType().id(1).name("Sénior Compétition").medicalCertificateRequired(true),
+        new LicenceType().id(5).name("Arbitre").medicalCertificateRequired(true),
+        new LicenceType().id(6).name("Dirigeant").medicalCertificateRequired(false));
+
+    protected static final String LICENCE_DEFAULT_MEDICAL_CERTIFICATE = "medicalCertificate";
+
+    protected static final List<Integer> LICENCE_DEFAULT_FORMATION_NEED_ID = Arrays.asList(2, 3);
+
+    protected static final List<FormationType> LICENCE_DEFAULT_FORMATION_NEED = Arrays.asList(
+        new FormationType().id(2).name("Arbitre Niveau 2"),
+        new FormationType().id(3).name("Arbitre Niveau 3"));
 
     protected static final String SEASON_DEFAULT_ID = "20182019";
 
@@ -186,6 +203,10 @@ public abstract class AbstractTest {
 
     protected static Affiliation getAffiliation(Response result) throws IOException {
         return getBody(result, Affiliation.class);
+    }
+
+    protected static Licence getLicence(Response result) throws IOException {
+        return getBody(result, Licence.class);
     }
 
     protected static User getUser(Response result) throws IOException {
@@ -340,6 +361,12 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
+    protected Response licenceCreate(ApiVersion version, Integer personId, Integer clubId, String season, LicenceForCreation licenceForCreation) {
+        Entity<LicenceForCreation> entity = Entity.json(licenceForCreation);
+        String path = buildPathPerson(version, personId, clubId, season);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
         String path = buildPath(version, clubId, season);
@@ -348,28 +375,28 @@ public abstract class AbstractTest {
 
     protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {
         Entity<PersonForCreation> entity = Entity.json(personForCreation);
-        String path = buildPathPerson(version, null);
+        String path = buildPathPerson(version, null, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
     protected Response personUpdate(ApiVersion version, Integer personId, PersonForUpdate personForUpdate) {
         Entity<PersonForUpdate> entity = Entity.json(personForUpdate);
-        String path = buildPathPerson(version, personId);
+        String path = buildPathPerson(version, personId, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response personGet(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId);
+        String path = buildPathPerson(version, personId, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response personDelete(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId);
+        String path = buildPathPerson(version, personId, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response personFind(ApiVersion version) {
-        String path = buildPathPerson(version, null);
+        String path = buildPathPerson(version, null, null, null);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
@@ -526,11 +553,21 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathPerson(ApiVersion version, Integer personId) {
+    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
         if (personId != null) {
             path.append("/");
             path.append(personId);
+        }
+
+        if (clubId != null) {
+            path.append("/");
+            path.append(clubId);
+        }
+        if (season != null) {
+            path.append("/");
+            path.append(season);
+            path.append("/licence");
         }
         return path.toString();
     }
@@ -618,6 +655,19 @@ public abstract class AbstractTest {
             () -> assertEquals(name, club.getName(), " name incorrect"),
             () -> assertEquals(shortName, club.getShortName(), " shortName incorrect"),
             () -> assertEquals(logo, club.getLogo(), " logo incorrect")
+        );
+    }
+
+    protected void checkLicence(Licence licence, List<LicenceType> licenceTypes, String medicalCertificate, List<FormationType> formationsNeed, Integer clubId,
+        String season) {
+        assertAll("Check Licence ",
+            () -> assertNotNull(licence, " licence shouldn't be null"),
+            () -> assertEquals(licenceTypes, licence.getTypeLicences(), " licenceTypes incorrect"),
+            () -> assertEquals(medicalCertificate, licence.getMedicalCertificate(), " medicalCertificate incorrect"),
+            () -> assertEquals(formationsNeed, licence.getFormationNeed(), " formationsNeed incorrect"),
+            () -> assertEquals(clubId, licence.getClubId(), " clubId incorrect"),
+            () -> assertEquals(season, licence.getSeason(), " season incorrect")
+
         );
     }
 

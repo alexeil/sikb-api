@@ -35,6 +35,7 @@ public enum ResponseCode {
     CONFIRM_TOKEN_EXPIRED(INFO, 404, 5, "Confirm token is no longer available"),
     PERSON_NOT_FOUND(INFO, 404, 6, "Person (%s) not found"),
     SEASON_NOT_FOUND(INFO, 404, 7, "Season (%s) not found"),
+    LICENCE_NOT_FOUND(INFO, 404, 8, "Licence (%s) not found"),
 
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
