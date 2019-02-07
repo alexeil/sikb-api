@@ -78,20 +78,24 @@ CREATE TABLE sikb.affiliation
 
 CREATE TABLE sikb.person
 (
-  "id"               serial PRIMARY KEY,
-  "firstName"        varchar(255),
-  "name"             varchar(255),
-  "sex"              varchar(255),
-  "birthDate"        date,
-  "address"          varchar(255),
-  "postalCode"       varchar(255),
-  "city"             varchar(255),
-  "phoneNumber"      varchar(255),
-  "email"            varchar(255),
-  "nationality"      varchar(255),
-  "formations"       json,
-  "creationDate"     timestamp,
-  "modificationDate" timestamp
+  "id"                                  serial PRIMARY KEY,
+  "firstName"                           varchar(255),
+  "name"                                varchar(255),
+  "sex"                                 varchar(255),
+  "birthDate"                           date,
+  "address"                             varchar(255),
+  "postalCode"                          varchar(255),
+  "city"                                varchar(255),
+  "phoneNumber"                         varchar(255),
+  "email"                               varchar(255),
+  "nationality"                         varchar(255),
+  "formations"                          json,
+  "medicalCertificateKey"               varchar(255) unique,
+  "medicalCertificateData"              bytea,
+  "medicalCertificateContentType"       varchar(255),
+  "medicalCertificateBeginValidityDate" date,
+  "creationDate"                        timestamp,
+  "modificationDate"                    timestamp
 );
 
 CREATE TABLE sikb.licenceType
@@ -103,13 +107,12 @@ CREATE TABLE sikb.licenceType
 
 CREATE TABLE sikb.licence
 (
-  "id"                 serial PRIMARY KEY,
-  "medicalCertificate" varchar(255), -- à voir stocker un URL ou Bytes
-  "formationsNeed"     json,
-  "types"              json,
-  "season"             varchar(8) REFERENCES sikb.season (id),
-  "clubId"             integer REFERENCES sikb.club (id),
-  "personId"           integer REFERENCES sikb.person (id) ON DELETE CASCADE
+  "id"             serial PRIMARY KEY,
+  "formationsNeed" json,
+  "types"          json,
+  "season"         varchar(8) REFERENCES sikb.season (id),
+  "clubId"         integer REFERENCES sikb.club (id),
+  "personId"       integer REFERENCES sikb.person (id) ON DELETE CASCADE
 );
 
 CREATE TABLE sikb.formationType

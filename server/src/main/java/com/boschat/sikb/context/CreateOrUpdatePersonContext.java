@@ -1,6 +1,7 @@
 package com.boschat.sikb.context;
 
 import com.boschat.sikb.model.Formation;
+import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Sex;
 
@@ -30,6 +31,8 @@ public class CreateOrUpdatePersonContext {
     private String nationality;
 
     private List<Formation> formations = null;
+
+    private MedicalCertificate medicalCertificate;
 
     public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
         CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
@@ -133,5 +136,13 @@ public class CreateOrUpdatePersonContext {
 
     public void setFormations(List<Formation> formations) {
         this.formations = formations;
+    }
+
+    public MedicalCertificate getMedicalCertificate() {
+        return medicalCertificate;
+    }
+
+    public void setMedicalCertificate(MedicalCertificate medicalCertificate) {
+        this.medicalCertificate = medicalCertificate;
     }
 }

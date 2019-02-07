@@ -35,7 +35,6 @@ class LicenceCreateTest extends AbstractTest {
     void withEverything() throws Exception {
         LicenceForCreation licenceForCreation = new LicenceForCreation();
         licenceForCreation.setTypeLicences(LICENCE_DEFAULT_TYPE_LICENCE_ID);
-        licenceForCreation.setMedicalCertificate(LICENCE_DEFAULT_MEDICAL_CERTIFICATE);
         licenceForCreation.setFormationNeed(LICENCE_DEFAULT_FORMATION_NEED_ID);
 
         Response response = licenceCreate(V1, PERSON_DEFAULT_ID, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, licenceForCreation);

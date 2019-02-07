@@ -11,10 +11,24 @@
 		<param-value>file://${env:CONFIG_PATH}/log4j2.xml</param-value>
 	</context-param>
 
+	<filter>
+		<filter-name>CORSFilter</filter-name>
+		<filter-class>com.boschat.sikb.servlet.CORSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+
 	<servlet>
 		<servlet-name>Init Servlet</servlet-name>
 		<servlet-class>com.boschat.sikb.servlet.InitServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>sikb document</servlet-name>
+		<servlet-class>com.boschat.sikb.servlet.DocumentServlet</servlet-class>
 	</servlet>
 
 	<servlet>
@@ -29,9 +43,20 @@
 				io.swagger.v3.jaxrs2.integration.resources
 			</param-value>
 		</init-param>
+		<init-param>
+			<param-name>jersey.config.server.provider.classnames</param-name>
+			<param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+		</init-param>
 	</servlet>
+
+
 	<servlet-mapping>
 		<servlet-name>sikb api</servlet-name>
 		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>sikb document</servlet-name>
+		<url-pattern>/document/*</url-pattern>
 	</servlet-mapping>
 </web-app>

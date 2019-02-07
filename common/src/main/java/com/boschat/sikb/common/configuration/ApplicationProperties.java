@@ -15,7 +15,14 @@ public enum ApplicationProperties implements IProperties {
     TEMPLATE_RESET_USER_PASSWORD_NAME("mail.template.resetUserPassword.name"),
     TEMPLATE_RESET_USER_PASSWORD_TITLE("mail.template.resetUserPassword.title"),
 
-    CHECK_QUERY_STRING_SEASON_ID_REGEXP("check.queryString.seasonId.regexp");
+    CHECK_QUERY_STRING_SEASON_ID_REGEXP("check.queryString.seasonId.regexp"),
+
+    MEDICAL_CERTIFICATE_LIMIT_YEARS("medicalCertificate.limitYears"),
+    MEDICAL_CERTIFICATE_BASE_PATH("medicalCertificate.basePath"),
+
+    CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN("cors.header.accessControlAllowOrigin"),
+    CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS("cors.header.accessControlAllowMethods"),
+    CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS("cors.header.accessControlAllowHeaders");
 
     private String propName;
 

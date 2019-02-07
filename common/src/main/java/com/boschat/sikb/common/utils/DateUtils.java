@@ -2,6 +2,7 @@ package com.boschat.sikb.common.utils;
 
 import java.sql.Timestamp;
 import java.time.Clock;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -46,4 +47,7 @@ public class DateUtils {
         return datetime == null ? null : OffsetDateTime.of(datetime.toLocalDateTime(), getCurrentZoneOffSet());
     }
 
+    public static LocalDate parseLocalDate(String localDateAsString) {
+        return LocalDate.parse(localDateAsString);
+    }
 }

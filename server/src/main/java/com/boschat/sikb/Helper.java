@@ -6,6 +6,8 @@ import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.DocumentType;
+import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.dao.DAOFactory;
@@ -18,17 +20,22 @@ import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.Season;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_AUTHORIZED;
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_SUPPORTED;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormationNeed;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormations;
@@ -127,7 +134,6 @@ public class Helper {
         com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
 
         licence.setTypeLicences(jsonNodeToLicenceTypes(bean.getTypes()));
-        licence.setMedicalCertificate(bean.getMedicalcertificate());
 
         if (!bean.getFormationsneed().isNull()) {
             licence.setFormationNeed(jsonNodeToFormationNeed(bean.getFormationsneed()));
@@ -191,6 +197,13 @@ public class Helper {
         if (!personBean.getFormations().isNull()) {
             person.setFormations(jsonNodeToFormations(personBean.getFormations()));
         }
+
+        if (StringUtils.isNotEmpty(personBean.getMedicalcertificatekey())) {
+            MedicalCertificate medicalCertificate = new MedicalCertificate();
+            medicalCertificate.setMedicalCertificateLocation(MEDICAL_CERTIFICATE_TYPE.buildUrl(personBean.getMedicalcertificatekey()));
+            medicalCertificate.setMedicalCertificateBeginValidityDate(personBean.getMedicalcertificatebeginvaliditydate());
+            person.setMedicalCertificate(medicalCertificate);
+        }
         return person;
     }
 
@@ -248,5 +261,17 @@ public class Helper {
         user.setId(userBean.getId());
         user.setEmail(userBean.getEmail());
         return user;
+    }
+
+    public static String getAndCheckContentType(DocumentType documentType, String fileName) {
+        String contentType = URLConnection.getFileNameMap().getContentTypeFor(fileName);
+        if (org.jooq.tools.StringUtils.isEmpty(contentType)) {
+            throw new FunctionalException(FILE_EXTENSION_NOT_SUPPORTED, fileName);
+        }
+        if (!documentType.isAuthorized(contentType)) {
+            throw new FunctionalException(FILE_EXTENSION_NOT_AUTHORIZED, contentType);
+        }
+
+        return contentType;
     }
 }

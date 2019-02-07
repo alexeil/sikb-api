@@ -14,6 +14,9 @@ public class SikbConstants {
 
     public static final String QUERY_STRING_SEASON_ID = "seasonId";
 
+    public static final String BODY_FIELD_MEDICAL_CERTIFICATE = "medicalCertificate";
+
+
     private SikbConstants() {
 
     }

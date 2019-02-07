@@ -648,6 +648,41 @@ paths:
       tags:
         - persons
 
+  '/persons/{personId}/medicalCertificate':
+    post:
+      summary: Create a person's medical certificate
+      description: ''
+      operationId: createMedicalCertificate
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/medicalCertificateForCreation'
+            encoding:
+              medicalCertificateFileName:
+                contentType: image/png, image/jpeg, application/pdf
+
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created person's medical certificate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/medicalCertificate'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
   '/persons/{personId}/{clubId}/{seasonId}/licence':
     post:
       summary: Create a person's licence
@@ -1136,6 +1171,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/licence"
+        medicalCertificate:
+          $ref: "#/components/schemas/medicalCertificate"
 
     personForCreation:
       allOf:
@@ -1205,6 +1242,24 @@ components:
           description: 'Season 2015/2016'
           begin: '2015-09-01'
           end: '2016-08-31'
+
+    medicalCertificateForCreation:
+      type: object
+      properties:
+        medicalCertificateFileName:
+          type: string
+          format: binary
+        medicalCertificateBeginValidityDate:
+          type: string
+          description: "Format is YYYY-MM-DD. <br> There is a bug in some client so the date is sent as string without format:date"
+
+    medicalCertificate:
+      properties:
+        medicalCertificateLocation:
+          type: string
+        medicalCertificateBeginValidityDate:
+          type: string
+          format: date
 
     seasonForCreation:
       allOf:

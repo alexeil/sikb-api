@@ -1,15 +1,19 @@
 package com.boschat.sikb.api.impl;
 
+import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.PersonsApiService;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.io.InputStream;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.LICENCE_CREATE;
+import static com.boschat.sikb.api.CallType.MEDICAL_CERTIFICATE_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_DELETE;
 import static com.boschat.sikb.api.CallType.PERSON_FIND;
@@ -22,6 +26,14 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response createPerson(String accessToken, PersonForCreation personForCreation, SecurityContext securityContext) {
         return runService(PERSON_CREATE, accessToken, securityContext, personForCreation);
+    }
+
+    @Override
+    public Response createMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
+        FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext)
+        throws NotFoundException {
+        return runService(MEDICAL_CERTIFICATE_CREATE, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
+            medicalCertificateFileNameDetail, medicalCertificateBeginValidityDate);
     }
 
     @Override
@@ -48,6 +60,5 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response updatePerson(String accessToken, Integer personId, PersonForUpdate personForUpdate, SecurityContext securityContext) {
         return runService(PERSON_UPDATE, accessToken, securityContext, personId, personForUpdate);
-
     }
 }

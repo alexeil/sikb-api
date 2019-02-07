@@ -56,9 +56,6 @@ public class LicenceUtils {
         if (licenceForCreation.getFormationNeed() != null) {
             licenceBean.setFormationsneed(formationsNeedToJsonNode(licenceForCreation.getFormationNeed()));
         }
-        if (licenceForCreation.getMedicalCertificate() != null) {
-            licenceBean.setMedicalcertificate(licenceForCreation.getMedicalCertificate());
-        }
 
         if (isModification) {
             DAOFactory.getInstance().getLicenceDAO().update(licenceBean);

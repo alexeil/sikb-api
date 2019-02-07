@@ -17,6 +17,8 @@ import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceType;
+import com.boschat.sikb.model.MedicalCertificate;
+import com.boschat.sikb.model.MedicalCertificateForCreation;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
@@ -33,6 +35,11 @@ import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.servlet.InitServlet;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.jupiter.api.AfterAll;
@@ -217,6 +224,10 @@ public abstract class AbstractTest {
         return getBody(result, Person.class);
     }
 
+    protected static MedicalCertificate getMedicalCertificate(Response result) throws IOException {
+        return getBody(result, MedicalCertificate.class);
+    }
+
     protected static List<Person> getPersons(Response result) throws IOException {
         return Arrays.asList(getBody(result, Person[].class));
     }
@@ -297,6 +308,12 @@ public abstract class AbstractTest {
         jerseyTest = new JerseyTest() {
 
             @Override
+            protected void configureClient(ClientConfig config) {
+                config.register(MultiPartFeature.class)
+                      .register(JacksonFeature.class);
+            }
+
+            @Override
             protected Application configure() {
                 if (null == serverPort) {
                     try {
@@ -306,10 +323,12 @@ public abstract class AbstractTest {
                         fail(e);
                     }
                 }
-                return new ResourceConfig().packages(
-                    "com.boschat.sikb.api",
-                    "com.boschat.sikb.servlet",
-                    "com.boschat.sikb.mapper");
+                return new ResourceConfig().register(MultiPartFeature.class)
+                                           .register(JacksonJsonProvider.class)
+                                           .packages(
+                                               "com.boschat.sikb.api",
+                                               "com.boschat.sikb.servlet",
+                                               "com.boschat.sikb.mapper");
             }
         };
     }
@@ -363,7 +382,7 @@ public abstract class AbstractTest {
 
     protected Response licenceCreate(ApiVersion version, Integer personId, Integer clubId, String season, LicenceForCreation licenceForCreation) {
         Entity<LicenceForCreation> entity = Entity.json(licenceForCreation);
-        String path = buildPathPerson(version, personId, clubId, season);
+        String path = buildPathPerson(version, personId, clubId, season, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
@@ -374,29 +393,40 @@ public abstract class AbstractTest {
     }
 
     protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {
-        Entity<PersonForCreation> entity = Entity.json(personForCreation);
-        String path = buildPathPerson(version, null, null, null);
-        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+        Entity<PersonForCreation> entityPerson = Entity.json(personForCreation);
+        String path = buildPathPerson(version, null, null, null, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entityPerson);
+    }
+
+    protected Response medicalCertificateCreate(ApiVersion version, Integer personId, MedicalCertificateForCreation medicalCertificate) {
+        String path = buildPathPerson(version, personId, null, null, true);
+
+        final FileDataBodyPart filePart = new FileDataBodyPart("medicalCertificateFileName", medicalCertificate.getMedicalCertificateFileName());
+        FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+        formDataMultiPart.field("medicalCertificateBeginValidityDate", medicalCertificate.getMedicalCertificateBeginValidityDate());
+        formDataMultiPart.bodyPart(filePart);
+
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
     }
 
     protected Response personUpdate(ApiVersion version, Integer personId, PersonForUpdate personForUpdate) {
         Entity<PersonForUpdate> entity = Entity.json(personForUpdate);
-        String path = buildPathPerson(version, personId, null, null);
+        String path = buildPathPerson(version, personId, null, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response personGet(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null);
+        String path = buildPathPerson(version, personId, null, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response personDelete(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null);
+        String path = buildPathPerson(version, personId, null, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response personFind(ApiVersion version) {
-        String path = buildPathPerson(version, null, null, null);
+        String path = buildPathPerson(version, null, null, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
@@ -514,8 +544,7 @@ public abstract class AbstractTest {
     }
 
     private Invocation.Builder createRequest(String path, String token, String accessToken) {
-
-        WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
+        WebTarget target = jerseyTest.target(path);
 
         if (token != null) {
             target = target.queryParam("confirmToken", token);
@@ -553,11 +582,15 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season) {
+    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season, boolean uploadMedicalCertificate) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
         if (personId != null) {
             path.append("/");
             path.append(personId);
+        }
+
+        if (uploadMedicalCertificate) {
+            path.append("/medicalCertificate");
         }
 
         if (clubId != null) {
@@ -663,11 +696,9 @@ public abstract class AbstractTest {
         assertAll("Check Licence ",
             () -> assertNotNull(licence, " licence shouldn't be null"),
             () -> assertEquals(licenceTypes, licence.getTypeLicences(), " licenceTypes incorrect"),
-            () -> assertEquals(medicalCertificate, licence.getMedicalCertificate(), " medicalCertificate incorrect"),
             () -> assertEquals(formationsNeed, licence.getFormationNeed(), " formationsNeed incorrect"),
             () -> assertEquals(clubId, licence.getClubId(), " clubId incorrect"),
             () -> assertEquals(season, licence.getSeason(), " season incorrect")
-
         );
     }
 
@@ -687,6 +718,15 @@ public abstract class AbstractTest {
             () -> assertNotNull(user.getId(), "Id shouldn't be null"),
             () -> assertEquals(email, user.getEmail(), " email incorrect")
         );
+    }
+
+    protected void checkMedicalCertificate(MedicalCertificate medicalCertificate, LocalDate validity) {
+        assertAll("Check MedicalCertificate",
+            () -> assertNotNull(medicalCertificate, " medicalCertificate shouldn't be null"),
+            () -> assertNotNull(medicalCertificate.getMedicalCertificateLocation(), " MedicalCertificateLocation shouldn't be null"),
+            () -> assertEquals(validity, medicalCertificate.getMedicalCertificateBeginValidityDate(), "MedicalCertificateBeginValidityDate incorrect")
+        );
+
     }
 
     protected void checkPerson(Person person, String firstName, String name, Sex sex, LocalDate birthDate, String address, String postalCode, String city,

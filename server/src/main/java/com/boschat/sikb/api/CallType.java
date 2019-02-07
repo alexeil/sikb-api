@@ -21,6 +21,9 @@ import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+
+import java.io.InputStream;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
@@ -44,6 +47,7 @@ import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
+import static com.boschat.sikb.service.PersonUtils.createMedicalCertificate;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
 import static com.boschat.sikb.service.PersonUtils.deletePerson;
 import static com.boschat.sikb.service.PersonUtils.findPersons;
@@ -426,6 +430,20 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[1]);
             MyThreadLocal.get().setSeasonId((String) params[2]);
             MyThreadLocal.get().setLicenceForCreation((LicenceForCreation) params[3]);
+        }
+    },
+    MEDICAL_CERTIFICATE_CREATE("Create a person's medical certificate", CREATED, true) {
+        @Override
+        public Object call() {
+            return createMedicalCertificate();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setMedicalCertificateFileNameInputStream((InputStream) params[1]);
+            MyThreadLocal.get().setMedicalCertificateFileNameDetail((FormDataContentDisposition) params[2]);
+            MyThreadLocal.get().setMedicalCertificateBeginValidityDate((String) params[3]);
         }
     };
 

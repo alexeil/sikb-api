@@ -1,18 +1,28 @@
 package com.boschat.sikb.context;
 
 import com.boschat.sikb.api.CallType;
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CHECK_QUERY_STRING_SEASON_ID_REGEXP;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
+import static com.boschat.sikb.common.utils.DateUtils.parseLocalDate;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestQueryStringParam;
 
@@ -55,6 +65,12 @@ public class Context {
     private Integer licenceId;
 
     private LicenceForCreation licenceForCreation;
+
+    private byte[] medicalCertificateFileNameInputStream;
+
+    private FormDataContentDisposition medicalCertificateFileNameDetail;
+
+    private LocalDate medicalCertificateBeginValidityDate;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -209,5 +225,33 @@ public class Context {
 
     public void setLicenceForCreation(LicenceForCreation licenceForCreation) {
         this.licenceForCreation = licenceForCreation;
+    }
+
+    public byte[] getMedicalCertificateFileNameInputStream() {
+        return medicalCertificateFileNameInputStream;
+    }
+
+    public void setMedicalCertificateFileNameInputStream(InputStream medicalCertificateFileNameInputStream) {
+        try {
+            this.medicalCertificateFileNameInputStream = IOUtils.toByteArray(medicalCertificateFileNameInputStream);
+        } catch (IOException e) {
+            throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_MEDICAL_CERTIFICATE, e.getMessage());
+        }
+    }
+
+    public FormDataContentDisposition getMedicalCertificateFileNameDetail() {
+        return medicalCertificateFileNameDetail;
+    }
+
+    public void setMedicalCertificateFileNameDetail(FormDataContentDisposition medicalCertificateFileNameDetail) {
+        this.medicalCertificateFileNameDetail = medicalCertificateFileNameDetail;
+    }
+
+    public LocalDate getMedicalCertificateBeginValidityDate() {
+        return medicalCertificateBeginValidityDate;
+    }
+
+    public void setMedicalCertificateBeginValidityDate(String medicalCertificateBeginValidityDate) {
+        this.medicalCertificateBeginValidityDate = parseLocalDate(medicalCertificateBeginValidityDate);
     }
 }

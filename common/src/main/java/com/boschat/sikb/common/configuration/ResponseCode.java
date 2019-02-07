@@ -24,6 +24,8 @@ public enum ResponseCode {
     WRONG_OLD_PASSWORD(INFO, 400, 11, "Wrong old Password"),
     NEW_PASSWORD_CANNOT_BE_SAME(INFO, 400, 12, "New and old passwords cannot be the same"),
     SEASON_ALREADY_EXISTS(INFO, 400, 13, "The season %s Already Exists"),
+    FILE_EXTENSION_NOT_SUPPORTED(INFO, 400, 14, "This file (%s) extension is not supported"),
+    FILE_EXTENSION_NOT_AUTHORIZED(INFO, 400, 15, "This content type (%s) is not Authorized"),
 
     UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
 
