@@ -16,6 +16,13 @@ addons:
       - postgresql-10
       - postgresql-client-10
 
+notifications:
+  email:
+    recipients:
+      - thierry.boschat@gmail.com
+    on_success: never # default: change
+    on_failure: always # default: always
+
 env:
   global:
     - POSTGRES_DB=sikb
@@ -38,7 +45,10 @@ before_install:
   - psql -l
 
 script:
-  - mvn clean install --fail-at-end
+  - mvn clean install
+
+after_script:
+  - bash check_surefire_reports.sh
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
