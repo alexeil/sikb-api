@@ -14,7 +14,6 @@ import static com.boschat.sikb.PersistenceUtils.loadAffiliations;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
@@ -28,7 +27,6 @@ class AdministrationTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
         loadSeasons();
         loadClubs();
         loadAffiliations();

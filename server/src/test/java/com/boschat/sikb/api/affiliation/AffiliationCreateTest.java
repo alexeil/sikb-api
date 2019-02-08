@@ -12,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadSeasons;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
@@ -25,7 +24,6 @@ class AffiliationCreateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
         loadSeasons();
         loadClubs();
     }

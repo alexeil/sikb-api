@@ -10,14 +10,18 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
 
 @DisplayName(" Update a user ")
 class UserUpdateTest extends AbstractTest {
+
+    @BeforeEach
+    void loadDataSuite() throws IOException {
+        loadUsers();
+    }
 
     private static UserForUpdate buildUserForUpdate(String email) {
         UserForUpdate userForUpdate = new UserForUpdate();
@@ -25,12 +29,6 @@ class UserUpdateTest extends AbstractTest {
             userForUpdate.setEmail(email);
         }
         return userForUpdate;
-    }
-
-    @BeforeEach
-    void loadDataSuite() throws IOException {
-        truncateData();
-        loadUsers();
     }
 
     @Test

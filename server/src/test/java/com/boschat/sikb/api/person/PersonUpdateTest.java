@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 
@@ -21,7 +20,6 @@ class PersonUpdateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
         loadPersons();
     }
 

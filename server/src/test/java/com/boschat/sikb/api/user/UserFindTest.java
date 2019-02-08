@@ -1,8 +1,8 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 
+import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.api.ApiVersion.V1;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,8 +23,7 @@ class UserFindTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
-        PersistenceUtils.loadUsers();
+        loadUsers();
     }
 
     @Test
@@ -44,9 +43,9 @@ class UserFindTest extends AbstractTest {
     }
 
     @Test
-    @DisplayName(" no clubs ")
+    @DisplayName(" no users ")
     void unknown() throws Exception {
-        truncateData();
+        DAOFactory.getInstance().truncateUser();
         Response response = userFind(V1);
 
         checkResponse(response, OK);

@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 
@@ -24,7 +23,6 @@ class PersonCreateTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
         loadPersons();
     }
 

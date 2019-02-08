@@ -10,7 +10,6 @@ import javax.ws.rs.core.Response;
 import static com.boschat.sikb.PersistenceUtils.loadAffiliations;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadSeasons;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
@@ -20,7 +19,6 @@ class AffiliationDeleteTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws Exception {
-        truncateData();
         loadSeasons();
         loadClubs();
         loadAffiliations();

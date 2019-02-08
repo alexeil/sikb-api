@@ -10,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
-import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_PASSWORD;
 
@@ -21,7 +20,6 @@ class UserLoginTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
         loadUsers();
     }
 

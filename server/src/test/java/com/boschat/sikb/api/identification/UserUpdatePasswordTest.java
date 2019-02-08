@@ -1,7 +1,6 @@
 package com.boschat.sikb.api.identification;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.UpdatePassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CANNOT_BE_SAME;
@@ -24,8 +24,7 @@ class UserUpdatePasswordTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadUsers();
+        loadUsers();
     }
 
     @Test

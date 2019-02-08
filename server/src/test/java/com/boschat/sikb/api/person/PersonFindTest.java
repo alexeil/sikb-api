@@ -2,6 +2,7 @@ package com.boschat.sikb.api.person;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.model.Person;
+import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
 
-import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
-import static com.boschat.sikb.PersistenceUtils.truncateData;
+import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,7 +23,6 @@ class PersonFindTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        truncateData();
         loadPersons();
     }
 
@@ -46,7 +45,7 @@ class PersonFindTest extends AbstractTest {
     @Test
     @DisplayName(" no person ")
     void noPerson() throws Exception {
-        truncateData();
+        DAOFactory.getInstance().truncateSeason();
         Response response = personFind(V1);
 
         checkResponse(response, OK);

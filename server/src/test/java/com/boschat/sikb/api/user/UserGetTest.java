@@ -1,7 +1,6 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import com.boschat.sikb.model.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.USER_NOT_FOUND;
@@ -19,8 +19,7 @@ class UserGetTest extends AbstractTest {
 
     @BeforeAll
     static void loadDataSuite() throws IOException {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadUsers();
+        loadUsers();
     }
 
     @Test

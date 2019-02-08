@@ -1,7 +1,6 @@
 package com.boschat.sikb.api.club;
 
 import com.boschat.sikb.AbstractTest;
-import com.boschat.sikb.PersistenceUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
@@ -18,8 +18,7 @@ class ClubDeleteTest extends AbstractTest {
 
     @BeforeEach
     void loadDataSuite() throws IOException {
-        PersistenceUtils.truncateData();
-        PersistenceUtils.loadClubs();
+        loadClubs();
     }
 
     @Test

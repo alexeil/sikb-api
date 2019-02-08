@@ -38,7 +38,7 @@ before_install:
   - psql -l
 
 script:
-  - mvn clean install
+  - mvn clean install --fail-at-end
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

@@ -10,6 +10,10 @@ import org.jooq.impl.TableImpl;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.boschat.sikb.Sequences.AFFILIATION_ID_SEQ;
+import static com.boschat.sikb.Sequences.CLUB_ID_SEQ;
+import static com.boschat.sikb.Sequences.PERSON_ID_SEQ;
+import static com.boschat.sikb.Sequences.USER_ID_SEQ;
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.PERSON;
 import static com.boschat.sikb.Tables.SEASON;
@@ -25,6 +29,8 @@ public class PersistenceUtils {
     }
 
     public static void loadUsers() throws IOException {
+        DAOFactory.getInstance().truncateUser();
+        DAOFactory.getInstance().getDslContext().alterSequence(USER_ID_SEQ).restart().execute();
         loadDataSuite("sql/insertUser.csv", USER, USER.ID, USER.EMAIL, USER.PASSWORD, USER.SALT, USER.INFORMATION, USER.ACTIVATIONTOKEN,
             USER.ACTIVATIONTOKENEXPIRATIONDATE, USER.ACCESSTOKEN, USER.ENABLED, USER.CREATIONDATE, USER.MODIFICATIONDATE);
     }
@@ -34,14 +40,19 @@ public class PersistenceUtils {
     }
 
     public static void loadClubs() throws IOException {
+        DAOFactory.getInstance().truncateClub();
+        DAOFactory.getInstance().getDslContext().alterSequence(CLUB_ID_SEQ).restart().execute();
         loadClubs("sql/insertClub.csv");
     }
 
     public static void loadSeasons() throws IOException {
+        DAOFactory.getInstance().truncateSeason();
         loadDataSuite("sql/insertSeason.csv", SEASON, SEASON.ID, SEASON.DESCRIPTION, SEASON.BEGIN, SEASON.END);
     }
 
     public static void loadAffiliations() throws IOException {
+        DAOFactory.getInstance().truncateAffiliation();
+        DAOFactory.getInstance().getDslContext().alterSequence(AFFILIATION_ID_SEQ).restart().execute();
         loadAffiliations("sql/insertAffiliation.csv");
     }
 
@@ -57,11 +68,13 @@ public class PersistenceUtils {
     }
 
     public static void loadPersons() throws IOException {
+        DAOFactory.getInstance().truncatePerson();
+        DAOFactory.getInstance().getDslContext().alterSequence(PERSON_ID_SEQ).restart().execute();
         loadPersons("sql/insertPerson.csv");
     }
 
     public static void loadPersons(String fileName) throws IOException {
-        loadDataSuite(fileName, PERSON, PERSON.ID, PERSON.FIRSTNAME, PERSON.NAME, PERSON.SEX, PERSON.BIRTHDATE, PERSON.ADDRESS, PERSON.POSTALCODE, PERSON.CITY,
+        loadDataSuite(fileName, PERSON, PERSON.FIRSTNAME, PERSON.NAME, PERSON.SEX, PERSON.BIRTHDATE, PERSON.ADDRESS, PERSON.POSTALCODE, PERSON.CITY,
             PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.CREATIONDATE, PERSON.MODIFICATIONDATE);
 
     }
@@ -84,13 +97,5 @@ public class PersistenceUtils {
 
             LOGGER.trace(" processed {} - stored {} - ignored {}", processed, stored, ignored);
         }
-    }
-
-    public static void truncateData() {
-        DAOFactory.getInstance().truncateAffiliation();
-        DAOFactory.getInstance().truncateClub();
-        DAOFactory.getInstance().truncateUser();
-        DAOFactory.getInstance().truncatePerson();
-        DAOFactory.getInstance().truncateSeason();
     }
 }
