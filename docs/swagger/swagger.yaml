@@ -1294,25 +1294,10 @@ components:
         date:
           type: string
           format: date
-      examples:
-        - id: 1
-          name: 'Arbitre Niveau 1'
-          date: '2010-02-01'
-        - id: 2
-          name: 'Arbitre Niveau 2'
-          date: '2012-02-01'
-        - id: 3
-          name: 'Arbitre Niveau 3'
-          date: '2013-02-01'
-        - id: 4
-          name: 'Formateur Arbitre Niveau 1'
-          date: '2014-02-01'
-        - id: 5
-          name: 'Formateur Arbitre Niveau 2'
-          date: '2016-02-01'
-        - id: 6
-          name: 'Formateur Arbitre Niveau 3'
-          date: '2019-02-01'
+      example:
+        id: 1
+        name: 'Arbitre Niveau 1'
+        date: '2010-02-01'
 
     licenceType:
       required:
@@ -1328,18 +1313,9 @@ components:
         medicalCertificateRequired:
           type: boolean
       example:
-        - name: 'Sénior Compétition'
-          medicalCertificateRequired: true
-        - name: 'Sénior Loisir'
-          medicalCertificateRequired: true
-        - name: 'Junior'
-          medicalCertificateRequired: true
-        - name: 'Entraineur/Coach'
-          medicalCertificateRequired: false
-        - name: 'Arbitre'
-          medicalCertificateRequired: true
-        - name: 'Dirigeant'
-          medicalCertificateRequired: false
+        name: 'Sénior Compétition'
+        medicalCertificateRequired: true
+
 
 
     licence:
@@ -1396,7 +1372,7 @@ components:
       example:
         - description: 400/1
           code: 1
-          message: "The body field %s is absent"
+          message: "The body field %s is missing"
         - description: 400/2
           code: 2
           message: "The body field value %s is invalid : %s"
@@ -1411,7 +1387,7 @@ components:
           message: "The header value %s is invalid  : %s"
         - description: 400/6
           code: 6
-          message: "The query string %s is absent"
+          message: "The query string %s is missing"
         - description: 400/7
           code: 7
           message: "The query string value %s is invalid : %s"
@@ -1424,6 +1400,21 @@ components:
         - description: 400/10
           code: 10
           message: "Wrong login/password"
+        - description: 400/11
+          code: 11
+          message: "Wrong old Password"
+        - description: 400/12
+          code: 12
+          message: "New and old passwords cannot be the same"
+        - description: 400/13
+          code: 13
+          message: "The season %s Already Exists"
+        - description: 400/14
+          code: 14
+          message: "This file (%s) extension is not supported"
+        - description: 400/15
+          code: 15
+          message: "This content type (%s) is not Authorized"
         - description: 401/1
           code: 1
           message: "Unauthorized"
@@ -1438,16 +1429,37 @@ components:
           message: "Affiliation (clubId %s, season %s) not found"
         - description: 404/3
           code: 3
-          message: "User (id %s) not found"
+          message: "User (%s) not found"
         - description: 404/4
           code: 4
           message: "Confirm token not found"
         - description: 404/5
           code: 5
           message: "Confirm token is no longer available"
+        - description: 404/6
+          code: 6
+          message: "Person (%s) not found"
+        - description: 404/7
+          code: 7
+          message: "Season (%s) not found"
+        - description: 404/8
+          code: 8
+          message: "Licence (%s) not found"
         - description: 405/0
           code: 0
           message: "Method Not Allowed"
         - description: 500/1
           code: 1
           message: "Internal Error : %s"
+        - description: 500/2
+          code: 2
+          message: "Error loading technical configuration : %s"
+        - description: 500/3
+          code: 3
+          message: "Error with emailing"
+        - description: 500/4
+          code: 4
+          message: "Database Error"
+        - description: 500/5
+          code: 5
+          message: "Json Parse Error"
