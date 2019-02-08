@@ -23,9 +23,9 @@ class AffiliationUpdateTest extends AbstractTest {
     @BeforeEach
     void loadDataSuite() throws Exception {
         truncateData();
+        loadSeasons();
         loadClubs();
         loadAffiliations();
-        loadSeasons();
     }
 
     @Test

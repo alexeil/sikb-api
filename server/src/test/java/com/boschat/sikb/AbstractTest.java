@@ -36,7 +36,6 @@ import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.servlet.InitServlet;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
@@ -309,8 +308,7 @@ public abstract class AbstractTest {
 
             @Override
             protected void configureClient(ClientConfig config) {
-                config.register(MultiPartFeature.class)
-                      .register(JacksonFeature.class);
+                config.register(MultiPartFeature.class);
             }
 
             @Override
@@ -324,7 +322,6 @@ public abstract class AbstractTest {
                     }
                 }
                 return new ResourceConfig().register(MultiPartFeature.class)
-                                           .register(JacksonJsonProvider.class)
                                            .packages(
                                                "com.boschat.sikb.api",
                                                "com.boschat.sikb.servlet",
@@ -544,7 +541,7 @@ public abstract class AbstractTest {
     }
 
     private Invocation.Builder createRequest(String path, String token, String accessToken) {
-        WebTarget target = jerseyTest.target(path);
+        WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
 
         if (token != null) {
             target = target.queryParam("confirmToken", token);
