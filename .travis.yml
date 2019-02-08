@@ -44,10 +44,10 @@ before_install:
   # list all databases
   - psql -l
 
+install: true
+
 script:
   - mvn clean install
-
-after_script:
   - bash check_surefire_reports.sh
 
 after_success:
