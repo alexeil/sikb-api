@@ -45,7 +45,7 @@ class PersonFindTest extends AbstractTest {
     @Test
     @DisplayName(" no person ")
     void noPerson() throws Exception {
-        DAOFactory.getInstance().truncateSeason();
+        DAOFactory.getInstance().truncatePerson();
         Response response = personFind(V1);
 
         checkResponse(response, OK);

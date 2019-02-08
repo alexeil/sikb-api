@@ -31,12 +31,12 @@ public class PersistenceUtils {
     public static void loadUsers() throws IOException {
         DAOFactory.getInstance().truncateUser();
         DAOFactory.getInstance().getDslContext().alterSequence(USER_ID_SEQ).restart().execute();
-        loadDataSuite("sql/insertUser.csv", USER, USER.ID, USER.EMAIL, USER.PASSWORD, USER.SALT, USER.INFORMATION, USER.ACTIVATIONTOKEN,
+        loadDataSuite("sql/insertUser.csv", USER, USER.EMAIL, USER.PASSWORD, USER.SALT, USER.INFORMATION, USER.ACTIVATIONTOKEN,
             USER.ACTIVATIONTOKENEXPIRATIONDATE, USER.ACCESSTOKEN, USER.ENABLED, USER.CREATIONDATE, USER.MODIFICATIONDATE);
     }
 
     public static void loadClubs(String fileName) throws IOException {
-        loadDataSuite(fileName, CLUB, CLUB.ID, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
+        loadDataSuite(fileName, CLUB, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
     }
 
     public static void loadClubs() throws IOException {
@@ -57,7 +57,7 @@ public class PersistenceUtils {
     }
 
     public static void loadAffiliations(String fileName) throws IOException {
-        loadDataSuite(fileName, AFFILIATION, AFFILIATION.ID, AFFILIATION.PREFECTURENUMBER, AFFILIATION.PREFECTURECITY,
+        loadDataSuite(fileName, AFFILIATION, AFFILIATION.PREFECTURENUMBER, AFFILIATION.PREFECTURECITY,
             AFFILIATION.SIRETNUMBER,
             AFFILIATION.ADDRESS,
             AFFILIATION.POSTALCODE, AFFILIATION.CITY, AFFILIATION.PHONENUMBER, AFFILIATION.EMAIL, AFFILIATION.WEBSITE, AFFILIATION.PRESIDENT,

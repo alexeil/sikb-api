@@ -8,8 +8,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 import java.util.List;
 
+import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class ClubFindTest extends AbstractTest {
 
     @BeforeEach
-    void loadDataSuite() {
-        DAOFactory.getInstance().truncateClub();
+    void loadDataSuite() throws IOException {
+        loadClubs();
     }
 
     @Test
@@ -44,6 +46,7 @@ class ClubFindTest extends AbstractTest {
     @Test
     @DisplayName(" no clubs ")
     void unknown() throws Exception {
+        DAOFactory.getInstance().truncateClub();
         Response response = clubFind(V1);
 
         checkResponse(response, OK);

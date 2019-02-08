@@ -4,6 +4,7 @@ import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DisplayName(" Create a User ")
 class UserCreateTest extends AbstractTest {
+
+    @BeforeEach
+    void loadDataSuite() {
+        DAOFactory.getInstance().truncateUser();
+    }
 
     @Test
     @DisplayName(" with only a email ")
