@@ -8,7 +8,8 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.MEDICA
 
 public enum DocumentType {
 
-    MEDICAL_CERTIFICATE_TYPE("medicalCertificate", "image/png", "image/jpeg", "application/pdf");
+    MEDICAL_CERTIFICATE_TYPE("medicalCertificate", "image/png", "image/jpeg", "application/pdf"),
+    LICENCE_TYPE("licence", "application/pdf");
 
     private String key;
 

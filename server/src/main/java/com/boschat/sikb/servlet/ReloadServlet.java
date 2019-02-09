@@ -3,6 +3,7 @@ package com.boschat.sikb.servlet;
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.utils.MailUtils;
+import com.boschat.sikb.utils.PDFGeneratorUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +28,7 @@ public class ReloadServlet {
     public static void reloadEverything() {
         MailUtils.reset();
         DAOFactory.reset();
+        PDFGeneratorUtils.reset();
         reloadProperties();
     }
 

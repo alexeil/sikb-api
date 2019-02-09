@@ -5,8 +5,27 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.SignStyle;
+
+import static java.time.temporal.ChronoField.DAY_OF_MONTH;
+import static java.time.temporal.ChronoField.MONTH_OF_YEAR;
+import static java.time.temporal.ChronoField.YEAR;
 
 public class DateUtils {
+
+    private static final DateTimeFormatter FRENCH_LOCAL_DATE;
+
+    static {
+        FRENCH_LOCAL_DATE = new DateTimeFormatterBuilder()
+            .appendValue(DAY_OF_MONTH, 2)
+            .appendLiteral('/')
+            .appendValue(MONTH_OF_YEAR, 2)
+            .appendLiteral('/')
+            .appendValue(YEAR, 4, 10, SignStyle.EXCEEDS_PAD)
+            .toFormatter();
+    }
 
     private static Clock clock = Clock.systemDefaultZone();
 
@@ -49,5 +68,9 @@ public class DateUtils {
 
     public static LocalDate parseLocalDate(String localDateAsString) {
         return LocalDate.parse(localDateAsString);
+    }
+
+    public static String formatFrenchLocalDate(LocalDate localDate) {
+        return localDate.format(FRENCH_LOCAL_DATE);
     }
 }

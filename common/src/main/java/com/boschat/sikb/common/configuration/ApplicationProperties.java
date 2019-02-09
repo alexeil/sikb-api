@@ -22,7 +22,12 @@ public enum ApplicationProperties implements IProperties {
 
     CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN("cors.header.accessControlAllowOrigin"),
     CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS("cors.header.accessControlAllowMethods"),
-    CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS("cors.header.accessControlAllowHeaders");
+    CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS("cors.header.accessControlAllowHeaders"),
+
+    JASPER_TEMPLATE_DIRECTORY("jasper.template.directory"),
+    JASPER_TEMPLATE_LICENCE_NAME("jasper.template.licence.name"),
+    JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE("jasper.template.licence.colorsByLicenceType"),
+    JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO("jasper.template.licence.defaultPhoto");
 
     private String propName;
 

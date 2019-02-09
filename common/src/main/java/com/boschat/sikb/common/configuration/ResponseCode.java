@@ -46,7 +46,9 @@ public enum ResponseCode {
     CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s"),
     EMAIL_ERROR(ERROR, 500, 3, "Error with emailing"),
     DATABASE_ERROR(ERROR, 500, 4, "Database Error"),
-    JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error");
+    JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error"),
+    JASPER_TEMPLATE_ERROR(ERROR, 500, 6, "Jasper template %s has producing an error"),
+    EXPORT_PDF_ERROR(ERROR, 500, 7, "Error while exporting PDF");
 
     /**
      * http code returned

@@ -90,6 +90,8 @@ CREATE TABLE sikb.person
   "email"                               varchar(255),
   "nationality"                         varchar(255),
   "formations"                          json,
+  "photoData"                           bytea,
+  "photoContentType"                    varchar(255),
   "medicalCertificateKey"               varchar(255) unique,
   "medicalCertificateData"              bytea,
   "medicalCertificateContentType"       varchar(255),
@@ -108,6 +110,7 @@ CREATE TABLE sikb.licenceType
 CREATE TABLE sikb.licence
 (
   "id"             serial PRIMARY KEY,
+  "number"         varchar(255) unique,
   "formationsNeed" json,
   "types"          json,
   "season"         varchar(8) REFERENCES sikb.season (id),
