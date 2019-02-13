@@ -29,14 +29,18 @@ public class HashUtils {
 
     }
 
+    private static String encodeToStringWithoutEquals(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes).replace("=", "");
+    }
+
     public static String generateToken() {
-        return new String(Base64.getEncoder().encode((UUID.randomUUID().toString() + DateUtils.now().toString()).getBytes()));
+        return encodeToStringWithoutEquals((UUID.randomUUID().toString() + DateUtils.now().toString()).getBytes());
     }
 
     public static String generateSalt() {
         byte[] salt = new byte[SALT_SIZE];
         RANDOM.nextBytes(salt);
-        return Base64.getEncoder().encodeToString(salt);
+        return encodeToStringWithoutEquals(salt);
     }
 
     public static String hash(String password, String salt) {
@@ -44,7 +48,7 @@ public class HashUtils {
         final byte[] all = ArrayUtils.addAll(passwordBytes, salt.getBytes());
         SHA3.DigestSHA3 md = new SHA3.Digest512();
         md.update(all);
-        return Base64.getEncoder().encodeToString(md.digest());
+        return encodeToStringWithoutEquals(md.digest());
     }
 
     public static boolean isExpectedPassword(final String password, final String salt, final String currentPassword) {
@@ -53,7 +57,7 @@ public class HashUtils {
     }
 
     public static String basicEncode(String userName, String password) {
-        return Base64.getEncoder().encodeToString((userName + BASIC_SEPARATOR + password).getBytes());
+        return encodeToStringWithoutEquals((userName + BASIC_SEPARATOR + password).getBytes());
     }
 
     public static Credentials basicDecode(String accessToken) {

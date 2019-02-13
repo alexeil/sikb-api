@@ -91,10 +91,8 @@ CREATE TABLE sikb.person
   "nationality"                         varchar(255),
   "formations"                          json,
   "photoData"                           bytea,
-  "photoContentType"                    varchar(255),
   "medicalCertificateKey"               varchar(255) unique,
   "medicalCertificateData"              bytea,
-  "medicalCertificateContentType"       varchar(255),
   "medicalCertificateBeginValidityDate" date,
   "creationDate"                        timestamp,
   "modificationDate"                    timestamp

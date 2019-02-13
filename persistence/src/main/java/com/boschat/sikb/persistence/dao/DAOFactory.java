@@ -30,6 +30,7 @@ import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_USER;
 import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
 import static com.boschat.sikb.tables.Affiliation.AFFILIATION;
 import static com.boschat.sikb.tables.Club.CLUB;
+import static com.boschat.sikb.tables.Licence.LICENCE;
 import static com.boschat.sikb.tables.Person.PERSON;
 import static com.boschat.sikb.tables.Season.SEASON;
 import static com.boschat.sikb.tables.User.USER;
@@ -163,6 +164,10 @@ public class DAOFactory {
 
     public void truncateClub() {
         truncate(CLUB);
+    }
+
+    public void truncateLicence() {
+        truncate(LICENCE);
     }
 
     public void truncateAffiliation() {

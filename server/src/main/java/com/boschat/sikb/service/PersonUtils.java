@@ -10,7 +10,6 @@ import com.boschat.sikb.utils.HashUtils;
 
 import java.util.List;
 
-import static com.boschat.sikb.Helper.getAndCheckContentType;
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
@@ -111,9 +110,6 @@ public class PersonUtils {
         person.setMedicalcertificatedata(MyThreadLocal.get().getMedicalCertificateFileNameInputStream());
         person.setMedicalcertificatebeginvaliditydate(MyThreadLocal.get().getMedicalCertificateBeginValidityDate());
         person.setMedicalcertificatekey(HashUtils.generateToken());
-
-        String fileName = MyThreadLocal.get().getMedicalCertificateFileNameDetail().getFileName();
-        person.setMedicalcertificatecontenttype(getAndCheckContentType(MEDICAL_CERTIFICATE_TYPE, fileName));
 
         DAOFactory.getInstance().getPersonDAO().update(person);
 

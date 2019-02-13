@@ -38,7 +38,10 @@ public enum ResponseCode {
     PERSON_NOT_FOUND(INFO, 404, 6, "Person (%s) not found"),
     SEASON_NOT_FOUND(INFO, 404, 7, "Season (%s) not found"),
     LICENCE_NOT_FOUND(INFO, 404, 8, "Licence (%s) not found"),
+    DOCUMENT_TYPE_NOT_FOUND(INFO, 404, 9, "Document Type (%s) not found"),
+    MEDICAL_CERTIFICATE_NOT_FOUND(INFO, 404, 10, "Medical Certificate (%s) not found"),
 
+    
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem

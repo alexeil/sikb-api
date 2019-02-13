@@ -17,34 +17,34 @@
   <property name="com.jaspersoft.studio.unit.columnWidth" value="cm"/>
   <property name="com.jaspersoft.studio.unit.columnSpacing" value="cm"/>
   <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-  <parameter name="licenceNumber" class="java.lang.String">
+  <parameter name="licenceNumber">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="name" class="java.lang.String">
+  <parameter name="name">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="firstName" class="java.lang.String">
+  <parameter name="firstName">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="birthDate" class="java.lang.String">
+  <parameter name="birthDate">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="sex" class="java.lang.String">
+  <parameter name="sex">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="categorie" class="java.lang.String">
+  <parameter name="categorie">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="playerType" class="java.lang.String">
+  <parameter name="playerType">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="club" class="java.lang.String">
+  <parameter name="club">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="beginDate" class="java.lang.String">
+  <parameter name="beginDate">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="endDate" class="java.lang.String">
+  <parameter name="endDate">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
   <parameter name="photo" class="java.io.InputStream">
@@ -53,7 +53,7 @@
   <parameter name="licenceColor" class="java.io.InputStream">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="team" class="java.lang.String"/>
+  <parameter name="team"/>
   <parameter name="licenceTypeBackground1" class="java.io.InputStream">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
@@ -66,29 +66,40 @@
   <parameter name="licenceTypeBackground4" class="java.io.InputStream">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="licenceType1" class="java.lang.String">
+  <parameter name="licenceType1">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="licenceType2" class="java.lang.String">
+  <parameter name="licenceType2">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="licenceType3" class="java.lang.String">
+  <parameter name="licenceType3">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="licenceType4" class="java.lang.String">
+  <parameter name="licenceType4">
     <parameterDescription><![CDATA[]]></parameterDescription>
   </parameter>
-  <parameter name="currentYear" class="java.lang.String"/>
-  <parameter name="nextYear" class="java.lang.String"/>
+
+  <parameter name="logo" class="java.io.InputStream">
+    <parameterDescription><![CDATA[]]></parameterDescription>
+  </parameter>
+  <parameter name="licenceBackground" class="java.io.InputStream">
+    <parameterDescription><![CDATA[]]></parameterDescription>
+  </parameter>
+  <parameter name="informationBackground" class="java.io.InputStream">
+    <parameterDescription><![CDATA[]]></parameterDescription>
+  </parameter>
+
+  <parameter name="currentYear"/>
+  <parameter name="nextYear"/>
   <background>
     <band height="155">
       <image scaleImage="RetainShape">
         <reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="240" height="155" uuid="2fa92e62-9980-423e-8925-c639d5b8a8f6"/>
-        <imageExpression><![CDATA["C:/Projets/perso/LicenceGenerationTools/src/main/resources/FKBF_FondLicence.png"]]></imageExpression>
+        <imageExpression><![CDATA[$P{licenceBackground}]]></imageExpression>
       </image>
       <image>
         <reportElement x="70" y="25" width="170" height="85" uuid="de51e83c-abe4-4c7e-a0c7-cae3fc683ba7"/>
-        <imageExpression><![CDATA["C:/Projets/perso/LicenceGenerationTools/src/main/resources/FKBF_FondGris.png"]]></imageExpression>
+        <imageExpression><![CDATA[$P{informationBackground}]]></imageExpression>
       </image>
       <textField>
         <reportElement x="81" y="89" width="104" height="10" forecolor="#FFFFFF" uuid="422b2455-a767-4880-a16a-7a2da2615102"/>
@@ -170,7 +181,7 @@ fkbf@kin-ball.fr - www.kin-ball.fr]]></text>
       </staticText>
       <image>
         <reportElement x="11" y="112" width="30" height="29" uuid="eb37ab27-11ff-41d3-bbbb-19696bfc2b20"/>
-        <imageExpression><![CDATA["C:/Projets/perso/LicenceGenerationTools/src/main/resources/logo.png"]]></imageExpression>
+        <imageExpression><![CDATA[$P{logo}]]></imageExpression>
       </image>
       <textField isBlankWhenNull="true">
         <reportElement positionType="FixRelativeToBottom" x="94" y="117" width="148" height="10" forecolor="#000000"

@@ -134,7 +134,7 @@ public abstract class AbstractTest {
         new Formation().id(1).name("Arbitre Niveau 1").date(LocalDate.of(2015, 4, 4)),
         new Formation().id(2).name("Arbitre Niveau 2").date(LocalDate.of(2016, 4, 4)));
 
-    protected static final String USER_DEFAULT_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA==";
+    protected static final String USER_DEFAULT_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA";
 
     protected static final Integer USER_DEFAULT_ID = 1;
 
@@ -341,7 +341,7 @@ public abstract class AbstractTest {
         wiser.stop();
     }
 
-    private static void initContext() throws IOException {
+    public static void initContext() throws IOException {
         DateUtils.useFixedClockAt(NOW);
         System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
         System.setProperty(POSTGRES_DB.getEnv(), "sikb");
