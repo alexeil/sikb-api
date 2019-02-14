@@ -3,6 +3,7 @@ package com.boschat.sikb.api;
 import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.context.CreateOrUpdateClubContext;
+import com.boschat.sikb.context.CreateOrUpdateLicenceContext;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
 import com.boschat.sikb.context.CreateOrUpdateUserContext;
@@ -13,6 +14,7 @@ import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.LicenceForCreation;
+import com.boschat.sikb.model.LicenceForUpdate;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
@@ -46,6 +48,8 @@ import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
+import static com.boschat.sikb.service.LicenceUtils.deleteLicence;
+import static com.boschat.sikb.service.LicenceUtils.updateLicence;
 import static com.boschat.sikb.service.PersonUtils.createMedicalCertificate;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
 import static com.boschat.sikb.service.PersonUtils.createPhoto;
@@ -429,7 +433,37 @@ public enum CallType {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
             MyThreadLocal.get().setClubId((Integer) params[1]);
             MyThreadLocal.get().setSeasonId((String) params[2]);
-            MyThreadLocal.get().setLicenceForCreation((LicenceForCreation) params[3]);
+            MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForCreation) params[3]));
+        }
+    },
+    LICENCE_DELETE("Create a licence", NO_CONTENT, true) {
+        @Override
+        public Object call() {
+            deleteLicence();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setClubId((Integer) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[2]);
+            MyThreadLocal.get().setLicenceId((String) params[3]);
+        }
+    },
+    LICENCE_UPDATE("Update a licence", OK, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(updateLicence());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setClubId((Integer) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[2]);
+            MyThreadLocal.get().setLicenceId((String) params[3]);
+            MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForUpdate) params[4]));
         }
     },
     MEDICAL_CERTIFICATE_CREATE("Upload a person's medical certificate", OK, true) {

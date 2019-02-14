@@ -16,6 +16,7 @@ import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForCreation;
+import com.boschat.sikb.model.LicenceForUpdate;
 import com.boschat.sikb.model.LicenceType;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.MedicalCertificateForCreation;
@@ -88,6 +89,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    protected static final String LICENCE_DEFAULT_NUMBER = "1234KBAR20182019";
 
     protected static final List<Integer> LICENCE_DEFAULT_TYPE_LICENCE_ID = Arrays.asList(1, 5, 6);
 
@@ -393,8 +396,19 @@ public abstract class AbstractTest {
 
     protected Response licenceCreate(ApiVersion version, Integer personId, Integer clubId, String season, LicenceForCreation licenceForCreation) {
         Entity<LicenceForCreation> entity = Entity.json(licenceForCreation);
-        String path = buildPathPerson(version, personId, clubId, season, false, false);
+        String path = buildPathPerson(version, personId, clubId, season, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response licenceUpdate(ApiVersion version, Integer personId, Integer clubId, String season, String licenceId, LicenceForUpdate licenceForUpdate) {
+        Entity<LicenceForUpdate> entity = Entity.json(licenceForUpdate);
+        String path = buildPathPerson(version, personId, clubId, season, licenceId, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
+    }
+
+    protected Response licenceDelete(ApiVersion version, Integer personId, Integer clubId, String season, String licenceId) {
+        String path = buildPathPerson(version, personId, clubId, season, licenceId, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
@@ -405,12 +419,12 @@ public abstract class AbstractTest {
 
     protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {
         Entity<PersonForCreation> entityPerson = Entity.json(personForCreation);
-        String path = buildPathPerson(version, null, null, null, false, false);
+        String path = buildPathPerson(version, null, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entityPerson);
     }
 
     protected Response medicalCertificateUpload(ApiVersion version, Integer personId, MedicalCertificateForCreation medicalCertificate) {
-        String path = buildPathPerson(version, personId, null, null, true, false);
+        String path = buildPathPerson(version, personId, null, null, null, true, false);
 
         final FileDataBodyPart filePart = new FileDataBodyPart("medicalCertificateFileName", medicalCertificate.getMedicalCertificateFileName());
         FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
@@ -421,7 +435,7 @@ public abstract class AbstractTest {
     }
 
     protected Response photoUpload(ApiVersion version, Integer personId, PhotoForCreation photo) {
-        String path = buildPathPerson(version, personId, null, null, false, true);
+        String path = buildPathPerson(version, personId, null, null, null, false, true);
 
         final FileDataBodyPart filePart = new FileDataBodyPart("photoFileName", photo.getPhotoFileName());
         FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
@@ -432,22 +446,22 @@ public abstract class AbstractTest {
 
     protected Response personUpdate(ApiVersion version, Integer personId, PersonForUpdate personForUpdate) {
         Entity<PersonForUpdate> entity = Entity.json(personForUpdate);
-        String path = buildPathPerson(version, personId, null, null, false, false);
+        String path = buildPathPerson(version, personId, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response personGet(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null, false, false);
+        String path = buildPathPerson(version, personId, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response personDelete(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null, false, false);
+        String path = buildPathPerson(version, personId, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response personFind(ApiVersion version) {
-        String path = buildPathPerson(version, null, null, null, false, false);
+        String path = buildPathPerson(version, null, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
@@ -603,7 +617,8 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season, boolean uploadMedicalCertificate, boolean uploadPhoto) {
+    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season, String licenceId,
+        boolean uploadMedicalCertificate, boolean uploadPhoto) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
         if (personId != null) {
             path.append("/");
@@ -617,7 +632,6 @@ public abstract class AbstractTest {
         if (uploadPhoto) {
             path.append("/");
             path.append(PHOTO_TYPE.getKey());
-
         }
 
         if (clubId != null) {
@@ -628,6 +642,11 @@ public abstract class AbstractTest {
             path.append("/");
             path.append(season);
             path.append("/licence");
+        }
+
+        if (licenceId != null) {
+            path.append("/");
+            path.append(licenceId);
         }
         return path.toString();
     }
@@ -718,10 +737,11 @@ public abstract class AbstractTest {
         );
     }
 
-    protected void checkLicence(Licence licence, List<LicenceType> licenceTypes, String medicalCertificate, List<FormationType> formationsNeed, Integer clubId,
+    protected void checkLicence(Licence licence, List<LicenceType> licenceTypes, List<FormationType> formationsNeed, Integer clubId,
         String season) {
         assertAll("Check Licence ",
             () -> assertNotNull(licence, " licence shouldn't be null"),
+            () -> assertNotNull(licence.getNumber(), " Number incorrect"),
             () -> assertEquals(licenceTypes, licence.getTypeLicences(), " licenceTypes incorrect"),
             () -> assertEquals(formationsNeed, licence.getFormationNeed(), " formationsNeed incorrect"),
             () -> assertEquals(clubId, licence.getClubId(), " clubId incorrect"),

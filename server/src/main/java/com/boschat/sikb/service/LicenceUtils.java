@@ -1,6 +1,7 @@
 package com.boschat.sikb.service;
 
 import com.boschat.sikb.common.exceptions.FunctionalException;
+import com.boschat.sikb.context.CreateOrUpdateLicenceContext;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Licence;
@@ -20,7 +21,7 @@ public class LicenceUtils {
 
     }
 
-    public static Licence updatePerson() {
+    public static Licence updateLicence() {
         return saveLicence(true);
     }
 
@@ -29,7 +30,7 @@ public class LicenceUtils {
     }
 
     private static Licence saveLicence(boolean isModification) {
-        com.boschat.sikb.model.LicenceForCreation licenceForCreation = MyThreadLocal.get().getLicenceForCreation();
+        CreateOrUpdateLicenceContext context = MyThreadLocal.get().getCreateOrUpdateLicenceContext();
         Licence licenceBean;
         if (isModification) {
             licenceBean = getLicence();
@@ -48,13 +49,15 @@ public class LicenceUtils {
 
             checkPersonExists(personId);
             licenceBean.setPersonid(personId);
+
+            licenceBean.setNumber(personId + clubId + seasonId);
         }
 
-        if (licenceForCreation.getTypeLicences() != null) {
-            licenceBean.setTypes(licenceTypesToJsonNode(licenceForCreation.getTypeLicences()));
+        if (context.getTypeLicences() != null) {
+            licenceBean.setTypes(licenceTypesToJsonNode(context.getTypeLicences()));
         }
-        if (licenceForCreation.getFormationNeed() != null) {
-            licenceBean.setFormationsneed(formationsNeedToJsonNode(licenceForCreation.getFormationNeed()));
+        if (context.getFormationNeed() != null) {
+            licenceBean.setFormationsneed(formationsNeedToJsonNode(context.getFormationNeed()));
         }
 
         if (isModification) {
@@ -67,8 +70,8 @@ public class LicenceUtils {
     }
 
     public static Licence getLicence() {
-        Integer licenceId = MyThreadLocal.get().getLicenceId();
-        Licence licence = DAOFactory.getInstance().getLicenceDAO().fetchOneById(licenceId);
+        String licenceId = MyThreadLocal.get().getLicenceId();
+        Licence licence = DAOFactory.getInstance().getLicenceDAO().fetchOneByNumber(licenceId);
 
         if (licence == null) {
             throw new FunctionalException(LICENCE_NOT_FOUND, licenceId);

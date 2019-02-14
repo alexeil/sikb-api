@@ -39,7 +39,7 @@ class LicenceCreateTest extends AbstractTest {
 
         checkResponse(response, CREATED);
         Licence licence = getLicence(response);
-        checkLicence(licence, LICENCE_DEFAULT_TYPE_LICENCE, LICENCE_DEFAULT_MEDICAL_CERTIFICATE, LICENCE_DEFAULT_FORMATION_NEED,
+        checkLicence(licence, LICENCE_DEFAULT_TYPE_LICENCE, LICENCE_DEFAULT_FORMATION_NEED,
             CLUB_DEFAULT_ID, SEASON_DEFAULT_ID);
     }
 

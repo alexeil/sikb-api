@@ -754,7 +754,61 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - persons
-
+  '/persons/{personId}/{clubId}/{seasonId}/licence/{licenceId}':
+    put:
+      summary: Update a person's licence
+      description: ''
+      operationId: updatePersonLicence
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/licenceId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/licenceForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly updated person's licence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/licence'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+    delete:
+      summary: Delete a person's licence
+      description: ''
+      operationId: deletePersonLicence
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/licenceId'
+      responses:
+        204:
+          description: The person's licence is deleted
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
   '/configurations/seasons':
     get:
       summary: Find all seasons
@@ -936,6 +990,13 @@ components:
       required: true
       in: path
       description: "Id of a person"
+    licenceId:
+      name: "licenceId"
+      schema:
+        type: string
+      required: true
+      in: path
+      description: "Identification of the licence"
     seasonId:
       name: "seasonId"
       schema:
@@ -1372,6 +1433,8 @@ components:
 
     licence:
       properties:
+        number:
+          type: string
         typeLicences:
           type: array
           items:
@@ -1402,8 +1465,6 @@ components:
           items:
             type: integer
             format: int32
-        medicalCertificate:
-          type: string
         formationNeed:
           description: ids of formation types needed
           type: array

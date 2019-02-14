@@ -4,12 +4,10 @@ import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Licence;
-import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,17 +61,15 @@ public class Context {
 
     private Licence licence;
 
-    private Integer licenceId;
-
-    private LicenceForCreation licenceForCreation;
+    private String licenceId;
 
     private byte[] medicalCertificateFileNameInputStream;
-
-    private FormDataContentDisposition medicalCertificateFileNameDetail;
 
     private LocalDate medicalCertificateBeginValidityDate;
 
     private byte[] photoFileNameInputStream;
+
+    private CreateOrUpdateLicenceContext createOrUpdateLicenceContext;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -214,20 +210,12 @@ public class Context {
         this.licence = licence;
     }
 
-    public Integer getLicenceId() {
+    public String getLicenceId() {
         return licenceId;
     }
 
-    public void setLicenceId(Integer licenceId) {
+    public void setLicenceId(String licenceId) {
         this.licenceId = licenceId;
-    }
-
-    public LicenceForCreation getLicenceForCreation() {
-        return licenceForCreation;
-    }
-
-    public void setLicenceForCreation(LicenceForCreation licenceForCreation) {
-        this.licenceForCreation = licenceForCreation;
     }
 
     public byte[] getMedicalCertificateFileNameInputStream() {
@@ -260,5 +248,13 @@ public class Context {
         } catch (Exception e) {
             throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_PHOTO, e.getMessage());
         }
+    }
+
+    public CreateOrUpdateLicenceContext getCreateOrUpdateLicenceContext() {
+        return createOrUpdateLicenceContext;
+    }
+
+    public void setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext createOrUpdateLicenceContext) {
+        this.createOrUpdateLicenceContext = createOrUpdateLicenceContext;
     }
 }

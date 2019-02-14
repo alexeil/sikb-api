@@ -3,6 +3,7 @@ package com.boschat.sikb.api.impl;
 import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.PersonsApiService;
 import com.boschat.sikb.model.LicenceForCreation;
+import com.boschat.sikb.model.LicenceForUpdate;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -13,6 +14,8 @@ import java.io.InputStream;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.LICENCE_CREATE;
+import static com.boschat.sikb.api.CallType.LICENCE_DELETE;
+import static com.boschat.sikb.api.CallType.LICENCE_UPDATE;
 import static com.boschat.sikb.api.CallType.MEDICAL_CERTIFICATE_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_DELETE;
@@ -55,6 +58,13 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     }
 
     @Override
+    public Response deletePersonLicence(String accessToken, Integer personId, Integer clubId, String seasonId, String licenceId,
+        SecurityContext securityContext) {
+        return runService(LICENCE_DELETE, accessToken, securityContext, personId, clubId, seasonId, licenceId);
+
+    }
+
+    @Override
     public Response findPersons(String accessToken, SecurityContext securityContext) {
         return runService(PERSON_FIND, accessToken, securityContext);
     }
@@ -67,5 +77,12 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response updatePerson(String accessToken, Integer personId, PersonForUpdate personForUpdate, SecurityContext securityContext) {
         return runService(PERSON_UPDATE, accessToken, securityContext, personId, personForUpdate);
+    }
+
+    @Override
+    public Response updatePersonLicence(String accessToken, Integer personId, Integer clubId, String seasonId, String licenceId,
+        LicenceForUpdate licenceForUpdate,
+        SecurityContext securityContext) {
+        return runService(LICENCE_UPDATE, accessToken, securityContext, personId, clubId, seasonId, licenceId, licenceForUpdate);
     }
 }

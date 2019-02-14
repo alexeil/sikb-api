@@ -135,6 +135,7 @@ public class Helper {
     public static com.boschat.sikb.model.Licence convertBeanToModel(Licence bean) {
         com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
 
+        licence.setNumber(bean.getNumber());
         licence.setTypeLicences(jsonNodeToLicenceTypes(bean.getTypes()));
 
         if (!bean.getFormationsneed().isNull()) {

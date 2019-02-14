@@ -9,6 +9,7 @@ import com.boschat.sikb.servlet.JacksonJsonProvider;
 import com.boschat.sikb.tables.pojos.Formationtype;
 import com.boschat.sikb.tables.pojos.Licencetype;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -43,7 +44,11 @@ public class JsonUtils {
     }
 
     public static JsonNode formationsNeedToJsonNode(List<Integer> formations) {
-        return objectToJsonNode(formations);
+        if (CollectionUtils.isEmpty(formations)) {
+            return null;
+        } else {
+            return objectToJsonNode(formations);
+        }
     }
 
     public static List<FormationType> jsonNodeToFormationNeed(JsonNode json) {

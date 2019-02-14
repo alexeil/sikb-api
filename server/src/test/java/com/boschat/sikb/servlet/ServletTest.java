@@ -18,6 +18,7 @@ import java.io.IOException;
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.METHOD_NOT_ALLOWED;
 import static com.boschat.sikb.common.configuration.ResponseCode.SERVICE_NOT_FOUND;
 import static com.boschat.sikb.servlet.ServletTest.FakeProperties.FAKE_PROPERTY;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
@@ -55,6 +56,20 @@ class ServletTest extends AbstractTest {
     void notFound() throws IOException {
         Response response = callRequest("/v1/profiles/aeggae1/toto");
         checkResponse(response, SERVICE_NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName(" not allowed ")
+    void notAllowed() throws IOException {
+        Entity<ClubForUpdate> entity = Entity.json(new ClubForUpdate());
+
+        Response response = jerseyTest.target("/v1/clubs/1")
+                                      .register(JacksonJsonProvider.class)
+                                      .request()
+                                      .header("Authorization", "Basic " + basicEncode("admin", "admin"))
+                                      .post(entity);
+
+        checkResponse(response, METHOD_NOT_ALLOWED);
     }
 
     @Test
