@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import static com.boschat.sikb.AbstractTest.PERSON_MEDICAL_CERTIFICATE_KEY;
+import static com.boschat.sikb.AbstractTest.PERSON_PHOTO_KEY;
 import static com.boschat.sikb.AbstractTest.initContext;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadLicences;
@@ -61,7 +63,7 @@ class DocumentTest {
     @Test
     @DisplayName(" medical Certificate ")
     void medicalCertificate() {
-        callDocument(MEDICAL_CERTIFICATE_TYPE.getKey(), "NTFkYzE4NmMtZWZlOS00NjNmLWEzYTgtMzA1NGIxMTUxNGI5MjAxOC0wMS0xOFQxMzoxMSswMTowMA", null);
+        callDocument(MEDICAL_CERTIFICATE_TYPE.getKey(), PERSON_MEDICAL_CERTIFICATE_KEY, null);
     }
 
     @Test
@@ -91,7 +93,7 @@ class DocumentTest {
     @Test
     @DisplayName(" photo ")
     void photo() {
-        callDocument(PHOTO_TYPE.getKey(), "NTFkYzE4NmMtZWZlOS00NjNmLWEzYTgtMzA1NGIxMTUxNGI5MjAxOC0wMS0xOFQxMzoxMSswMTowMA", null);
+        callDocument(PHOTO_TYPE.getKey(), PERSON_PHOTO_KEY, null);
     }
 
     @Test

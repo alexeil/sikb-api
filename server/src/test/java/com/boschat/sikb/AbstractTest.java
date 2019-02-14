@@ -136,6 +136,10 @@ public abstract class AbstractTest {
 
     protected static final LocalDate PERSON_MEDICAL_CERTIFICATE_VALIDITY = LocalDate.of(2018, 1, 2);
 
+    public static final String PERSON_MEDICAL_CERTIFICATE_KEY = "NTFkYzE4NmMtZWZlOS00NjNmLWEzYTgtMzA1NGIxMTUxNGI5MjAxOC0wMS0xOFQxMzoxMSswMTowMA";
+
+    public static final String PERSON_PHOTO_KEY = "NGI3OTcyZTMtODg3MS00Yjg0LWJlZjUtNGRhNmM0Y2RlMGY3MjAxOS0wMi0xNFQxNTo1NDo0My40OTYrMDE6MDA";
+
     protected static final List<Formation> PERSON_DEFAULT_FORMATIONS = Arrays.asList(
         new Formation().id(1).name("Arbitre Niveau 1").date(LocalDate.of(2015, 4, 4)),
         new Formation().id(2).name("Arbitre Niveau 2").date(LocalDate.of(2016, 4, 4)));
