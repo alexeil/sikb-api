@@ -650,9 +650,9 @@ paths:
 
   '/persons/{personId}/medicalCertificate':
     post:
-      summary: Create a person's medical certificate
+      summary: Upload a person's medical certificate
       description: ''
-      operationId: createMedicalCertificate
+      operationId: uploadMedicalCertificate
       parameters:
         - $ref: '#/components/parameters/access_token'
         - $ref: '#/components/parameters/personId'
@@ -669,8 +669,8 @@ paths:
           true
         description: body
       responses:
-        201:
-          description: Newly created person's medical certificate
+        200:
+          description: Created or updated person's medical certificate
           content:
             application/json:
               schema:
@@ -683,6 +683,44 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - persons
+
+  '/persons/{personId}/photo':
+    post:
+      summary: Upload a person's photo
+      description: ''
+      operationId: uploadPhoto
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/photoForCreation'
+            encoding:
+              medicalCertificateFileName:
+                contentType: image/png, image/jpeg
+
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Created or updated person's photo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/photo'
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - persons
+
+
   '/persons/{personId}/{clubId}/{seasonId}/licence':
     post:
       summary: Create a person's licence
@@ -1141,6 +1179,8 @@ components:
           type: string
         sex:
           $ref: '#/components/schemas/sex'
+        photo:
+          $ref: "#/components/schemas/photo"
         birthDate:
           type: string
           format: date
@@ -1253,11 +1293,23 @@ components:
           type: string
           description: "Format is YYYY-MM-DD. <br> There is a bug in some client so the date is sent as string without format:date"
 
+    photoForCreation:
+      type: object
+      properties:
+        photoFileName:
+          type: string
+          format: binary
+
+    photo:
+      properties:
+        location:
+          type: string
+
     medicalCertificate:
       properties:
-        medicalCertificateLocation:
+        location:
           type: string
-        medicalCertificateBeginValidityDate:
+        beginValidityDate:
           type: string
           format: date
 

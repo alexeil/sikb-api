@@ -16,6 +16,8 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_MEDICAL_CERTIFICATE = "medicalCertificate";
 
+    public static final String BODY_FIELD_PHOTO = "photo";
+
 
     private SikbConstants() {
 

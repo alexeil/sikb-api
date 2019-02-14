@@ -19,6 +19,7 @@ import static com.boschat.sikb.api.CallType.PERSON_DELETE;
 import static com.boschat.sikb.api.CallType.PERSON_FIND;
 import static com.boschat.sikb.api.CallType.PERSON_GET;
 import static com.boschat.sikb.api.CallType.PERSON_UPDATE;
+import static com.boschat.sikb.api.CallType.PHOTO_CREATE;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-17T10:05:39.503+01:00[Europe/Paris]")
 public class PersonsApiServiceImpl extends PersonsApiService {
@@ -29,17 +30,23 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     }
 
     @Override
-    public Response createMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
+    public Response uploadMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
         FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext)
         throws NotFoundException {
         return runService(MEDICAL_CERTIFICATE_CREATE, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
-            medicalCertificateFileNameDetail, medicalCertificateBeginValidityDate);
+            medicalCertificateBeginValidityDate);
     }
 
     @Override
     public Response createPersonLicence(String accessToken, Integer personId, Integer clubId, String season, LicenceForCreation licence,
         SecurityContext securityContext) {
         return runService(LICENCE_CREATE, accessToken, securityContext, personId, clubId, season, licence);
+    }
+
+    @Override
+    public Response uploadPhoto(String accessToken, Integer personId, InputStream photoFileNameInputStream, FormDataContentDisposition photoFileNameDetail,
+        SecurityContext securityContext) {
+        return runService(PHOTO_CREATE, accessToken, securityContext, personId, photoFileNameInputStream);
     }
 
     @Override

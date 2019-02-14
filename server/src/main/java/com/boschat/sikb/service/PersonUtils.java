@@ -4,6 +4,7 @@ import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.MedicalCertificate;
+import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.utils.HashUtils;
@@ -12,6 +13,7 @@ import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
+import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
 
 public class PersonUtils {
@@ -114,9 +116,20 @@ public class PersonUtils {
         DAOFactory.getInstance().getPersonDAO().update(person);
 
         MedicalCertificate medicalCertificate = new MedicalCertificate();
-        medicalCertificate.setMedicalCertificateLocation(MEDICAL_CERTIFICATE_TYPE.buildUrl(person.getMedicalcertificatekey()));
-        medicalCertificate.setMedicalCertificateBeginValidityDate(person.getMedicalcertificatebeginvaliditydate());
+        medicalCertificate.setLocation(MEDICAL_CERTIFICATE_TYPE.buildUrl(person.getMedicalcertificatekey()));
+        medicalCertificate.setBeginValidityDate(person.getMedicalcertificatebeginvaliditydate());
         return medicalCertificate;
     }
 
+    public static Photo createPhoto() {
+        Person person = getPerson();
+
+        person.setPhotodata(MyThreadLocal.get().getPhotoFileNameInputStream());
+        person.setPhotokey(HashUtils.generateToken());
+        DAOFactory.getInstance().getPersonDAO().update(person);
+
+        Photo photo = new Photo();
+        photo.setLocation(PHOTO_TYPE.buildUrl(person.getMedicalcertificatekey()));
+        return photo;
+    }
 }

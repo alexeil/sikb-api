@@ -21,7 +21,6 @@ import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.InputStream;
 
@@ -49,6 +48,7 @@ import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
 import static com.boschat.sikb.service.PersonUtils.createMedicalCertificate;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
+import static com.boschat.sikb.service.PersonUtils.createPhoto;
 import static com.boschat.sikb.service.PersonUtils.deletePerson;
 import static com.boschat.sikb.service.PersonUtils.findPersons;
 import static com.boschat.sikb.service.PersonUtils.getPerson;
@@ -432,7 +432,7 @@ public enum CallType {
             MyThreadLocal.get().setLicenceForCreation((LicenceForCreation) params[3]);
         }
     },
-    MEDICAL_CERTIFICATE_CREATE("Create a person's medical certificate", CREATED, true) {
+    MEDICAL_CERTIFICATE_CREATE("Upload a person's medical certificate", OK, true) {
         @Override
         public Object call() {
             return createMedicalCertificate();
@@ -442,8 +442,19 @@ public enum CallType {
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
             MyThreadLocal.get().setMedicalCertificateFileNameInputStream((InputStream) params[1]);
-            MyThreadLocal.get().setMedicalCertificateFileNameDetail((FormDataContentDisposition) params[2]);
-            MyThreadLocal.get().setMedicalCertificateBeginValidityDate((String) params[3]);
+            MyThreadLocal.get().setMedicalCertificateBeginValidityDate((String) params[2]);
+        }
+    },
+    PHOTO_CREATE("Upload a person's photo", OK, true) {
+        @Override
+        public Object call() {
+            return createPhoto();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setPhotoFileNameInputStream((InputStream) params[1]);
         }
     };
 

@@ -18,7 +18,7 @@ public enum ApplicationProperties implements IProperties {
     CHECK_QUERY_STRING_SEASON_ID_REGEXP("check.queryString.seasonId.regexp"),
 
     MEDICAL_CERTIFICATE_LIMIT_YEARS("medicalCertificate.limitYears"),
-    MEDICAL_CERTIFICATE_BASE_PATH("medicalCertificate.basePath"),
+    DOCUMENT_BASE_PATH("document.basePath"),
 
     CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN("cors.header.accessControlAllowOrigin"),
     CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS("cors.header.accessControlAllowMethods"),

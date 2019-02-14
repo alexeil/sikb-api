@@ -22,6 +22,8 @@ import com.boschat.sikb.model.MedicalCertificateForCreation;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
+import com.boschat.sikb.model.Photo;
+import com.boschat.sikb.model.PhotoForCreation;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Season;
 import com.boschat.sikb.model.SeasonForCreation;
@@ -73,6 +75,8 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
+import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
+import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
@@ -129,6 +133,8 @@ public abstract class AbstractTest {
     protected static final String PERSON_DEFAULT_EMAIL = "person@kin-ball.fr";
 
     protected static final String PERSON_DEFAULT_NATIONALITY = "FRANCE";
+
+    protected static final LocalDate PERSON_MEDICAL_CERTIFICATE_VALIDITY = LocalDate.of(2018, 1, 2);
 
     protected static final List<Formation> PERSON_DEFAULT_FORMATIONS = Arrays.asList(
         new Formation().id(1).name("Arbitre Niveau 1").date(LocalDate.of(2015, 4, 4)),
@@ -225,6 +231,10 @@ public abstract class AbstractTest {
 
     protected static MedicalCertificate getMedicalCertificate(Response result) throws IOException {
         return getBody(result, MedicalCertificate.class);
+    }
+
+    protected static Photo getPhoto(Response result) throws IOException {
+        return getBody(result, Photo.class);
     }
 
     protected static List<Person> getPersons(Response result) throws IOException {
@@ -379,7 +389,7 @@ public abstract class AbstractTest {
 
     protected Response licenceCreate(ApiVersion version, Integer personId, Integer clubId, String season, LicenceForCreation licenceForCreation) {
         Entity<LicenceForCreation> entity = Entity.json(licenceForCreation);
-        String path = buildPathPerson(version, personId, clubId, season, false);
+        String path = buildPathPerson(version, personId, clubId, season, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
@@ -391,12 +401,12 @@ public abstract class AbstractTest {
 
     protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {
         Entity<PersonForCreation> entityPerson = Entity.json(personForCreation);
-        String path = buildPathPerson(version, null, null, null, false);
+        String path = buildPathPerson(version, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entityPerson);
     }
 
-    protected Response medicalCertificateCreate(ApiVersion version, Integer personId, MedicalCertificateForCreation medicalCertificate) {
-        String path = buildPathPerson(version, personId, null, null, true);
+    protected Response medicalCertificateUpload(ApiVersion version, Integer personId, MedicalCertificateForCreation medicalCertificate) {
+        String path = buildPathPerson(version, personId, null, null, true, false);
 
         final FileDataBodyPart filePart = new FileDataBodyPart("medicalCertificateFileName", medicalCertificate.getMedicalCertificateFileName());
         FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
@@ -406,24 +416,34 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
     }
 
+    protected Response photoUpload(ApiVersion version, Integer personId, PhotoForCreation photo) {
+        String path = buildPathPerson(version, personId, null, null, false, true);
+
+        final FileDataBodyPart filePart = new FileDataBodyPart("photoFileName", photo.getPhotoFileName());
+        FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+        formDataMultiPart.bodyPart(filePart);
+
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+    }
+
     protected Response personUpdate(ApiVersion version, Integer personId, PersonForUpdate personForUpdate) {
         Entity<PersonForUpdate> entity = Entity.json(personForUpdate);
-        String path = buildPathPerson(version, personId, null, null, false);
+        String path = buildPathPerson(version, personId, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response personGet(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null, false);
+        String path = buildPathPerson(version, personId, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response personDelete(ApiVersion version, Integer personId) {
-        String path = buildPathPerson(version, personId, null, null, false);
+        String path = buildPathPerson(version, personId, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response personFind(ApiVersion version) {
-        String path = buildPathPerson(version, null, null, null, false);
+        String path = buildPathPerson(version, null, null, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
@@ -579,7 +599,7 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season, boolean uploadMedicalCertificate) {
+    private String buildPathPerson(ApiVersion version, Integer personId, Integer clubId, String season, boolean uploadMedicalCertificate, boolean uploadPhoto) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/persons");
         if (personId != null) {
             path.append("/");
@@ -587,7 +607,13 @@ public abstract class AbstractTest {
         }
 
         if (uploadMedicalCertificate) {
-            path.append("/medicalCertificate");
+            path.append("/");
+            path.append(MEDICAL_CERTIFICATE_TYPE.getKey());
+        }
+        if (uploadPhoto) {
+            path.append("/");
+            path.append(PHOTO_TYPE.getKey());
+
         }
 
         if (clubId != null) {
@@ -718,16 +744,19 @@ public abstract class AbstractTest {
     }
 
     protected void checkMedicalCertificate(MedicalCertificate medicalCertificate, LocalDate validity) {
-        assertAll("Check MedicalCertificate",
-            () -> assertNotNull(medicalCertificate, " medicalCertificate shouldn't be null"),
-            () -> assertNotNull(medicalCertificate.getMedicalCertificateLocation(), " MedicalCertificateLocation shouldn't be null"),
-            () -> assertEquals(validity, medicalCertificate.getMedicalCertificateBeginValidityDate(), "MedicalCertificateBeginValidityDate incorrect")
-        );
-
+        if (validity != null) {
+            assertAll("Check MedicalCertificate",
+                () -> assertNotNull(medicalCertificate, " medicalCertificate shouldn't be null"),
+                () -> assertNotNull(medicalCertificate.getLocation(), " MedicalCertificateLocation shouldn't be null"),
+                () -> assertEquals(validity, medicalCertificate.getBeginValidityDate(), "MedicalCertificateBeginValidityDate incorrect")
+            );
+        } else {
+            assertNull(medicalCertificate, " Photo shouldn't be null");
+        }
     }
 
     protected void checkPerson(Person person, String firstName, String name, Sex sex, LocalDate birthDate, String address, String postalCode, String city,
-        String phoneNumber, String email, String nationality, List<Formation> formations) {
+        String phoneNumber, String email, String nationality, List<Formation> formations, LocalDate medicalCertificateValidity, boolean checkPhoto) {
         assertAll("Check person " + person.getFirstName(),
             () -> assertNotNull(person, " User shouldn't be null"),
             () -> assertNotNull(person.getId(), "Id shouldn't be null"),
@@ -741,8 +770,21 @@ public abstract class AbstractTest {
             () -> assertEquals(phoneNumber, person.getPhoneNumber(), " phoneNumber incorrect"),
             () -> assertEquals(email, person.getEmail(), " email incorrect"),
             () -> assertEquals(nationality, person.getNationality(), " nationality incorrect"),
-            () -> assertEquals(formations, person.getFormations(), " formations incorrect")
+            () -> assertEquals(formations, person.getFormations(), " formations incorrect"),
+            () -> checkPhoto(person.getPhoto(), checkPhoto),
+            () -> checkMedicalCertificate(person.getMedicalCertificate(), medicalCertificateValidity)
         );
+    }
+
+    protected void checkPhoto(Photo photo, boolean checkPhoto) {
+        if (checkPhoto) {
+            assertAll("Check Photo ",
+                () -> assertNotNull(photo, " Photo shouldn't be null"),
+                () -> assertNotNull(photo.getLocation(), "Photo location shouldn't be null")
+            );
+        } else {
+            assertNull(photo, " Photo shouldn't be null");
+        }
     }
 
     protected void checkSession(Session session) {

@@ -87,7 +87,7 @@ public class PersistenceUtils {
 
     public static void loadPersons(String fileName) throws IOException {
         loadDataSuite(fileName, PERSON, PERSON.FIRSTNAME, PERSON.NAME, PERSON.SEX, PERSON.BIRTHDATE, PERSON.ADDRESS, PERSON.POSTALCODE, PERSON.CITY,
-            PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.PHOTODATA, PERSON.MEDICALCERTIFICATEKEY,
+            PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.PHOTOKEY, PERSON.PHOTODATA, PERSON.MEDICALCERTIFICATEKEY,
             PERSON.MEDICALCERTIFICATEDATA, PERSON.MEDICALCERTIFICATEBEGINVALIDITYDATE, PERSON.CREATIONDATE,
             PERSON.MODIFICATIONDATE);
     }
@@ -102,6 +102,7 @@ public class PersistenceUtils {
                                       .loadCSV(url.openStream())
                                       .fields(fields)
                                       .separator(';')
+                                      .nullString("")
                                       .execute();
 
             int processed = loader.processed();

@@ -5,6 +5,8 @@ import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.MedicalCertificateForCreation;
 import com.boschat.sikb.model.Person;
 import com.boschat.sikb.model.PersonForCreation;
+import com.boschat.sikb.model.Photo;
+import com.boschat.sikb.model.PhotoForCreation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
 @DisplayName(" Create a person ")
 class PersonCreateTest extends AbstractTest {
@@ -32,12 +35,24 @@ class PersonCreateTest extends AbstractTest {
 
         MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
         medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
-        medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/certificates/certificate.jpg"));
-        Response response = medicalCertificateCreate(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
+        medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.jpg"));
+        Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
 
-        checkResponse(response, CREATED);
+        checkResponse(response, OK);
         MedicalCertificate medicalCertificate = getMedicalCertificate(response);
         checkMedicalCertificate(medicalCertificate, LocalDate.of(2018, 1, 2));
+    }
+
+    @Test
+    @DisplayName(" photo ")
+    void photo() throws Exception {
+        PhotoForCreation photoForCreation = new PhotoForCreation();
+        photoForCreation.setPhotoFileName(new File("src/test/resources/documents/photo.png"));
+        Response response = photoUpload(V1, PERSON_DEFAULT_ID, photoForCreation);
+
+        checkResponse(response, OK);
+        Photo photo = getPhoto(response);
+        checkPhoto(photo, true);
     }
 
     @Test
@@ -47,12 +62,12 @@ class PersonCreateTest extends AbstractTest {
         personForCreation.setFirstName(PERSON_DEFAULT_FIRST_NAME);
 
         MedicalCertificate medicalCertificate = new MedicalCertificate();
-        medicalCertificate.setMedicalCertificateBeginValidityDate(LocalDate.of(1990, 4, 4));
+        medicalCertificate.setBeginValidityDate(LocalDate.of(1990, 4, 4));
         Response response = personCreate(V1, personForCreation);
 
         checkResponse(response, CREATED);
         Person person = getPerson(response);
-        checkPerson(person, PERSON_DEFAULT_FIRST_NAME, null, null, null, null, null, null, null, null, null, null);
+        checkPerson(person, PERSON_DEFAULT_FIRST_NAME, null, null, null, null, null, null, null, null, null, null, null, false);
     }
 
     @Test
@@ -76,6 +91,6 @@ class PersonCreateTest extends AbstractTest {
         Person person = getPerson(response);
         checkPerson(person, PERSON_DEFAULT_FIRST_NAME, PERSON_DEFAULT_NAME, PERSON_DEFAULT_SEX, PERSON_DEFAULT_BIRTH_DATE, PERSON_DEFAULT_ADDRESS,
             PERSON_DEFAULT_POSTAL_CODE, PERSON_DEFAULT_CITY, PERSON_DEFAULT_PHONE_NUMBER, PERSON_DEFAULT_EMAIL, PERSON_DEFAULT_NATIONALITY,
-            PERSON_DEFAULT_FORMATIONS);
+            PERSON_DEFAULT_FORMATIONS, null, false);
     }
 }

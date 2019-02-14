@@ -20,6 +20,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FI
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PHOTO;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 import static com.boschat.sikb.common.utils.DateUtils.parseLocalDate;
@@ -71,6 +72,8 @@ public class Context {
     private FormDataContentDisposition medicalCertificateFileNameDetail;
 
     private LocalDate medicalCertificateBeginValidityDate;
+
+    private byte[] photoFileNameInputStream;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -239,19 +242,23 @@ public class Context {
         }
     }
 
-    public FormDataContentDisposition getMedicalCertificateFileNameDetail() {
-        return medicalCertificateFileNameDetail;
-    }
-
-    public void setMedicalCertificateFileNameDetail(FormDataContentDisposition medicalCertificateFileNameDetail) {
-        this.medicalCertificateFileNameDetail = medicalCertificateFileNameDetail;
-    }
-
     public LocalDate getMedicalCertificateBeginValidityDate() {
         return medicalCertificateBeginValidityDate;
     }
 
     public void setMedicalCertificateBeginValidityDate(String medicalCertificateBeginValidityDate) {
         this.medicalCertificateBeginValidityDate = parseLocalDate(medicalCertificateBeginValidityDate);
+    }
+
+    public byte[] getPhotoFileNameInputStream() {
+        return photoFileNameInputStream;
+    }
+
+    public void setPhotoFileNameInputStream(InputStream photoFileNameInputStream) {
+        try {
+            this.photoFileNameInputStream = IOUtils.toByteArray(photoFileNameInputStream);
+        } catch (Exception e) {
+            throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_PHOTO, e.getMessage());
+        }
     }
 }

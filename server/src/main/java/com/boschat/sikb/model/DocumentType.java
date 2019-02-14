@@ -14,10 +14,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.boschat.sikb.common.configuration.ApplicationProperties.MEDICAL_CERTIFICATE_BASE_PATH;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.DOCUMENT_BASE_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.DOCUMENT_TYPE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.MEDICAL_CERTIFICATE_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.PHOTO_NOT_FOUND;
 
 public enum DocumentType {
 
@@ -45,6 +46,18 @@ public enum DocumentType {
                 Season season = DAOFactory.getInstance().getSeasonDAO().fetchOneById(licence.getSeason());
 
                 PDFGeneratorUtils.getInstance().generateLicencePdf(person, club, season, licence, outputStream);
+            }
+        }
+    },
+    PHOTO_TYPE("photo", "image/png", "image/jpeg") {
+        @Override
+        public void writeDocument(String id, OutputStream outputStream) throws IOException {
+            Person person = DAOFactory.getInstance().getPersonDAO().fetchOneByPhotokey(id);
+            if (person == null) {
+                throw new FunctionalException(PHOTO_NOT_FOUND, id);
+            } else {
+                byte[] data = person.getPhotodata();
+                outputStream.write(data);
             }
         }
     };
@@ -76,7 +89,7 @@ public enum DocumentType {
     }
 
     public String buildUrl(String id) {
-        return MEDICAL_CERTIFICATE_BASE_PATH.getValue().replace("{type}", key).replace("{id}", id);
+        return DOCUMENT_BASE_PATH.getValue().replace("{type}", key).replace("{id}", id);
     }
 
     public abstract void writeDocument(String id, OutputStream outputStream) throws IOException;

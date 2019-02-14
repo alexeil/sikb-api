@@ -90,6 +90,7 @@ CREATE TABLE sikb.person
   "email"                               varchar(255),
   "nationality"                         varchar(255),
   "formations"                          json,
+  "photoKey"                            varchar(255) unique,
   "photoData"                           bytea,
   "medicalCertificateKey"               varchar(255) unique,
   "medicalCertificateData"              bytea,

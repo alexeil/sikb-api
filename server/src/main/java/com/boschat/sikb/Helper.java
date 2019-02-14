@@ -8,6 +8,7 @@ import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.DocumentType;
 import com.boschat.sikb.model.MedicalCertificate;
+import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.persistence.dao.DAOFactory;
@@ -36,6 +37,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
+import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormationNeed;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormations;
@@ -200,9 +202,15 @@ public class Helper {
 
         if (StringUtils.isNotEmpty(personBean.getMedicalcertificatekey())) {
             MedicalCertificate medicalCertificate = new MedicalCertificate();
-            medicalCertificate.setMedicalCertificateLocation(MEDICAL_CERTIFICATE_TYPE.buildUrl(personBean.getMedicalcertificatekey()));
-            medicalCertificate.setMedicalCertificateBeginValidityDate(personBean.getMedicalcertificatebeginvaliditydate());
+            medicalCertificate.setLocation(MEDICAL_CERTIFICATE_TYPE.buildUrl(personBean.getMedicalcertificatekey()));
+            medicalCertificate.setBeginValidityDate(personBean.getMedicalcertificatebeginvaliditydate());
             person.setMedicalCertificate(medicalCertificate);
+        }
+
+        if (StringUtils.isNotEmpty(personBean.getPhotokey())) {
+            Photo photo = new Photo();
+            photo.setLocation(PHOTO_TYPE.buildUrl(personBean.getPhotokey()));
+            person.setPhoto(photo);
         }
         return person;
     }

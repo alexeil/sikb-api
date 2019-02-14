@@ -17,8 +17,10 @@ import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.common.configuration.ResponseCode.DOCUMENT_TYPE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.MEDICAL_CERTIFICATE_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.PHOTO_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.LICENCE_TYPE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
+import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -86,4 +88,15 @@ class DocumentTest {
         callDocument("unknownType", UNKNOWN_ID, new FunctionalException(DOCUMENT_TYPE_NOT_FOUND, "unknownType"));
     }
 
+    @Test
+    @DisplayName(" photo ")
+    void photo() {
+        callDocument(PHOTO_TYPE.getKey(), "NTFkYzE4NmMtZWZlOS00NjNmLWEzYTgtMzA1NGIxMTUxNGI5MjAxOC0wMS0xOFQxMzoxMSswMTowMA", null);
+    }
+
+    @Test
+    @DisplayName(" unknown photo ")
+    void unknownPhoto() {
+        callDocument(PHOTO_TYPE.getKey(), UNKNOWN_ID, new FunctionalException(PHOTO_NOT_FOUND, UNKNOWN_ID));
+    }
 }
