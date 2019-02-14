@@ -47,6 +47,17 @@ class LicenceUpdateTest extends AbstractTest {
     }
 
     @Test
+    @DisplayName(" with nothing ")
+    void withNothing() throws Exception {
+        LicenceForUpdate licenceForUpdate = new LicenceForUpdate();
+        Response response = licenceUpdate(V1, PERSON_DEFAULT_ID, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, LICENCE_DEFAULT_NUMBER, licenceForUpdate);
+
+        checkResponse(response, OK);
+        Licence licence = getLicence(response);
+        checkLicence(licence, LICENCE_DEFAULT_TYPE_LICENCE, LICENCE_DEFAULT_FORMATION_NEED, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID);
+    }
+
+    @Test
     @DisplayName(" unknown licence ")
     void unknownSeason() throws Exception {
         LicenceForUpdate licenceForUpdate = new LicenceForUpdate();

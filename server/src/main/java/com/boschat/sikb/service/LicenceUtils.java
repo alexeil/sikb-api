@@ -6,8 +6,6 @@ import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Licence;
 
-import java.util.List;
-
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
 import static com.boschat.sikb.service.ClubUtils.checkClubExists;
 import static com.boschat.sikb.service.PersonUtils.checkPersonExists;
@@ -81,9 +79,5 @@ public class LicenceUtils {
 
     public static void deleteLicence() {
         DAOFactory.getInstance().getLicenceDAO().delete(getLicence());
-    }
-
-    public static List<Licence> findLicences() {
-        return DAOFactory.getInstance().getLicenceDAO().findAll();
     }
 }
