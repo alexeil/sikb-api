@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.SERVICE_NOT_FOUND;
 import static com.boschat.sikb.servlet.ServletTest.FakeProperties.FAKE_PROPERTY;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
@@ -54,6 +55,13 @@ class ServletTest extends AbstractTest {
     void notFound() throws IOException {
         Response response = callRequest("/v1/profiles/aeggae1/toto");
         checkResponse(response, SERVICE_NOT_FOUND);
+    }
+
+    @Test
+    @DisplayName(" internal error  ")
+    void internalError() throws IOException {
+        Response response = callRequest("/v1/clubs/affiliations");
+        checkResponse(response, INTERNAL_ERROR, "org.glassfish.jersey.server.ParamException$PathParamException");
     }
 
     public enum FakeProperties implements IProperties {

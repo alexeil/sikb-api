@@ -16,7 +16,7 @@ public class MapperUtils {
     }
 
     public static Response logAndBuildResponse(Throwable e, ResponseCode error, Object... params) {
-        LOGGER.log(error.getLevel(), error.getErrorMessage(), e);
+        LOGGER.log(error.getLevel(), String.format(error.getErrorMessage(), params), e);
         return buildResponse(error, params);
     }
 
