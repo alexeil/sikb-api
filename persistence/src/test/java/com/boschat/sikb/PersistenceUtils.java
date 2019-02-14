@@ -12,9 +12,11 @@ import java.net.URL;
 
 import static com.boschat.sikb.Sequences.AFFILIATION_ID_SEQ;
 import static com.boschat.sikb.Sequences.CLUB_ID_SEQ;
+import static com.boschat.sikb.Sequences.LICENCE_ID_SEQ;
 import static com.boschat.sikb.Sequences.PERSON_ID_SEQ;
 import static com.boschat.sikb.Sequences.USER_ID_SEQ;
 import static com.boschat.sikb.Tables.AFFILIATION;
+import static com.boschat.sikb.Tables.LICENCE;
 import static com.boschat.sikb.Tables.PERSON;
 import static com.boschat.sikb.Tables.SEASON;
 import static com.boschat.sikb.Tables.USER;
@@ -39,10 +41,20 @@ public class PersistenceUtils {
         loadDataSuite(fileName, CLUB, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
     }
 
+    public static void loadLicences(String fileName) throws IOException {
+        loadDataSuite(fileName, LICENCE, LICENCE.NUMBER, LICENCE.FORMATIONSNEED, LICENCE.TYPES, LICENCE.SEASON, LICENCE.CLUBID, LICENCE.PERSONID);
+    }
+
     public static void loadClubs() throws IOException {
         DAOFactory.getInstance().truncateClub();
         DAOFactory.getInstance().getDslContext().alterSequence(CLUB_ID_SEQ).restart().execute();
         loadClubs("sql/insertClub.csv");
+    }
+
+    public static void loadLicences() throws IOException {
+        DAOFactory.getInstance().truncateLicence();
+        DAOFactory.getInstance().getDslContext().alterSequence(LICENCE_ID_SEQ).restart().execute();
+        loadLicences("sql/insertLicence.csv");
     }
 
     public static void loadSeasons() throws IOException {
@@ -75,8 +87,9 @@ public class PersistenceUtils {
 
     public static void loadPersons(String fileName) throws IOException {
         loadDataSuite(fileName, PERSON, PERSON.FIRSTNAME, PERSON.NAME, PERSON.SEX, PERSON.BIRTHDATE, PERSON.ADDRESS, PERSON.POSTALCODE, PERSON.CITY,
-            PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.CREATIONDATE, PERSON.MODIFICATIONDATE);
-
+            PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.PHOTODATA, PERSON.MEDICALCERTIFICATEKEY,
+            PERSON.MEDICALCERTIFICATEDATA, PERSON.MEDICALCERTIFICATEBEGINVALIDITYDATE, PERSON.CREATIONDATE,
+            PERSON.MODIFICATIONDATE);
     }
 
     private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {

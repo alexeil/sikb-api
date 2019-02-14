@@ -53,11 +53,11 @@
 		<migbase64.version>2.2</migbase64.version>
 		<jooq.version>3.11.9</jooq.version>
 		<postgresql.version>42.2.5</postgresql.version>
-		<junit.version>5.3.2</junit.version>
+		<junit.version>5.4.0</junit.version>
 		<jacoco-plugin.version>0.8.3</jacoco-plugin.version>
 		<bcprov-jdk15on.version>1.60</bcprov-jdk15on.version>
 		<mail.version>1.4.7</mail.version>
-		<commons-collections4.version>4.2</commons-collections4.version>
+		<commons-collections4.version>4.3</commons-collections4.version>
 		<subethasmtp.version>3.1.7</subethasmtp.version>
 		<commons-lang3.version>3.8.1</commons-lang3.version>
 
@@ -66,10 +66,17 @@
 		<swagger-core-version>1.5.21</swagger-core-version>
 
 		<commons-io.version>2.6</commons-io.version>
+		<jasperreports.version>6.7.0</jasperreports.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+
+			<dependency>
+				<groupId>net.sf.jasperreports</groupId>
+				<artifactId>jasperreports</artifactId>
+				<version>${jasperreports.version}</version>
+			</dependency>
 
 			<dependency>
 				<groupId>io.swagger</groupId>

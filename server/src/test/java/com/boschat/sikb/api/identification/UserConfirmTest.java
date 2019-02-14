@@ -72,7 +72,7 @@ class UserConfirmTest extends AbstractTest {
     void expired() throws Exception {
         UpdatePassword updatePassword = new UpdatePassword();
         updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
-        Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA==");
+        Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMToold");
 
         checkResponse(response, CONFIRM_TOKEN_EXPIRED);
     }

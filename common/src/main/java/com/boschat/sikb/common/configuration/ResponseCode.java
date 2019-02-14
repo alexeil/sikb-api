@@ -38,7 +38,10 @@ public enum ResponseCode {
     PERSON_NOT_FOUND(INFO, 404, 6, "Person (%s) not found"),
     SEASON_NOT_FOUND(INFO, 404, 7, "Season (%s) not found"),
     LICENCE_NOT_FOUND(INFO, 404, 8, "Licence (%s) not found"),
+    DOCUMENT_TYPE_NOT_FOUND(INFO, 404, 9, "Document Type (%s) not found"),
+    MEDICAL_CERTIFICATE_NOT_FOUND(INFO, 404, 10, "Medical Certificate (%s) not found"),
 
+    
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem
@@ -46,7 +49,9 @@ public enum ResponseCode {
     CONFIG_TECH_LOADING_ERROR(ERROR, 500, 2, "Error loading technical configuration : %s"),
     EMAIL_ERROR(ERROR, 500, 3, "Error with emailing"),
     DATABASE_ERROR(ERROR, 500, 4, "Database Error"),
-    JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error");
+    JSON_PARSE_ERROR(ERROR, 500, 5, "Json Parse Error"),
+    JASPER_TEMPLATE_ERROR(ERROR, 500, 6, "Jasper template %s has producing an error"),
+    EXPORT_PDF_ERROR(ERROR, 500, 7, "Error while exporting PDF");
 
     /**
      * http code returned

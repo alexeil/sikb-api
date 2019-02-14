@@ -137,12 +137,4 @@ public class CreateOrUpdatePersonContext {
     public void setFormations(List<Formation> formations) {
         this.formations = formations;
     }
-
-    public MedicalCertificate getMedicalCertificate() {
-        return medicalCertificate;
-    }
-
-    public void setMedicalCertificate(MedicalCertificate medicalCertificate) {
-        this.medicalCertificate = medicalCertificate;
-    }
 }
