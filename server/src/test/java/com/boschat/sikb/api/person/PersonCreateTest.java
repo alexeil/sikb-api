@@ -47,7 +47,7 @@ class PersonCreateTest extends AbstractTest {
     @DisplayName(" photo ")
     void photo() throws Exception {
         PhotoForCreation photoForCreation = new PhotoForCreation();
-        photoForCreation.setPhotoFileName(new File("src/test/resources/documents/photo.png"));
+        photoForCreation.setPhotoFileName(new File("src/test/resources/documents/photo.jpg"));
         Response response = photoUpload(V1, PERSON_DEFAULT_ID, photoForCreation);
 
         checkResponse(response, OK);
