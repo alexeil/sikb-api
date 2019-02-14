@@ -51,7 +51,7 @@ All modules can be build with the [Maven] using the following command.
 
 `mvn clean install`
 
-To perform a successful build, you need to have a running postgresSQL instance with the right schema (persistence\src\main\resources\initdb.sql). 
+To perform a successful build, you need to have a running postgresSQL instance withe a database named `sikb` with the right structure (persistence\src\main\resources\initdb.sql). 
 
 You can either use [Docker] configuration (docs\docker\compose.yml) or download your own [PostgresSQL].
 
