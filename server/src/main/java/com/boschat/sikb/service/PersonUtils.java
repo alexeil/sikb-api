@@ -129,7 +129,7 @@ public class PersonUtils {
         DAOFactory.getInstance().getPersonDAO().update(person);
 
         Photo photo = new Photo();
-        photo.setLocation(PHOTO_TYPE.buildUrl(person.getMedicalcertificatekey()));
+        photo.setLocation(PHOTO_TYPE.buildUrl(person.getPhotokey()));
         return photo;
     }
 }

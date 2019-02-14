@@ -41,7 +41,7 @@ class DocumentTest {
 
     private void callDocument(String documentType, String id, Throwable exception) {
         try {
-            // FileOutputStream out = new FileOutputStream("test.pdf");
+            //FileOutputStream out = new FileOutputStream("test.pdf");
             ByteArrayOutputStream out = new ByteArrayOutputStream(1000000000);
             DocumentType.fromValue(documentType).writeDocument(id, out);
             assertTrue(out.size() > 0, "output shouldn't be null or empty");

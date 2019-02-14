@@ -14,9 +14,11 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -142,8 +144,9 @@ public class PDFGeneratorUtils {
     }
 
     private InputStream getPhoto(Person person) throws IOException {
-        byte[] photo = person.getMedicalcertificatedata();
+        byte[] photo = person.getPhotodata();
         if (photo != null && photo.length > 0) {
+            IOUtils.copy(new ByteArrayInputStream(photo), new FileOutputStream("test.png"));
             return new ByteArrayInputStream(photo);
         } else {
             return getImage(JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO.getValue());
