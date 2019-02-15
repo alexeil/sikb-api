@@ -17,10 +17,12 @@ import java.util.List;
 import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_ALREADY_EXISTS;
 import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SEASON_DESCRIPTION;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -36,6 +38,15 @@ class SeasonTest extends AbstractTest {
     @Nested
     @DisplayName(" Create new season ")
     class create {
+
+        @Test
+        @DisplayName(" no field ")
+        void noField() throws Exception {
+            SeasonForCreation seasonForCreation = new SeasonForCreation();
+            Response response = seasonCreate(V1, seasonForCreation);
+
+            checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_SEASON_DESCRIPTION);
+        }
 
         @Test
         @DisplayName(" right case ")

@@ -64,6 +64,12 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY = "medicalCertificateBeginValidityDate";
 
+    public static final String BODY_FIELD_SEASON_DESCRIPTION = "description";
+
+    public static final String BODY_FIELD_SEASON_BEGIN = "begin";
+
+    public static final String BODY_FIELD_SEASON_END = "end";
+
     private SikbConstants() {
 
     }
