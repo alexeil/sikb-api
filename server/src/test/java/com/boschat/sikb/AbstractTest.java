@@ -197,6 +197,10 @@ public abstract class AbstractTest {
 
     protected static final LocalDate AFFILIATION_DEFAULT_ELECTED_DATE = LocalDate.of(2018, 6, 29);
 
+    public static final String PATH_DOCUMENT_CERTIFICATE = "src/test/resources/documents/certificate.jpg";
+
+    public static final String PATH_DOCUMENT_PHOTO = "src/test/resources/documents/photo.jpg";
+
     protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
     private static Wiser wiser;

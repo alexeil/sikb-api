@@ -7,13 +7,13 @@ import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Person;
-import com.boschat.sikb.utils.HashUtils;
 
 import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.utils.HashUtils.generateToken;
 import static com.boschat.sikb.utils.JsonUtils.formationsToJsonNode;
 
 public class PersonUtils {
@@ -108,10 +108,10 @@ public class PersonUtils {
 
     public static MedicalCertificate createMedicalCertificate() {
         Person person = getPerson();
-
-        person.setMedicalcertificatedata(MyThreadLocal.get().getMedicalCertificateFileNameInputStream());
-        person.setMedicalcertificatebeginvaliditydate(MyThreadLocal.get().getMedicalCertificateBeginValidityDate());
-        person.setMedicalcertificatekey(HashUtils.generateToken());
+        CreateOrUpdatePersonContext context = MyThreadLocal.get().getCreateOrUpdatePersonContext();
+        person.setMedicalcertificatedata(context.getMedicalCertificateFileNameInputStream());
+        person.setMedicalcertificatebeginvaliditydate(context.getMedicalCertificateBeginValidityDate());
+        person.setMedicalcertificatekey(generateToken());
 
         DAOFactory.getInstance().getPersonDAO().update(person);
 
@@ -124,8 +124,8 @@ public class PersonUtils {
     public static Photo createPhoto() {
         Person person = getPerson();
 
-        person.setPhotodata(MyThreadLocal.get().getPhotoFileNameInputStream());
-        person.setPhotokey(HashUtils.generateToken());
+        person.setPhotodata(MyThreadLocal.get().getCreateOrUpdatePersonContext().getPhotoFileNameInputStream());
+        person.setPhotokey(generateToken());
         DAOFactory.getInstance().getPersonDAO().update(person);
 
         Photo photo = new Photo();

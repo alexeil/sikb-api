@@ -475,8 +475,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
-            MyThreadLocal.get().setMedicalCertificateFileNameInputStream((InputStream) params[1]);
-            MyThreadLocal.get().setMedicalCertificateBeginValidityDate((String) params[2]);
+            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((InputStream) params[1], (String) params[2]));
         }
     },
     PHOTO_CREATE("Upload a person's photo", OK, true) {
@@ -488,7 +487,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
-            MyThreadLocal.get().setPhotoFileNameInputStream((InputStream) params[1]);
+            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((InputStream) params[1]));
         }
     };
 

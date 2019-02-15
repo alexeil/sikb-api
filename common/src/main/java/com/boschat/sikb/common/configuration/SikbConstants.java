@@ -52,9 +52,17 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_NAME = "name";
 
+    public static final String BODY_FIELD_FIRST_NAME = "firstName";
+
     public static final String BODY_FIELD_SHORT_NAME = "shortName";
 
     public static final String BODY_FIELD_LICENCE_TYPE = "typeLicences";
+
+    public static final String BODY_FIELD_PHOTO_FILENAME = "photoFileName";
+
+    public static final String BODY_FIELD_MEDICAL_CERTIFICATE_FILE_NAME = "medicalCertificateFileName";
+
+    public static final String BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY = "medicalCertificateBeginValidityDate";
 
     private SikbConstants() {
 

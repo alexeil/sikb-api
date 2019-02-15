@@ -1,6 +1,5 @@
 package com.boschat.sikb.api.impl;
 
-import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.api.PersonsApiService;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceForUpdate;
@@ -34,8 +33,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response uploadMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
-        FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext)
-        throws NotFoundException {
+        FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext) {
         return runService(MEDICAL_CERTIFICATE_CREATE, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
             medicalCertificateBeginValidityDate);
     }
@@ -81,8 +79,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response updatePersonLicence(String accessToken, Integer personId, Integer clubId, String seasonId, String licenceId,
-        LicenceForUpdate licenceForUpdate,
-        SecurityContext securityContext) {
+        LicenceForUpdate licenceForUpdate, SecurityContext securityContext) {
         return runService(LICENCE_UPDATE, accessToken, securityContext, personId, clubId, seasonId, licenceId, licenceForUpdate);
     }
 }

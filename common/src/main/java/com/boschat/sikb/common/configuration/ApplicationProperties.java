@@ -16,7 +16,7 @@ public enum ApplicationProperties implements IProperties {
     TEMPLATE_RESET_USER_PASSWORD_TITLE("mail.template.resetUserPassword.title"),
 
     CHECK_QUERY_STRING_SEASON_ID_REGEXP("check.queryString.seasonId.regexp"),
-
+    CHECK_BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY_REGEXP("check.bodyField.medicalCertificate.validity.regexp"),
     MEDICAL_CERTIFICATE_LIMIT_YEARS("medicalCertificate.limitYears"),
     DOCUMENT_BASE_PATH("document.basePath"),
 

@@ -1,12 +1,29 @@
 package com.boschat.sikb.context;
 
+import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Formation;
-import com.boschat.sikb.model.MedicalCertificate;
+import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Sex;
+import org.apache.commons.io.IOUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+
+import static com.boschat.sikb.common.configuration.ApplicationProperties.CHECK_BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY_REGEXP;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_EMAIL;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_FIRST_NAME;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE_FILE_NAME;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NAME;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PHOTO;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PHOTO_FILENAME;
+import static com.boschat.sikb.common.utils.DateUtils.parseLocalDate;
+import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 
 public class CreateOrUpdatePersonContext {
 
@@ -32,9 +49,13 @@ public class CreateOrUpdatePersonContext {
 
     private List<Formation> formations = null;
 
-    private MedicalCertificate medicalCertificate;
+    private byte[] medicalCertificateFileNameInputStream;
 
-    public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
+    private LocalDate medicalCertificateBeginValidityDate;
+
+    private byte[] photoFileNameInputStream;
+
+    private static CreateOrUpdatePersonContext buildCommon(PersonForUpdate person) {
         CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
         createOrUpdateContext.setFirstName(person.getFirstName());
         createOrUpdateContext.setName(person.getName());
@@ -47,6 +68,34 @@ public class CreateOrUpdatePersonContext {
         createOrUpdateContext.setEmail(person.getEmail());
         createOrUpdateContext.setNationality(person.getNationality());
         createOrUpdateContext.setFormations(person.getFormations());
+        return createOrUpdateContext;
+    }
+
+    public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
+        return buildCommon(person);
+    }
+
+    public static CreateOrUpdatePersonContext create(PersonForCreation person) {
+        checkRequestBodyField(person.getFirstName(), BODY_FIELD_FIRST_NAME);
+        checkRequestBodyField(person.getName(), BODY_FIELD_NAME);
+        checkRequestBodyField(person.getEmail(), BODY_FIELD_EMAIL);
+        return buildCommon(person);
+    }
+
+    public static CreateOrUpdatePersonContext create(InputStream medicalCertificateStream, String validity) {
+        checkRequestBodyField(medicalCertificateStream, BODY_FIELD_MEDICAL_CERTIFICATE_FILE_NAME);
+        checkRequestBodyField(validity, BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY, CHECK_BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY_REGEXP.getValue());
+
+        CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
+        createOrUpdateContext.setMedicalCertificateFileNameInputStream(medicalCertificateStream);
+        createOrUpdateContext.setMedicalCertificateBeginValidityDate(validity);
+        return createOrUpdateContext;
+    }
+
+    public static CreateOrUpdatePersonContext create(InputStream photoFileStream) {
+        checkRequestBodyField(photoFileStream, BODY_FIELD_PHOTO_FILENAME);
+        CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
+        createOrUpdateContext.setPhotoFileNameInputStream(photoFileStream);
         return createOrUpdateContext;
     }
 
@@ -136,5 +185,37 @@ public class CreateOrUpdatePersonContext {
 
     public void setFormations(List<Formation> formations) {
         this.formations = formations;
+    }
+
+    public byte[] getMedicalCertificateFileNameInputStream() {
+        return medicalCertificateFileNameInputStream;
+    }
+
+    public void setMedicalCertificateFileNameInputStream(InputStream medicalCertificateFileNameInputStream) {
+        try {
+            this.medicalCertificateFileNameInputStream = IOUtils.toByteArray(medicalCertificateFileNameInputStream);
+        } catch (IOException e) {
+            throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_MEDICAL_CERTIFICATE, e.getMessage());
+        }
+    }
+
+    public LocalDate getMedicalCertificateBeginValidityDate() {
+        return medicalCertificateBeginValidityDate;
+    }
+
+    public void setMedicalCertificateBeginValidityDate(String medicalCertificateBeginValidityDate) {
+        this.medicalCertificateBeginValidityDate = parseLocalDate(medicalCertificateBeginValidityDate);
+    }
+
+    public byte[] getPhotoFileNameInputStream() {
+        return photoFileNameInputStream;
+    }
+
+    public void setPhotoFileNameInputStream(InputStream photoFileNameInputStream) {
+        try {
+            this.photoFileNameInputStream = IOUtils.toByteArray(photoFileNameInputStream);
+        } catch (Exception e) {
+            throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_PHOTO, e.getMessage());
+        }
     }
 }

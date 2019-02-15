@@ -9,6 +9,7 @@ import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.model.PhotoForCreation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.core.Response;
@@ -19,7 +20,11 @@ import java.time.LocalDate;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_FIRST_NAME;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY;
 
 @DisplayName(" Create a person ")
 class PersonCreateTest extends AbstractTest {
@@ -30,44 +35,71 @@ class PersonCreateTest extends AbstractTest {
     }
 
     @Test
-    @DisplayName(" medical certificate")
-    void medicalCertificate() throws Exception {
-
-        MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
-        medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
-        medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.jpg"));
-        Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
-
-        checkResponse(response, OK);
-        MedicalCertificate medicalCertificate = getMedicalCertificate(response);
-        checkMedicalCertificate(medicalCertificate, LocalDate.of(2018, 1, 2));
-    }
-
-    @Test
-    @DisplayName(" photo ")
-    void photo() throws Exception {
-        PhotoForCreation photoForCreation = new PhotoForCreation();
-        photoForCreation.setPhotoFileName(new File("src/test/resources/documents/photo.jpg"));
-        Response response = photoUpload(V1, PERSON_DEFAULT_ID, photoForCreation);
-
-        checkResponse(response, OK);
-        Photo photo = getPhoto(response);
-        checkPhoto(photo, true);
-    }
-
-    @Test
-    @DisplayName(" with only a firstName ")
-    void withFirstNameOnly() throws Exception {
+    @DisplayName(" with only a required fields ")
+    void withRequiredFields() throws Exception {
         PersonForCreation personForCreation = new PersonForCreation();
         personForCreation.setFirstName(PERSON_DEFAULT_FIRST_NAME);
-
-        MedicalCertificate medicalCertificate = new MedicalCertificate();
-        medicalCertificate.setBeginValidityDate(LocalDate.of(1990, 4, 4));
+        personForCreation.setName(PERSON_DEFAULT_NAME);
+        personForCreation.setEmail(PERSON_DEFAULT_EMAIL);
         Response response = personCreate(V1, personForCreation);
 
         checkResponse(response, CREATED);
         Person person = getPerson(response);
-        checkPerson(person, PERSON_DEFAULT_FIRST_NAME, null, null, null, null, null, null, null, null, null, null, null, false);
+        checkPerson(person, PERSON_DEFAULT_FIRST_NAME, PERSON_DEFAULT_NAME, null, null, null, null, null, null, PERSON_DEFAULT_EMAIL, null, null, null, false);
+    }
+
+    @Test
+    @DisplayName(" with no field ")
+    void withNoFields() throws Exception {
+        PersonForCreation personForCreation = new PersonForCreation();
+        Response response = personCreate(V1, personForCreation);
+        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_FIRST_NAME);
+    }
+
+    @Nested
+    @DisplayName(" medical certificate")
+    class MedicalCertificateTests {
+
+        @Test
+        @DisplayName(" right case")
+        void medicalCertificate() throws Exception {
+            MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
+            medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
+            medicalCertificateForCreation.setMedicalCertificateFileName(new File(PATH_DOCUMENT_CERTIFICATE));
+            Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
+
+            checkResponse(response, OK);
+            MedicalCertificate medicalCertificate = getMedicalCertificate(response);
+            checkMedicalCertificate(medicalCertificate, LocalDate.of(2018, 1, 2));
+        }
+
+        @Test
+        @DisplayName(" no invalid validity date")
+        void noInvalidValidityDate() throws Exception {
+            MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
+            medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018/01/02");
+            medicalCertificateForCreation.setMedicalCertificateFileName(new File(PATH_DOCUMENT_CERTIFICATE));
+            Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
+
+            checkResponse(response, INVALID_BODY_FIELD, BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY, "2018/01/02");
+        }
+    }
+
+    @Nested
+    @DisplayName(" photo")
+    class PhotoTests {
+
+        @Test
+        @DisplayName(" right Case ")
+        void rightCase() throws Exception {
+            PhotoForCreation photoForCreation = new PhotoForCreation();
+            photoForCreation.setPhotoFileName(new File(PATH_DOCUMENT_PHOTO));
+            Response response = photoUpload(V1, PERSON_DEFAULT_ID, photoForCreation);
+
+            checkResponse(response, OK);
+            Photo photo = getPhoto(response);
+            checkPhoto(photo, true);
+        }
     }
 
     @Test
