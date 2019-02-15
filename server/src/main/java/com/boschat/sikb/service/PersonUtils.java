@@ -3,13 +3,18 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.MyThreadLocal;
+import com.boschat.sikb.model.DocumentType;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Person;
+import org.apache.commons.lang3.StringUtils;
 
+import java.net.URLConnection;
 import java.util.List;
 
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_AUTHORIZED;
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_SUPPORTED;
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
@@ -131,5 +136,15 @@ public class PersonUtils {
         Photo photo = new Photo();
         photo.setLocation(PHOTO_TYPE.buildUrl(person.getPhotokey()));
         return photo;
+    }
+
+    public static void checkContentType(DocumentType documentType, String fileName) {
+        String contentType = URLConnection.getFileNameMap().getContentTypeFor(fileName);
+        if (StringUtils.isEmpty(contentType)) {
+            throw new FunctionalException(FILE_EXTENSION_NOT_SUPPORTED, fileName);
+        }
+        if (!documentType.isAuthorized(contentType)) {
+            throw new FunctionalException(FILE_EXTENSION_NOT_AUTHORIZED, contentType, fileName);
+        }
     }
 }

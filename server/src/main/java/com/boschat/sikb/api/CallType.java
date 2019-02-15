@@ -23,6 +23,7 @@ import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.InputStream;
 
@@ -475,7 +476,8 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
-            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((InputStream) params[1], (String) params[2]));
+            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((InputStream) params[1], (FormDataContentDisposition)
+                params[2], (String) params[3]));
         }
     },
     PHOTO_CREATE("Upload a person's photo", OK, true) {
@@ -487,7 +489,8 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
-            MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((InputStream) params[1]));
+            MyThreadLocal.get().setCreateOrUpdatePersonContext(
+                CreateOrUpdatePersonContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
         }
     };
 

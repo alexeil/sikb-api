@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_AUTHORIZED;
+import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_SUPPORTED;
 import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
@@ -82,6 +84,28 @@ class PersonCreateTest extends AbstractTest {
             Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
 
             checkResponse(response, INVALID_BODY_FIELD, BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY, "2018/01/02");
+        }
+
+        @Test
+        @DisplayName(" File extension not supported")
+        void fileExtensionNotSupported() throws Exception {
+            MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
+            medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
+            medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.toto"));
+            Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
+
+            checkResponse(response, FILE_EXTENSION_NOT_SUPPORTED, "certificate.toto");
+        }
+
+        @Test
+        @DisplayName(" File extension not authorized")
+        void fileExtensionNotAuthorized() throws Exception {
+            MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
+            medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
+            medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.zip"));
+            Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
+
+            checkResponse(response, FILE_EXTENSION_NOT_AUTHORIZED, "application/zip", "certificate.zip");
         }
     }
 

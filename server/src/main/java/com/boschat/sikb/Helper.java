@@ -6,7 +6,6 @@ import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
-import com.boschat.sikb.model.DocumentType;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.model.Sex;
@@ -27,12 +26,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
-import java.net.URLConnection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_AUTHORIZED;
-import static com.boschat.sikb.common.configuration.ResponseCode.FILE_EXTENSION_NOT_SUPPORTED;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
@@ -270,17 +266,5 @@ public class Helper {
         user.setId(userBean.getId());
         user.setEmail(userBean.getEmail());
         return user;
-    }
-
-    public static String getAndCheckContentType(DocumentType documentType, String fileName) {
-        String contentType = URLConnection.getFileNameMap().getContentTypeFor(fileName);
-        if (org.jooq.tools.StringUtils.isEmpty(contentType)) {
-            throw new FunctionalException(FILE_EXTENSION_NOT_SUPPORTED, fileName);
-        }
-        if (!documentType.isAuthorized(contentType)) {
-            throw new FunctionalException(FILE_EXTENSION_NOT_AUTHORIZED, contentType);
-        }
-
-        return contentType;
     }
 }

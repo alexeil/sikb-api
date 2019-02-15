@@ -6,8 +6,8 @@ import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Sex;
 import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +23,9 @@ import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NAM
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PHOTO;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PHOTO_FILENAME;
 import static com.boschat.sikb.common.utils.DateUtils.parseLocalDate;
+import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
+import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.service.PersonUtils.checkContentType;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 
 public class CreateOrUpdatePersonContext {
@@ -82,7 +85,9 @@ public class CreateOrUpdatePersonContext {
         return buildCommon(person);
     }
 
-    public static CreateOrUpdatePersonContext create(InputStream medicalCertificateStream, String validity) {
+    public static CreateOrUpdatePersonContext create(InputStream medicalCertificateStream, FormDataContentDisposition medicalCertificateFileNameDetail,
+        String validity) {
+        checkContentType(MEDICAL_CERTIFICATE_TYPE, medicalCertificateFileNameDetail.getFileName());
         checkRequestBodyField(medicalCertificateStream, BODY_FIELD_MEDICAL_CERTIFICATE_FILE_NAME);
         checkRequestBodyField(validity, BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY, CHECK_BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY_REGEXP.getValue());
 
@@ -92,7 +97,8 @@ public class CreateOrUpdatePersonContext {
         return createOrUpdateContext;
     }
 
-    public static CreateOrUpdatePersonContext create(InputStream photoFileStream) {
+    public static CreateOrUpdatePersonContext create(InputStream photoFileStream, FormDataContentDisposition photoFileNameDetail) {
+        checkContentType(PHOTO_TYPE, photoFileNameDetail.getFileName());
         checkRequestBodyField(photoFileStream, BODY_FIELD_PHOTO_FILENAME);
         CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
         createOrUpdateContext.setPhotoFileNameInputStream(photoFileStream);
@@ -194,7 +200,7 @@ public class CreateOrUpdatePersonContext {
     public void setMedicalCertificateFileNameInputStream(InputStream medicalCertificateFileNameInputStream) {
         try {
             this.medicalCertificateFileNameInputStream = IOUtils.toByteArray(medicalCertificateFileNameInputStream);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new TechnicalException(INVALID_BODY_FIELD, e, BODY_FIELD_MEDICAL_CERTIFICATE, e.getMessage());
         }
     }

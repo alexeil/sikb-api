@@ -35,6 +35,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     public Response uploadMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
         FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext) {
         return runService(MEDICAL_CERTIFICATE_CREATE, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
+            medicalCertificateFileNameDetail,
             medicalCertificateBeginValidityDate);
     }
 
@@ -47,7 +48,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response uploadPhoto(String accessToken, Integer personId, InputStream photoFileNameInputStream, FormDataContentDisposition photoFileNameDetail,
         SecurityContext securityContext) {
-        return runService(PHOTO_CREATE, accessToken, securityContext, personId, photoFileNameInputStream);
+        return runService(PHOTO_CREATE, accessToken, securityContext, personId, photoFileNameInputStream, photoFileNameDetail);
     }
 
     @Override
