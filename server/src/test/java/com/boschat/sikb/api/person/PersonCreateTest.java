@@ -102,10 +102,10 @@ class PersonCreateTest extends AbstractTest {
         void fileExtensionNotAuthorized() throws Exception {
             MedicalCertificateForCreation medicalCertificateForCreation = new MedicalCertificateForCreation();
             medicalCertificateForCreation.setMedicalCertificateBeginValidityDate("2018-01-02");
-            medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.zip"));
+            medicalCertificateForCreation.setMedicalCertificateFileName(new File("src/test/resources/documents/certificate.txt"));
             Response response = medicalCertificateUpload(V1, PERSON_DEFAULT_ID, medicalCertificateForCreation);
 
-            checkResponse(response, FILE_EXTENSION_NOT_AUTHORIZED, "application/zip", "certificate.zip");
+            checkResponse(response, FILE_EXTENSION_NOT_AUTHORIZED, "text/plain", "certificate.txt");
         }
     }
 
