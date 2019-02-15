@@ -13,6 +13,8 @@ import javax.ws.rs.core.Response;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_EMAIL;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -46,5 +48,14 @@ class UserCreateTest extends AbstractTest {
         );
 
         checkEmail(AFFILIATION_DEFAULT_EMAIL, TEMPLATE_CREATE_USER_TITLE.getValue());
+    }
+
+    @Test
+    @DisplayName(" with no email ")
+    void withNoEmail() throws Exception {
+        UserForCreation userForCreation = new UserForCreation();
+        Response response = userCreate(V1, userForCreation);
+
+        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_EMAIL);
     }
 }

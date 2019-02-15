@@ -18,7 +18,7 @@ public class CreateOrUpdateSeasonContext {
 
     private LocalDate end;
 
-    public static CreateOrUpdateSeasonContext buildCommon(SeasonForUpdate season) {
+    private static CreateOrUpdateSeasonContext buildCommon(SeasonForUpdate season) {
         CreateOrUpdateSeasonContext context = new CreateOrUpdateSeasonContext();
         context.setDescription(season.getDescription());
         context.setBegin(season.getBegin());
