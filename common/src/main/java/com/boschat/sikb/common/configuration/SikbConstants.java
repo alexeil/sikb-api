@@ -54,6 +54,8 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_SHORT_NAME = "shortName";
 
+    public static final String BODY_FIELD_LICENCE_TYPE = "typeLicences";
+
     private SikbConstants() {
 
     }
