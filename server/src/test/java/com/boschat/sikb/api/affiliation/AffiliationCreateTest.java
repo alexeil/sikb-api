@@ -16,7 +16,9 @@ import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_QUERY_STRING_PARAMETER;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PREFECTURE_NUMBER;
 import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 
 @DisplayName(" Create an affiliation ")
@@ -28,9 +30,7 @@ class AffiliationCreateTest extends AbstractTest {
         loadClubs();
     }
 
-    @Test
-    @DisplayName(" with everything ")
-    void withAName() throws Exception {
+    private AffiliationForCreation buildCommon() {
         AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
 
         affiliationForCreation.setPrefectureNumber(AFFILIATION_DEFAULT_PREFECTURE_NUMBER);
@@ -54,6 +54,13 @@ class AffiliationCreateTest extends AbstractTest {
         board.setElectedDate(AFFILIATION_DEFAULT_ELECTED_DATE);
         affiliationForCreation.setBoard(board);
 
+        return affiliationForCreation;
+    }
+
+    @Test
+    @DisplayName(" with everything ")
+    void withAName() throws Exception {
+        AffiliationForCreation affiliationForCreation = buildCommon();
         Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForCreation);
 
         checkResponse(response, CREATED);
@@ -68,7 +75,7 @@ class AffiliationCreateTest extends AbstractTest {
     @Test
     @DisplayName(" unknown season ")
     void unknownSeason() throws Exception {
-        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        AffiliationForCreation affiliationForCreation = buildCommon();
         Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, "10001000", affiliationForCreation);
         checkResponse(response, SEASON_NOT_FOUND, "10001000");
     }
@@ -76,7 +83,7 @@ class AffiliationCreateTest extends AbstractTest {
     @Test
     @DisplayName(" incorrect season ")
     void incorrectSeason() throws Exception {
-        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        AffiliationForCreation affiliationForCreation = buildCommon();
         Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, "IncorrectValue", affiliationForCreation);
         checkResponse(response, INVALID_QUERY_STRING_PARAMETER, QUERY_STRING_SEASON_ID, "IncorrectValue");
     }
@@ -84,8 +91,16 @@ class AffiliationCreateTest extends AbstractTest {
     @Test
     @DisplayName(" unknown club ")
     void unknownClub() throws Exception {
-        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        AffiliationForCreation affiliationForCreation = buildCommon();
         Response response = affiliationCreate(V1, 999, SEASON_DEFAULT_ID, affiliationForCreation);
         checkResponse(response, CLUB_NOT_FOUND, 999);
+    }
+
+    @Test
+    @DisplayName(" missing required body field prefectureNumber")
+    void missingPrefectureNumber() throws Exception {
+        AffiliationForCreation affiliationForCreation = new AffiliationForCreation();
+        Response response = affiliationCreate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForCreation);
+        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_PREFECTURE_NUMBER);
     }
 }

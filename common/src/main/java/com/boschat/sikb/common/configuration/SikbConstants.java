@@ -18,6 +18,37 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_PHOTO = "photo";
 
+    public static final String BODY_FIELD_PREFECTURE_NUMBER = "prefectureNumber";
+
+    public static final String BODY_FIELD_PREFECTURE_CITY = "prefectureCity";
+
+    public static final String BODY_FIELD_SIRET_NUMBER = "siretNumber";
+
+    public static final String BODY_FIELD_ADDRESS = "address";
+
+    public static final String BODY_FIELD_POSTAL_CODE = "postalCode";
+
+    public static final String BODY_FIELD_CITY = "city";
+
+    public static final String BODY_FIELD_EMAIL = "email";
+
+    public static final String BODY_FIELD_BOARD = "board";
+
+    public static final String BODY_FIELD_PRESIDENT = "president";
+
+    public static final String BODY_FIELD_PRESIDENT_SEX = "presidentSex";
+
+    public static final String BODY_FIELD_SECRETARY = "secretary";
+
+    public static final String BODY_FIELD_SECRETARY_SEX = "secretarySex";
+
+    public static final String BODY_FIELD_TREASURER = "treasurer";
+
+    public static final String BODY_FIELD_TREASURER_SEX = "treasurerSex";
+
+    public static final String BODY_FIELD_MEMBERS_NUMBER = "membersNumber";
+
+    public static final String BODY_FIELD_ELECTED_DATE = "electedDate";
 
     private SikbConstants() {
 

@@ -412,7 +412,7 @@ public abstract class AbstractTest {
     }
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
-        Entity<AffiliationForCreation> entity = Entity.json(affiliationForUpdate);
+        Entity<AffiliationForUpdate> entity = Entity.json(affiliationForUpdate);
         String path = buildPath(version, clubId, season);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }

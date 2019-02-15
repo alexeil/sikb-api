@@ -3,7 +3,6 @@ package com.boschat.sikb.context;
 import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Credentials;
-import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
@@ -58,8 +57,6 @@ public class Context {
     private String seasonId;
 
     private CreateOrUpdateSeasonContext createOrUpdateSeasonContext;
-
-    private Licence licence;
 
     private String licenceId;
 
@@ -200,14 +197,6 @@ public class Context {
 
     public void setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext createOrUpdateSeasonContext) {
         this.createOrUpdateSeasonContext = createOrUpdateSeasonContext;
-    }
-
-    public Licence getLicence() {
-        return licence;
-    }
-
-    public void setLicence(Licence licence) {
-        this.licence = licence;
     }
 
     public String getLicenceId() {

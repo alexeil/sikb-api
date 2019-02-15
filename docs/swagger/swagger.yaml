@@ -1086,6 +1086,7 @@ components:
         - $ref: '#/components/schemas/clubForUpdate'
       required:
         - name
+        - shortName
 
     clubForUpdate:
       properties:
@@ -1133,6 +1134,22 @@ components:
           $ref: '#/components/schemas/board'
 
     affiliationForCreation:
+      allOf:
+        - $ref: '#/components/schemas/affiliationForUpdate'
+      required:
+        - prefectureNumber
+        - prefectureCity
+        - siretNumber
+        - address
+        - postalCode
+        - city
+        - email
+        - board
+      properties:
+        board:
+          $ref: '#/components/schemas/boardForCreation'
+
+    affiliationForUpdate:
       properties:
         prefectureNumber:
           type: string
@@ -1156,9 +1173,18 @@ components:
         board:
           $ref: '#/components/schemas/board'
 
-    affiliationForUpdate:
+    boardForCreation:
       allOf:
-        - $ref: '#/components/schemas/affiliationForCreation'
+        - $ref: '#/components/schemas/board'
+      required:
+        - president
+        - presidentSex
+        - secretary
+        - secretarySex
+        - treasurer
+        - treasurerSex
+        - membersNumber
+        - electedDate
 
     board:
       properties:
@@ -1346,6 +1372,9 @@ components:
 
     medicalCertificateForCreation:
       type: object
+      required:
+        - medicalCertificateFileName
+        - medicalCertificateBeginValidityDate
       properties:
         medicalCertificateFileName:
           type: string
@@ -1356,6 +1385,8 @@ components:
 
     photoForCreation:
       type: object
+      required:
+        - photoFileName
       properties:
         photoFileName:
           type: string

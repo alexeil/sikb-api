@@ -1,10 +1,29 @@
 package com.boschat.sikb.context;
 
 import com.boschat.sikb.model.AffiliationForCreation;
+import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Sex;
 
 import java.time.LocalDate;
+
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_ADDRESS;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_BOARD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_CITY;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_ELECTED_DATE;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_EMAIL;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEMBERS_NUMBER;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_POSTAL_CODE;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PREFECTURE_CITY;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PREFECTURE_NUMBER;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRESIDENT;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRESIDENT_SEX;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SECRETARY;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SECRETARY_SEX;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SIRET_NUMBER;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_TREASURER;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_TREASURER_SEX;
+import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 
 public class CreateOrUpdateAffiliationContext {
 
@@ -42,7 +61,7 @@ public class CreateOrUpdateAffiliationContext {
 
     private String prefectureCity;
 
-    public static CreateOrUpdateAffiliationContext create(AffiliationForCreation affiliationForCreation) {
+    private static CreateOrUpdateAffiliationContext buildContext(AffiliationForUpdate affiliationForCreation) {
         CreateOrUpdateAffiliationContext createOrUpdateContext = new CreateOrUpdateAffiliationContext();
         createOrUpdateContext.setPrefectureNumber(affiliationForCreation.getPrefectureNumber());
         createOrUpdateContext.setPrefectureCity(affiliationForCreation.getPrefectureCity());
@@ -66,7 +85,32 @@ public class CreateOrUpdateAffiliationContext {
             createOrUpdateContext.setElectedDate(board.getElectedDate());
         }
         return createOrUpdateContext;
+    }
 
+    public static CreateOrUpdateAffiliationContext create(AffiliationForUpdate affiliationForUpdate) {
+        return buildContext(affiliationForUpdate);
+    }
+
+    public static CreateOrUpdateAffiliationContext create(AffiliationForCreation affiliationForCreation) {
+        checkRequestBodyField(affiliationForCreation.getPrefectureNumber(), BODY_FIELD_PREFECTURE_NUMBER);
+        checkRequestBodyField(affiliationForCreation.getPrefectureCity(), BODY_FIELD_PREFECTURE_CITY);
+        checkRequestBodyField(affiliationForCreation.getSiretNumber(), BODY_FIELD_SIRET_NUMBER);
+        checkRequestBodyField(affiliationForCreation.getAddress(), BODY_FIELD_ADDRESS);
+        checkRequestBodyField(affiliationForCreation.getPostalCode(), BODY_FIELD_POSTAL_CODE);
+        checkRequestBodyField(affiliationForCreation.getCity(), BODY_FIELD_CITY);
+        checkRequestBodyField(affiliationForCreation.getEmail(), BODY_FIELD_EMAIL);
+        checkRequestBodyField(affiliationForCreation.getBoard(), BODY_FIELD_BOARD);
+
+        checkRequestBodyField(affiliationForCreation.getBoard().getPresident(), BODY_FIELD_PRESIDENT);
+        checkRequestBodyField(affiliationForCreation.getBoard().getPresidentSex(), BODY_FIELD_PRESIDENT_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getSecretary(), BODY_FIELD_SECRETARY);
+        checkRequestBodyField(affiliationForCreation.getBoard().getSecretarySex(), BODY_FIELD_SECRETARY_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getTreasurer(), BODY_FIELD_TREASURER);
+        checkRequestBodyField(affiliationForCreation.getBoard().getTreasurerSex(), BODY_FIELD_TREASURER_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getMembersNumber(), BODY_FIELD_MEMBERS_NUMBER);
+        checkRequestBodyField(affiliationForCreation.getBoard().getElectedDate(), BODY_FIELD_ELECTED_DATE);
+
+        return buildContext(affiliationForCreation);
     }
 
     public String getPrefectureNumber() {
