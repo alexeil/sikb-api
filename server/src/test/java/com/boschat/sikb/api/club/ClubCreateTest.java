@@ -13,6 +13,8 @@ import java.io.IOException;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
+import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NAME;
 
 @DisplayName(" Create a club ")
 class ClubCreateTest extends AbstractTest {
@@ -23,15 +25,16 @@ class ClubCreateTest extends AbstractTest {
     }
 
     @Test
-    @DisplayName(" with only a name ")
+    @DisplayName(" with only a name and shortName")
     void withAName() throws Exception {
         ClubForCreation clubForCreation = new ClubForCreation();
         clubForCreation.setName(CLUB_DEFAULT_NAME);
+        clubForCreation.setShortName(CLUB_DEFAULT_SHORT_NAME);
         Response response = clubCreate(V1, clubForCreation);
 
         checkResponse(response, CREATED);
         Club club = getClub(response);
-        checkClub(club, CLUB_DEFAULT_NAME, null, null);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, null);
     }
 
     @Test
@@ -47,6 +50,14 @@ class ClubCreateTest extends AbstractTest {
         checkResponse(response, CREATED);
         Club club = getClub(response);
         checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
+    }
+
+    @Test
+    @DisplayName(" missing field")
+    void missingField() throws Exception {
+        ClubForCreation clubForCreation = new ClubForCreation();
+        Response response = clubCreate(V1, clubForCreation);
+        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_NAME);
     }
 
 }

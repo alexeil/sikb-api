@@ -50,6 +50,10 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_ELECTED_DATE = "electedDate";
 
+    public static final String BODY_FIELD_NAME = "name";
+
+    public static final String BODY_FIELD_SHORT_NAME = "shortName";
+
     private SikbConstants() {
 
     }
