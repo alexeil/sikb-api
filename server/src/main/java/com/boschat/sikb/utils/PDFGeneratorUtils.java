@@ -14,11 +14,9 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,13 +24,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_DIRECTORY;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_BACKGROUND;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_INFORMATION_BACKGROUND;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_LOGO;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER_TEMPLATE_LICENCE_NAME;
 import static com.boschat.sikb.common.configuration.ResponseCode.EXPORT_PDF_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.JASPER_TEMPLATE_ERROR;
 import static com.boschat.sikb.common.utils.DateUtils.formatFrenchLocalDate;
-import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToLicenceTypes;
 
 public class PDFGeneratorUtils {
@@ -84,7 +84,7 @@ public class PDFGeneratorUtils {
             for (int i = 0; i < values.length; i = i + 2) {
                 colorByType.put(Integer.parseInt(values[i]), values[i + 1]);
             }
-        } catch (JRException e) {
+        } catch (Exception e) {
             throw new TechnicalException(JASPER_TEMPLATE_ERROR, e, fileName);
         }
     }
@@ -108,14 +108,8 @@ public class PDFGeneratorUtils {
             hm.put(JASPER_NAME, person.getName().toUpperCase());
             hm.put(JASPER_FIRST_NAME, person.getFirstname().toUpperCase());
 
-            String birthDatePrefix;
-            if (FEMALE.toString().equals(person.getSex())) {
-                birthDatePrefix = "née le ";
-            } else {
-                birthDatePrefix = "né le ";
-            }
             hm.put(JASPER_GENDER, person.getSex().substring(0, 1));
-            hm.put(JASPER_BIRTH_DATE, birthDatePrefix + formatFrenchLocalDate(person.getBirthdate()));
+            hm.put(JASPER_BIRTH_DATE, formatFrenchLocalDate(person.getBirthdate()));
 
             int nbLicenceType = 1;
             for (LicenceType licenceType : jsonNodeToLicenceTypes(licence.getTypes())) {
@@ -133,9 +127,9 @@ public class PDFGeneratorUtils {
             hm.put(JASPER_PHOTO, getPhoto(person));
             hm.put(JASPER_CLUB, club.getName());
 
-            hm.put(JASPER_LOGO, getImage("logo.png"));
-            hm.put(JASPER_LICENCE_BACKGROUND, getImage("background.png"));
-            hm.put(JASPER_INFORMATION_BACKGROUND, getImage("infoBackground.png"));
+            hm.put(JASPER_LOGO, getImage(JASPER_TEMPLATE_LICENCE_LOGO.getValue()));
+            hm.put(JASPER_LICENCE_BACKGROUND, getImage(JASPER_TEMPLATE_LICENCE_BACKGROUND.getValue()));
+            hm.put(JASPER_INFORMATION_BACKGROUND, getImage(JASPER_TEMPLATE_LICENCE_INFORMATION_BACKGROUND.getValue()));
 
             exportPDF(hm, out);
         } catch (Exception e) {
@@ -146,7 +140,6 @@ public class PDFGeneratorUtils {
     private InputStream getPhoto(Person person) throws IOException {
         byte[] photo = person.getPhotodata();
         if (photo != null && photo.length > 0) {
-            IOUtils.copy(new ByteArrayInputStream(photo), new FileOutputStream("test.png"));
             return new ByteArrayInputStream(photo);
         } else {
             return getImage(JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO.getValue());

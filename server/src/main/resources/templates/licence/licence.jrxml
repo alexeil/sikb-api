@@ -141,7 +141,7 @@
         <textElement>
           <font size="7"/>
         </textElement>
-        <textFieldExpression><![CDATA[$P{birthDate}]]></textFieldExpression>
+        <textFieldExpression><![CDATA["né(e) le " + $P{birthDate}]]></textFieldExpression>
       </textField>
       <textField>
         <reportElement x="146" y="70" width="68" height="12" forecolor="#FFFFFF" uuid="422b2455-a767-4880-a16a-7a2da2615102"/>

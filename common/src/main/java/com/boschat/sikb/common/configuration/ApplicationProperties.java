@@ -27,7 +27,11 @@ public enum ApplicationProperties implements IProperties {
     JASPER_TEMPLATE_DIRECTORY("jasper.template.directory"),
     JASPER_TEMPLATE_LICENCE_NAME("jasper.template.licence.name"),
     JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE("jasper.template.licence.colorsByLicenceType"),
-    JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO("jasper.template.licence.defaultPhoto");
+    JASPER_TEMPLATE_LICENCE_DEFAULT_PHOTO("jasper.template.licence.defaultPhoto"),
+
+    JASPER_TEMPLATE_LICENCE_LOGO("jasper.template.licence.logo"),
+    JASPER_TEMPLATE_LICENCE_BACKGROUND("jasper.template.licence.background"),
+    JASPER_TEMPLATE_LICENCE_INFORMATION_BACKGROUND("jasper.template.licence.informationBackground");
 
     private String propName;
 
