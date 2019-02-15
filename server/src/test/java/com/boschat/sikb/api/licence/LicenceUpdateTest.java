@@ -20,7 +20,7 @@ import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
-@DisplayName(" Create a licence ")
+@DisplayName(" update a licence ")
 class LicenceUpdateTest extends AbstractTest {
 
     @BeforeEach
@@ -53,8 +53,6 @@ class LicenceUpdateTest extends AbstractTest {
         Response response = licenceUpdate(V1, PERSON_DEFAULT_ID, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, LICENCE_DEFAULT_NUMBER, licenceForUpdate);
 
         checkResponse(response, OK);
-        Licence licence = getLicence(response);
-        checkLicence(licence, LICENCE_DEFAULT_TYPE_LICENCE, LICENCE_DEFAULT_FORMATION_NEED, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID);
     }
 
     @Test

@@ -3,7 +3,6 @@ package com.boschat.sikb.context;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceForUpdate;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ public class CreateOrUpdateLicenceContext {
     private List<Integer> formationNeed;
 
     private static CreateOrUpdateLicenceContext buildCommon(LicenceForUpdate licence) {
-        if (CollectionUtils.isEmpty(licence.getTypeLicences())) {
+        if (licence.getTypeLicences() != null && licence.getTypeLicences().isEmpty()) {
             throw new FunctionalException(INVALID_BODY_FIELD, BODY_FIELD_LICENCE_TYPE, licence.getTypeLicences());
         }
 
