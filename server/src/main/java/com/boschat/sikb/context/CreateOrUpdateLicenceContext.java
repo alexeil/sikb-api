@@ -8,13 +8,14 @@ import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.INVALID_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_LICENCE_TYPE;
+import static com.boschat.sikb.common.utils.IntegerUtils.toIntegerArray;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 
 public class CreateOrUpdateLicenceContext {
 
-    private List<Integer> typeLicences;
+    private Integer[] typeLicences;
 
-    private List<Integer> formationNeed;
+    private Integer[] formationNeed;
 
     private static CreateOrUpdateLicenceContext buildCommon(LicenceForUpdate licence) {
         if (licence.getTypeLicences() != null && licence.getTypeLicences().isEmpty()) {
@@ -36,19 +37,19 @@ public class CreateOrUpdateLicenceContext {
         return buildCommon(licence);
     }
 
-    public List<Integer> getTypeLicences() {
+    public Integer[] getTypeLicences() {
         return typeLicences;
     }
 
     public void setTypeLicences(List<Integer> typeLicences) {
-        this.typeLicences = typeLicences;
+        this.typeLicences = toIntegerArray(typeLicences);
     }
 
-    public List<Integer> getFormationNeed() {
+    public Integer[] getFormationNeed() {
         return formationNeed;
     }
 
     public void setFormationNeed(List<Integer> formationNeed) {
-        this.formationNeed = formationNeed;
+        this.formationNeed = toIntegerArray(formationNeed);
     }
 }

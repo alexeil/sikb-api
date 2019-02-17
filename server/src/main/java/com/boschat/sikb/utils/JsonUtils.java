@@ -9,7 +9,6 @@ import com.boschat.sikb.servlet.JacksonJsonProvider;
 import com.boschat.sikb.tables.pojos.Formationtype;
 import com.boschat.sikb.tables.pojos.Licencetype;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,36 +24,22 @@ public class JsonUtils {
 
     }
 
+    public static List<LicenceType> findLicenceTypes(Integer[] ids) {
+        List<Licencetype> licenceTypes = DAOFactory.getInstance().getLicenceTypeDAO().fetchById(ids);
+        return convertLicenceTypesBeansToModels(licenceTypes);
+    }
+
+    public static List<FormationType> findFormationNeed(Integer[] ids) {
+        List<Formationtype> formationTypes = DAOFactory.getInstance().getFormationTypeDAO().fetchById(ids);
+        return convertFormationTypesBeansToModels(formationTypes);
+    }
+
     public static JsonNode formationsToJsonNode(List<Formation> formations) {
         return objectToJsonNode(formations);
     }
 
     public static List<Formation> jsonNodeToFormations(JsonNode formations) {
         return Arrays.asList(jsonNodeToObject(formations, Formation[].class));
-    }
-
-    public static JsonNode licenceTypesToJsonNode(List<Integer> licenceTypes) {
-        return objectToJsonNode(licenceTypes);
-    }
-
-    public static List<LicenceType> jsonNodeToLicenceTypes(JsonNode json) {
-        Integer[] ids = jsonNodeToObject(json, Integer[].class);
-        List<Licencetype> licenceTypes = DAOFactory.getInstance().getLicenceTypeDAO().fetchById(ids);
-        return convertLicenceTypesBeansToModels(licenceTypes);
-    }
-
-    public static JsonNode formationsNeedToJsonNode(List<Integer> formations) {
-        if (CollectionUtils.isEmpty(formations)) {
-            return null;
-        } else {
-            return objectToJsonNode(formations);
-        }
-    }
-
-    public static List<FormationType> jsonNodeToFormationNeed(JsonNode json) {
-        Integer[] ids = jsonNodeToObject(json, Integer[].class);
-        List<Formationtype> formationTypes = DAOFactory.getInstance().getFormationTypeDAO().fetchById(ids);
-        return convertFormationTypesBeansToModels(formationTypes);
     }
 
     private static <T> JsonNode objectToJsonNode(T object) {
@@ -72,5 +57,4 @@ public class JsonUtils {
             throw new TechnicalException(JSON_PARSE_ERROR, e);
         }
     }
-
 }

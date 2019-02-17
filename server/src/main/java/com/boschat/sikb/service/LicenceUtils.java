@@ -10,8 +10,6 @@ import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOU
 import static com.boschat.sikb.service.ClubUtils.checkClubExists;
 import static com.boschat.sikb.service.PersonUtils.checkPersonExists;
 import static com.boschat.sikb.service.SeasonUtils.checkSeasonExists;
-import static com.boschat.sikb.utils.JsonUtils.formationsNeedToJsonNode;
-import static com.boschat.sikb.utils.JsonUtils.licenceTypesToJsonNode;
 
 public class LicenceUtils {
 
@@ -52,10 +50,10 @@ public class LicenceUtils {
         }
 
         if (context.getTypeLicences() != null) {
-            licenceBean.setTypes(licenceTypesToJsonNode(context.getTypeLicences()));
+            licenceBean.setTypes(context.getTypeLicences());
         }
         if (context.getFormationNeed() != null) {
-            licenceBean.setFormationsneed(formationsNeedToJsonNode(context.getFormationNeed()));
+            licenceBean.setFormationsneed(context.getFormationNeed());
         }
 
         if (isModification) {

@@ -33,7 +33,6 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.JASPER
 import static com.boschat.sikb.common.configuration.ResponseCode.EXPORT_PDF_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.JASPER_TEMPLATE_ERROR;
 import static com.boschat.sikb.common.utils.DateUtils.formatFrenchLocalDate;
-import static com.boschat.sikb.utils.JsonUtils.jsonNodeToLicenceTypes;
 
 public class PDFGeneratorUtils {
 
@@ -112,7 +111,7 @@ public class PDFGeneratorUtils {
             hm.put(JASPER_BIRTH_DATE, formatFrenchLocalDate(person.getBirthdate()));
 
             int nbLicenceType = 1;
-            for (LicenceType licenceType : jsonNodeToLicenceTypes(licence.getTypes())) {
+            for (LicenceType licenceType : JsonUtils.findLicenceTypes(licence.getTypes())) {
                 hm.put(JASPER_LICENCE_TYPE_BACKGROUND + (nbLicenceType), getImage(colorByType.get(licenceType.getId())));
                 hm.put(JASPER_LICENCE_CARRIER + (nbLicenceType), licenceType.getName());
                 nbLicenceType++;

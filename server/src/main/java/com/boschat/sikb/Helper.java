@@ -20,6 +20,7 @@ import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.Season;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,9 +36,9 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
-import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormationNeed;
+import static com.boschat.sikb.utils.JsonUtils.findFormationNeed;
+import static com.boschat.sikb.utils.JsonUtils.findLicenceTypes;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormations;
-import static com.boschat.sikb.utils.JsonUtils.jsonNodeToLicenceTypes;
 
 public class Helper {
 
@@ -132,10 +133,10 @@ public class Helper {
         com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
 
         licence.setNumber(bean.getNumber());
-        licence.setTypeLicences(jsonNodeToLicenceTypes(bean.getTypes()));
+        licence.setTypeLicences(findLicenceTypes(bean.getTypes()));
 
-        if (!bean.getFormationsneed().isNull()) {
-            licence.setFormationNeed(jsonNodeToFormationNeed(bean.getFormationsneed()));
+        if (ArrayUtils.isNotEmpty(bean.getFormationsneed())) {
+            licence.setFormationNeed(findFormationNeed(bean.getFormationsneed()));
         }
 
         licence.setClubId(bean.getClubid());

@@ -40,10 +40,12 @@ CREATE TABLE sikb.club
 
 CREATE TABLE sikb.season
 (
-  "id"          varchar(8) PRIMARY KEY,
-  "description" varchar(255),
-  "begin"       date,
-  "end"         date
+  "id"               varchar(8) PRIMARY KEY,
+  "description"      varchar(255),
+  "begin"            date,
+  "end"              date,
+  "creationDate"     timestamp,
+  "modificationDate" timestamp
 );
 
 CREATE TABLE sikb.affiliation
@@ -103,31 +105,40 @@ CREATE TABLE sikb.licenceType
 (
   "id"                         serial PRIMARY KEY,
   "name"                       varchar(255),
-  "medicalCertificateRequired" boolean
+  "medicalCertificateRequired" boolean,
+  "creationDate"               timestamp,
+  "modificationDate"           timestamp
 );
 
 CREATE TABLE sikb.licence
 (
-  "id"             serial PRIMARY KEY,
-  "number"         varchar(255) unique,
-  "formationsNeed" json,
-  "types"          json,
-  "season"         varchar(8) REFERENCES sikb.season (id),
-  "clubId"         integer REFERENCES sikb.club (id),
-  "personId"       integer REFERENCES sikb.person (id) ON DELETE CASCADE
+  "id"               serial PRIMARY KEY,
+  "number"           varchar(255) unique,
+  "formationsNeed"   integer[],
+  "types"            integer[],
+  "season"           varchar(8) REFERENCES sikb.season (id),
+  "clubId"           integer REFERENCES sikb.club (id),
+  "personId"         integer REFERENCES sikb.person (id) ON DELETE CASCADE,
+  "creationDate"     timestamp,
+  "modificationDate" timestamp
 );
 
 CREATE TABLE sikb.formationType
 (
-  "id"   serial PRIMARY KEY,
-  "name" varchar(255)
+  "id"               serial PRIMARY KEY,
+  "name"             varchar(255),
+  "creationDate"     timestamp,
+  "modificationDate" timestamp
 );
 
 CREATE TABLE sikb.formation
 (
-  "id"             serial PRIMARY KEY,
-  "trainedDate"    date,
-  "personId"       integer REFERENCES sikb.person (id),
-  "refereeLevelId" integer REFERENCES sikb.formationType (id)
+  "id"               serial PRIMARY KEY,
+  "trainedDate"      date,
+  "personId"         integer REFERENCES sikb.person (id),
+  "refereeLevelId"   integer REFERENCES sikb.formationType (id),
+  "creationDate"     timestamp,
+  "modificationDate" timestamp
+
 );
 

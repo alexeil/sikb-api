@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import static com.boschat.sikb.AbstractTest.PERSON_MEDICAL_CERTIFICATE_KEY;
 import static com.boschat.sikb.AbstractTest.PERSON_PHOTO_KEY;
@@ -43,7 +42,7 @@ class DocumentTest {
     private static final String UNKNOWN_ID = "AAAAA";
 
     @BeforeAll
-    static void start() throws IOException {
+    static void start() throws Exception {
         initContext();
         loadPersons();
         loadSeasons();

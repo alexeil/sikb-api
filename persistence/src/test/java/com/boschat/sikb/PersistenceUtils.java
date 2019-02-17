@@ -8,7 +8,13 @@ import org.jooq.TableField;
 import org.jooq.impl.TableImpl;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.boschat.sikb.Sequences.AFFILIATION_ID_SEQ;
 import static com.boschat.sikb.Sequences.CLUB_ID_SEQ;
@@ -20,7 +26,10 @@ import static com.boschat.sikb.Tables.LICENCE;
 import static com.boschat.sikb.Tables.PERSON;
 import static com.boschat.sikb.Tables.SEASON;
 import static com.boschat.sikb.Tables.USER;
+import static com.boschat.sikb.common.utils.IntegerUtils.toIntegerArray;
 import static com.boschat.sikb.tables.Club.CLUB;
+import static java.nio.file.Files.lines;
+import static java.util.stream.Collectors.toList;
 
 public class PersistenceUtils {
 
@@ -41,8 +50,22 @@ public class PersistenceUtils {
         loadDataSuite(fileName, CLUB, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
     }
 
-    public static void loadLicences(String fileName) throws IOException {
-        loadDataSuite(fileName, LICENCE, LICENCE.NUMBER, LICENCE.FORMATIONSNEED, LICENCE.TYPES, LICENCE.SEASON, LICENCE.CLUBID, LICENCE.PERSONID);
+    private static Object[] buildObjectFromLine(String[] line) {
+        Object[] values = new Object[line.length];
+        for (int i = 0; values.length > i; i++) {
+            String currentLine = line[i];
+            if (line[i].contains(",")) {
+                Integer[] numbers = toIntegerArray(Stream.of(currentLine.split(",")).map(Integer::parseInt).collect(Collectors.toList()));
+                values[i] = numbers;
+            } else {
+                values[i] = currentLine;
+            }
+        }
+        return values;
+    }
+
+    public static void loadLicences(String fileName) throws Exception {
+        loadCustomDataSuite(fileName, LICENCE, LICENCE.NUMBER, LICENCE.FORMATIONSNEED, LICENCE.TYPES, LICENCE.SEASON, LICENCE.CLUBID, LICENCE.PERSONID);
     }
 
     public static void loadClubs() throws IOException {
@@ -51,7 +74,7 @@ public class PersistenceUtils {
         loadClubs("sql/insertClub.csv");
     }
 
-    public static void loadLicences() throws IOException {
+    public static void loadLicences() throws Exception {
         DAOFactory.getInstance().truncateLicence();
         DAOFactory.getInstance().getDslContext().alterSequence(LICENCE_ID_SEQ).restart().execute();
         loadLicences("sql/insertLicence.csv");
@@ -90,6 +113,18 @@ public class PersistenceUtils {
             PERSON.PHONENUMBER, PERSON.EMAIL, PERSON.NATIONALITY, PERSON.FORMATIONS, PERSON.PHOTOKEY, PERSON.PHOTODATA, PERSON.MEDICALCERTIFICATEKEY,
             PERSON.MEDICALCERTIFICATEDATA, PERSON.MEDICALCERTIFICATEBEGINVALIDITYDATE, PERSON.CREATIONDATE,
             PERSON.MODIFICATIONDATE);
+    }
+
+    private static <T extends TableImpl> void loadCustomDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException, URISyntaxException {
+        Path path = Paths.get(PersistenceUtils.class.getClassLoader().getResource(resourcePath).toURI());
+        List<String[]> lines = lines(path).map(l -> l.split(";")).collect(toList());
+        Stream<Object[]> values = lines.stream().skip(1).map(PersistenceUtils::buildObjectFromLine);
+
+        DAOFactory.getInstance().getDslContext()
+                  .loadInto(clazz)
+                  .loadArrays(values)
+                  .fields(fields)
+                  .execute();
     }
 
     private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
