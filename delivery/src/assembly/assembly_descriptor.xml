@@ -50,7 +50,7 @@
 			<directory>${root.basedir}/server/src/main/resources/templates</directory>
 			<outputDirectory>${project.version}/conf/templates</outputDirectory>
 			<includes>
-				<include>*</include>
+				<include>**</include>
 			</includes>
 			<lineEnding>unix</lineEnding>
 			<filtered>true</filtered>
