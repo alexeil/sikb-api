@@ -8,6 +8,10 @@ public class SeasonsApiServiceFactory {
 
     private final static SeasonsApiService service = new SeasonsApiServiceImpl();
 
+    private SeasonsApiServiceFactory() {
+    
+    }
+
     public static SeasonsApiService getSeasonsApi() {
         return service;
     }

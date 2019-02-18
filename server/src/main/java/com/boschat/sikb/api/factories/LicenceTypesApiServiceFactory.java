@@ -8,6 +8,10 @@ public class LicenceTypesApiServiceFactory {
 
     private final static LicenceTypesApiService service = new LicenceTypesApiServiceImpl();
 
+    private LicenceTypesApiServiceFactory() {
+    
+    }
+
     public static LicenceTypesApiService getLicenceTypesApi() {
         return service;
     }

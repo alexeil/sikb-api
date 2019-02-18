@@ -8,6 +8,10 @@ public class FormationTypesApiServiceFactory {
 
     private final static FormationTypesApiService service = new FormationTypesApiServiceImpl();
 
+    private FormationTypesApiServiceFactory() {
+    
+    }
+
     public static FormationTypesApiService getFormationTypesApi() {
         return service;
     }
