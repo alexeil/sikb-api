@@ -139,6 +139,23 @@ CREATE TABLE sikb.formation
   "refereeLevelId"   integer REFERENCES sikb.formationType (id),
   "creationDate"     timestamp,
   "modificationDate" timestamp
-
 );
 
+
+
+CREATE TABLE sikb.team
+(
+  "id"               serial PRIMARY KEY,
+  "name"             varchar(255),
+  "season"           varchar(8) REFERENCES sikb.season (id),
+  "creationDate"     timestamp,
+  "modificationDate" timestamp
+);
+
+CREATE TABLE sikb.team_enrollment
+(
+  "playerId" integer,
+  "player"   boolean,
+  "coach"    boolean,
+  "clubId"   integer REFERENCES sikb.club (id)
+)

@@ -99,8 +99,6 @@ public abstract class AbstractTest {
         new LicenceType().id(5).name("Arbitre").medicalCertificateRequired(true),
         new LicenceType().id(6).name("Dirigeant").medicalCertificateRequired(false));
 
-    protected static final String LICENCE_DEFAULT_MEDICAL_CERTIFICATE = "medicalCertificate";
-
     protected static final List<Integer> LICENCE_DEFAULT_FORMATION_NEED_ID = Arrays.asList(2, 3);
 
     protected static final List<FormationType> LICENCE_DEFAULT_FORMATION_NEED = Arrays.asList(
@@ -639,13 +637,13 @@ public abstract class AbstractTest {
         }
 
         if (clubId != null) {
-            path.append("/");
+            path.append("/clubs/");
             path.append(clubId);
         }
         if (season != null) {
-            path.append("/");
+            path.append("/seasons/");
             path.append(season);
-            path.append("/licence");
+            path.append("/licences");
         }
 
         if (licenceId != null) {
@@ -662,7 +660,7 @@ public abstract class AbstractTest {
             path.append(clubId);
         }
         if (season != null) {
-            path.append("/");
+            path.append("/seasons/");
             path.append(season);
             path.append("/affiliations");
         }
@@ -670,7 +668,7 @@ public abstract class AbstractTest {
     }
 
     private String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType) {
-        StringBuilder path = new StringBuilder("/" + version.getName() + "/configurations");
+        StringBuilder path = new StringBuilder("/" + version.getName());
         if (isSeason) {
             path.append("/seasons");
         }

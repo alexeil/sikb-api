@@ -69,6 +69,11 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     }
 
     @Override
+    public Response getLicences(String accessToken, Integer personId, Integer clubId, String seasonId, SecurityContext securityContext) {
+        return null;
+    }
+
+    @Override
     public Response getPerson(String accessToken, Integer personId, SecurityContext securityContext) {
         return runService(PERSON_GET, accessToken, securityContext, personId);
     }

@@ -26,16 +26,20 @@ security:
 tags:
   - name: users
     description: accounts to log into the system
-  - name: identification
+  - name: identifications
     description: APIs related to user connection
   - name: clubs
-    description: APIs to Clubs management
+    description: APIs for Clubs management
   - name: affiliations
-    description: APIs to affiliations management
+    description: APIs for affiliations management
+  - name: teams
+    description: APIs for teams management
   - name: persons
-    description: APIs to persons management (a Person can be a Player, Referee etc.)
+    description: APIs for persons management (a Person can be a Player, Referee etc.)
+  - name: licences
+    description: APIs for persons' licences management
   - name: configurations
-    description: APIs to manage application configurations
+    description: APIs to manage application configuration
 
 paths:
   '/users':
@@ -54,7 +58,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/user'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -83,7 +87,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -111,14 +115,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/session'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - identification
+        - identifications
   '/users/logout':
     get:
       summary: Log out a user (Revoke access Token)
@@ -129,14 +133,14 @@ paths:
       responses:
         204:
           description: Access token is revoked and user logged out
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - identification
+        - identifications
   '/users/reset':
     post:
       summary: Ask to reset a password
@@ -153,14 +157,14 @@ paths:
       responses:
         204:
           description: A mail will be send allowing user to reset his password
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - identification
+        - identifications
   '/users/updatePassword':
     post:
       summary: Update the user password
@@ -185,14 +189,14 @@ paths:
       responses:
         204:
           description: The password was updated
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - identification
+        - identifications
   '/users/confirm':
     post:
       summary: Confirm user email
@@ -211,14 +215,14 @@ paths:
       responses:
         204:
           description: A mail was sent allowing to reset the password
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - identification
+        - identifications
   '/users/{userId}':
     get:
       summary: get a user
@@ -234,7 +238,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -264,7 +268,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -282,7 +286,7 @@ paths:
       responses:
         204:
           description: The user is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -306,7 +310,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/club'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -335,7 +339,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/club'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -358,7 +362,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/club'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -388,7 +392,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/club'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -406,7 +410,7 @@ paths:
       responses:
         204:
           description: The club is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -414,7 +418,7 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - clubs
-  '/clubs/{clubId}/{seasonId}/affiliations':
+  '/clubs/{clubId}/seasons/{seasonId}/affiliations':
     post:
       summary: Create the club affiliation for a season
       description: ''
@@ -438,7 +442,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/affiliation'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -461,7 +465,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/affiliation'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -494,7 +498,7 @@ paths:
                 $ref: '#/components/schemas/affiliation'
         '401':
           description: unauthorized
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -513,7 +517,7 @@ paths:
       responses:
         204:
           description: the club affiliation is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -521,6 +525,146 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - affiliations
+
+  '/clubs/{clubId}/seasons/{seasonId}/teams':
+    post:
+      summary: Create the club team for a season
+      description: ''
+      operationId: createTeam
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/teamForCreation'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly created team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
+  '/clubs/{clubId}/seasons/{seasonId}/teams/{teamId}':
+    get:
+      summary: get the club team for a season
+      description: ''
+      operationId: getTeam
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        200:
+          description: get the club team for the season
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
+    put:
+      summary: Update the club team for a season
+      description: ''
+      operationId: UpdateTeam
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/teamId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/teamForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        200:
+          description: updated club team
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/team'
+        '401':
+          description: unauthorized
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
+    delete:
+      summary: Delete the club team for a season
+      description: ''
+      operationId: deleteTeam
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        204:
+          description: the club team is deleted
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
+
+  '/clubs/{clubId}/seasons/{seasonId}/teams/{teamId}/members':
+    get:
+      summary: get team's member for a season
+      description: ''
+      operationId: getTeamMembers
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+        - $ref: '#/components/parameters/teamId'
+      responses:
+        200:
+          description: get the team's members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/teamMember'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
 
   '/persons':
     get:
@@ -538,7 +682,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/person'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -567,7 +711,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/person'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -591,7 +735,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/person'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -621,7 +765,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/person'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -639,7 +783,7 @@ paths:
       responses:
         204:
           description: The person is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -675,7 +819,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/medicalCertificate'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -711,7 +855,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/photo'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -721,7 +865,33 @@ paths:
         - persons
 
 
-  '/persons/{personId}/{clubId}/{seasonId}/licence':
+  '/persons/{personId}/clubs/{clubId}/seasons/{seasonId}/licences':
+    get:
+      summary: get a person's licences
+      description: ''
+      operationId: getLicences
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/personId'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+      responses:
+        200:
+          description: get person's licences
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/licence'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - licences
     post:
       summary: Create a person's licence
       description: ''
@@ -746,15 +916,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/licence'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - persons
-  '/persons/{personId}/{clubId}/{seasonId}/licence/{licenceId}':
+        - licences
+  '/persons/{personId}/clubs/{clubId}/seasons/{seasonId}/licences/{licenceId}':
     put:
       summary: Update a person's licence
       description: ''
@@ -780,14 +950,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/licence'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - persons
+        - licences
     delete:
       summary: Delete a person's licence
       description: ''
@@ -801,15 +971,15 @@ paths:
       responses:
         204:
           description: The person's licence is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ZError"
       tags:
-        - persons
-  '/configurations/seasons':
+        - licences
+  '/seasons':
     get:
       summary: Find all seasons
       description: ''
@@ -825,7 +995,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/season'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -854,7 +1024,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/season'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -862,7 +1032,7 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - configurations
-  '/configurations/seasons/{seasonId}':
+  '/seasons/{seasonId}':
     put:
       summary: Update a season
       description: ''
@@ -885,7 +1055,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/season'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -903,7 +1073,7 @@ paths:
       responses:
         204:
           description: The season is deleted
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -912,7 +1082,7 @@ paths:
       tags:
         - configurations
 
-  '/configurations/formationTypes':
+  '/formationTypes':
     get:
       summary: Find all formation types
       description: ''
@@ -928,7 +1098,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/formationType'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -937,7 +1107,7 @@ paths:
       tags:
         - configurations
 
-  '/configurations/licenceTypes':
+  '/licenceTypes':
     get:
       summary: Find all licence types
       description: ''
@@ -953,7 +1123,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/licenceType'
-        default:
+        400:
           description: Default error sample response
           content:
             application/json:
@@ -969,6 +1139,13 @@ components:
       scheme: basic
 
   parameters:
+    teamId:
+      name: "teamId"
+      schema:
+        type: integer
+      required: true
+      in: path
+      description: "Id of a team"
     clubId:
       name: "clubId"
       schema:
@@ -996,7 +1173,7 @@ components:
         type: string
       required: true
       in: path
-      description: "Identification of the licence"
+      description: "identifications of the licence"
     seasonId:
       name: "seasonId"
       schema:
@@ -1006,7 +1183,7 @@ components:
         pattern: "^([0-9]){8}$"
       required: true
       in: path
-      description: "Identification of the season"
+      description: "identifications of the season"
     access_token:
       name: "access_token"
       required: true
@@ -1076,10 +1253,6 @@ components:
           type: string
         logo:
           type: string
-        affiliations:
-          type: array
-          items:
-            $ref: "#/components/schemas/affiliation"
 
     clubForCreation:
       allOf:
@@ -1172,6 +1345,50 @@ components:
           type: string
         board:
           $ref: '#/components/schemas/board'
+
+    teamForCreation:
+      allOf:
+        - $ref: '#/components/schemas/teamForUpdate'
+      required:
+        - name
+
+    teamForUpdate:
+      properties:
+        name:
+          type: string
+        players:
+          type: array
+          items:
+            type: integer
+            format: int32
+        coaches:
+          type: array
+          items:
+            type: integer
+            format: int32
+
+    team:
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+
+    teamMember:
+      properties:
+        member:
+          $ref: '#/components/schemas/person'
+        type:
+          $ref: '#/components/schemas/memberType'
+
+    memberType:
+      type: string
+      enum:
+        - PLAYER
+        - COACH
+        - ASSISTANT
+
 
     boardForCreation:
       allOf:
@@ -1294,10 +1511,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/formation"
-        licences:
-          type: array
-          items:
-            $ref: "#/components/schemas/licence"
         medicalCertificate:
           $ref: "#/components/schemas/medicalCertificate"
 

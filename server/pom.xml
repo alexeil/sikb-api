@@ -224,6 +224,7 @@
 							<goal>replace</goal>
 						</goals>
 						<configuration>
+							<regex>false</regex>
 							<ignoreMissingFile>false</ignoreMissingFile>
 							<basedir>
 								${project.build.directory}/generated-sources/src/gen/java/com/boschat/sikb/api
@@ -233,26 +234,35 @@
 							</includes>
 							<replacements>
 								<replacement>
-									<token>/clubs</token>
-									<value>/v1/clubs</value>
+									<token>@Path("/clubs")</token>
+									<value>@Path("/v1/clubs")</value>
 								</replacement>
 								<replacement>
-									<token>/users</token>
-									<value>/v1/users</value>
+									<token>@Path("/users")</token>
+									<value>@Path("/v1/users")</value>
 								</replacement>
 								<replacement>
-									<token>/persons</token>
-									<value>/v1/persons</value>
+									<token>@Path("/persons")</token>
+									<value>@Path("/v1/persons")</value>
 								</replacement>
 								<replacement>
-									<token>/configurations</token>
-									<value>/v1/configurations</value>
+									<token>@Path("/seasons")</token>
+									<value>@Path("/v1/seasons")</value>
+								</replacement>
+								<replacement>
+									<token>@Path("/formationTypes")</token>
+									<value>@Path("/v1/formationTypes")</value>
+								</replacement>
+								<replacement>
+									<token>@Path("/licenceTypes")</token>
+									<value>@Path("/v1/licenceTypes")</value>
 								</replacement>
 							</replacements>
 						</configuration>
 					</execution>
 
 					<execution>
+						<id>replace swagger path in swagger ui</id>
 						<phase>prepare-package</phase>
 						<goals>
 							<goal>replace</goal>

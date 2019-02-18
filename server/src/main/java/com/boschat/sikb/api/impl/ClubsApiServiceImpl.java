@@ -5,6 +5,8 @@ import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.TeamForCreation;
+import com.boschat.sikb.model.TeamForUpdate;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
@@ -29,8 +31,18 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
+    public Response createTeam(String accessToken, Integer clubId, String seasonId, TeamForCreation teamForCreation, SecurityContext securityContext) {
+        return null;
+    }
+
+    @Override
     public Response deleteClub(String accessToken, Integer clubId, SecurityContext securityContext) {
         return runService(CLUB_DELETE, accessToken, securityContext, clubId);
+    }
+
+    @Override
+    public Response deleteTeam(String accessToken, Integer clubId, String seasonId, Integer teamId, SecurityContext securityContext) {
+        return null;
     }
 
     @Override
@@ -44,9 +56,27 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
+    public Response getTeam(String accessToken, Integer clubId, String seasonId, Integer teamId,
+        SecurityContext securityContext) {
+        return null;
+    }
+
+    @Override
+    public Response getTeamMembers(String accessToken, Integer clubId, String seasonId,
+        Integer teamId, SecurityContext securityContext) {
+        return null;
+    }
+
+    @Override
     public Response updateClub(String accessToken, Integer clubId, ClubForUpdate clubForUpdate, SecurityContext securityContext) {
         return runService(CLUB_UPDATE, accessToken, securityContext, clubId, clubForUpdate);
 
+    }
+
+    @Override
+    public Response updateTeam(String accessToken, Integer clubId, String seasonId, Integer teamId,
+        TeamForUpdate teamForUpdate, SecurityContext securityContext) {
+        return null;
     }
 
     @Override
