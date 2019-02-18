@@ -230,6 +230,10 @@ public abstract class AbstractTest {
         return getBody(result, Licence.class);
     }
 
+    protected static List<Licence> getLicences(Response result) throws IOException {
+        return Arrays.asList(getBody(result, Licence[].class));
+    }
+
     protected static User getUser(Response result) throws IOException {
         return getBody(result, User.class);
     }
@@ -389,6 +393,11 @@ public abstract class AbstractTest {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
         String path = buildPath(version, clubId, season);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response licenceFind(ApiVersion version, Integer personId, Integer clubId, String season) {
+        String path = buildPathPerson(version, personId, clubId, season, null, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response licenceCreate(ApiVersion version, Integer personId, Integer clubId, String season, LicenceForCreation licenceForCreation) {

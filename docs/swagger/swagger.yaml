@@ -1685,8 +1685,6 @@ components:
             $ref: "#/components/schemas/licenceType"
         season:
           type: string
-        medicalCertificate:
-          type: string
         formationNeed:
           type: array
           items:

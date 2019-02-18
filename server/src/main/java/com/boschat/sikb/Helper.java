@@ -129,6 +129,10 @@ public class Helper {
         return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
 
+    public static List<com.boschat.sikb.model.Licence> convertLicenceBeansToModels(List<Licence> beans) {
+        return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+    
     public static com.boschat.sikb.model.Licence convertBeanToModel(Licence bean) {
         com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
 

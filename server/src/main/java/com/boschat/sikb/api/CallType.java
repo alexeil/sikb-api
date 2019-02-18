@@ -30,6 +30,7 @@ import java.io.InputStream;
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
 import static com.boschat.sikb.Helper.convertFormationTypesBeansToModels;
+import static com.boschat.sikb.Helper.convertLicenceBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
 import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
@@ -50,6 +51,7 @@ import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
 import static com.boschat.sikb.service.LicenceUtils.deleteLicence;
+import static com.boschat.sikb.service.LicenceUtils.findLicences;
 import static com.boschat.sikb.service.LicenceUtils.updateLicence;
 import static com.boschat.sikb.service.PersonUtils.createMedicalCertificate;
 import static com.boschat.sikb.service.PersonUtils.createPerson;
@@ -435,6 +437,19 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[1]);
             MyThreadLocal.get().setSeasonId((String) params[2]);
             MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForCreation) params[3]));
+        }
+    },
+    LICENCE_FIND("Find person's licences", OK, true) {
+        @Override
+        public Object call() {
+            return convertLicenceBeansToModels(findLicences());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setPersonId((Integer) params[0]);
+            MyThreadLocal.get().setClubId((Integer) params[1]);
+            MyThreadLocal.get().setSeasonId((String) params[2]);
         }
     },
     LICENCE_DELETE("Create a licence", NO_CONTENT, true) {

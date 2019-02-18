@@ -14,6 +14,7 @@ import java.io.InputStream;
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.LICENCE_CREATE;
 import static com.boschat.sikb.api.CallType.LICENCE_DELETE;
+import static com.boschat.sikb.api.CallType.LICENCE_FIND;
 import static com.boschat.sikb.api.CallType.LICENCE_UPDATE;
 import static com.boschat.sikb.api.CallType.MEDICAL_CERTIFICATE_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
@@ -70,7 +71,8 @@ public class PersonsApiServiceImpl extends PersonsApiService {
 
     @Override
     public Response getLicences(String accessToken, Integer personId, Integer clubId, String seasonId, SecurityContext securityContext) {
-        return null;
+        return runService(LICENCE_FIND, accessToken, securityContext, personId, clubId, seasonId);
+
     }
 
     @Override
