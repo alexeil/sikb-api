@@ -1,10 +1,12 @@
 package com.boschat.sikb.api;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -23,6 +25,7 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORI
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 
 @DisplayName(" Test Administration Account ")
+@ExtendWith(JerseyTestExtension.class)
 class AdministrationTest extends AbstractTest {
 
     @BeforeEach

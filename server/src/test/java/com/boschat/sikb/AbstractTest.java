@@ -311,18 +311,11 @@ public abstract class AbstractTest {
 
     }
 
-    @BeforeAll
-    public static void setUp() throws Exception {
-        initJerseyTest();
-        jerseyTest.setUp();
-    }
-
-    @AfterAll
-    public static void tearDown() throws Exception {
+    public static void shutDownJerseyTest() throws Exception {
         jerseyTest.tearDown();
     }
 
-    private static void initJerseyTest() {
+    public static void initJerseyTest() throws Exception {
         jerseyTest = new JerseyTest() {
 
             @Override
@@ -347,6 +340,8 @@ public abstract class AbstractTest {
                                                "com.boschat.sikb.mapper");
             }
         };
+
+        jerseyTest.setUp();
     }
 
     @BeforeAll

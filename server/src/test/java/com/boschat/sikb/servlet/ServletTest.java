@@ -1,6 +1,7 @@
 package com.boschat.sikb.servlet;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.common.configuration.ApplicationProperties;
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.configuration.IProperties;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @DisplayName("Test Servlet")
+@ExtendWith(JerseyTestExtension.class)
 class ServletTest extends AbstractTest {
 
     private Response callRequest(String path) {

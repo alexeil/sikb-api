@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.person;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.MedicalCertificateForCreation;
 import com.boschat.sikb.model.Person;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.io.File;
@@ -29,6 +31,7 @@ import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_FIR
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_MEDICAL_CERTIFICATE_VALIDITY;
 
 @DisplayName(" Create a person ")
+@ExtendWith(JerseyTestExtension.class)
 class PersonCreateTest extends AbstractTest {
 
     @BeforeEach

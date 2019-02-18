@@ -1,12 +1,14 @@
 package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 
@@ -22,6 +24,7 @@ import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRE
 import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 
 @DisplayName(" Create an affiliation ")
+@ExtendWith(JerseyTestExtension.class)
 class AffiliationCreateTest extends AbstractTest {
 
     @BeforeEach

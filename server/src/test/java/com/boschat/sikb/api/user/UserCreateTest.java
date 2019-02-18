@@ -1,12 +1,14 @@
 package com.boschat.sikb.api.user;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @DisplayName(" Create a User ")
+@ExtendWith(JerseyTestExtension.class)
 class UserCreateTest extends AbstractTest {
 
     @BeforeEach

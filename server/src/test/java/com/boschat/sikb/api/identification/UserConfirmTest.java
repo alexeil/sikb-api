@@ -1,11 +1,13 @@
 package com.boschat.sikb.api.identification;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -21,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName(" Confirm a User email & password ")
+@ExtendWith(JerseyTestExtension.class)
 class UserConfirmTest extends AbstractTest {
 
     @BeforeEach

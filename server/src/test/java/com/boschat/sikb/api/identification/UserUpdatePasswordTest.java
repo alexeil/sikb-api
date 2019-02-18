@@ -1,10 +1,12 @@
 package com.boschat.sikb.api.identification;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.UpdatePassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -20,6 +22,7 @@ import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
 
 @DisplayName(" Update a User password ")
+@ExtendWith(JerseyTestExtension.class)
 class UserUpdatePasswordTest extends AbstractTest {
 
     @BeforeEach

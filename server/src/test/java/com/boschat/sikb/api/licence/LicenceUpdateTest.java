@@ -1,12 +1,14 @@
 package com.boschat.sikb.api.licence;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForUpdate;
 import com.boschat.sikb.model.LicenceType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOU
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
 @DisplayName(" update a licence ")
+@ExtendWith(JerseyTestExtension.class)
 class LicenceUpdateTest extends AbstractTest {
 
     @BeforeEach

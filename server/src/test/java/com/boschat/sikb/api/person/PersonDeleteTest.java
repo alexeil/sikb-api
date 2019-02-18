@@ -1,9 +1,11 @@
 package com.boschat.sikb.api.person;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.PERSON_NOT_FOUND;
 
 @DisplayName(" Delete a person ")
+@ExtendWith(JerseyTestExtension.class)
 class PersonDeleteTest extends AbstractTest {
 
     @BeforeEach

@@ -1,9 +1,11 @@
 package com.boschat.sikb.api.licence;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 
@@ -16,6 +18,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOU
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 
 @DisplayName(" Delete a licence ")
+@ExtendWith(JerseyTestExtension.class)
 class LicenceDeleteTest extends AbstractTest {
 
     @BeforeEach

@@ -1,11 +1,13 @@
 package com.boschat.sikb.api.licence;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForCreation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.SEASON_NOT_FOUN
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_LICENCE_TYPE;
 
 @DisplayName(" Create a licence ")
+@ExtendWith(JerseyTestExtension.class)
 class LicenceCreateTest extends AbstractTest {
 
     @BeforeEach

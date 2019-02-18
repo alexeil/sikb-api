@@ -1,10 +1,12 @@
 package com.boschat.sikb.api.configuration;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.LicenceType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName(" Check configuration : ")
+@ExtendWith(JerseyTestExtension.class)
 class ConfigurationTest extends AbstractTest {
 
     @Test

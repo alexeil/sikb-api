@@ -1,10 +1,12 @@
 package com.boschat.sikb.api.affiliation;
 
 import com.boschat.sikb.AbstractTest;
+import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Affiliation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.ws.rs.core.Response;
 
@@ -15,6 +17,7 @@ import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 
 @DisplayName(" get an affiliation ")
+@ExtendWith(JerseyTestExtension.class)
 class AffiliationGetTest extends AbstractTest {
 
     @BeforeEach
