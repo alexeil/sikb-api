@@ -554,28 +554,28 @@ public abstract class AbstractTest {
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPathClubs(version, null, null, true, false, null, false);
+        String path = buildPathClubs(version, null, null, false, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
     protected Response clubGet(ApiVersion version, Integer clubId) {
-        String path = buildPathClubs(version, clubId, null, true, false, null, false);
+        String path = buildPathClubs(version, clubId, null, false, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response clubFind(ApiVersion version) {
-        String path = buildPathClubs(version, null, null, true, false, null, false);
+        String path = buildPathClubs(version, null, null, false, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
-        String path = buildPathClubs(version, clubId, null, true, false, null, false);
+        String path = buildPathClubs(version, clubId, null, false, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
-        String path = buildPathClubs(version, clubId, null, true, false, null, false);
+        String path = buildPathClubs(version, clubId, null, false, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
