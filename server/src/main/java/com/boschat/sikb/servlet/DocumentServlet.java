@@ -36,6 +36,8 @@ public class DocumentServlet extends HttpServlet {
             logAndBuildResponse(response, e.getErrorCode().getLevel(), e.getErrorCode().getCodeHttp(), e);
         } catch (Throwable e) {
             logAndBuildResponse(response, ERROR, (short) 500, e);
+        } finally {
+            LOGGER.info("%s with id %s generated !", type, id);
         }
     }
 }

@@ -69,13 +69,6 @@ class DocumentTest {
         }
     }
 
-    @Test
-    @DisplayName(" two documents in a row ")
-    void twoDocumentsInARow() {
-        callDocument(PHOTO_TYPE.getKey(), PERSON_PHOTO_KEY, null);
-        callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019", null);
-    }
-
     @Nested
     @DisplayName(" medical Certificate ")
     class MedicalCertificateTests {
@@ -110,6 +103,12 @@ class DocumentTest {
         }
 
         @Test
+        @DisplayName(" withoutPhoto ")
+        void withoutPhoto() {
+            callDocument(LICENCE_TYPE.getKey(), "1666KBAR20182019", null);
+        }
+
+        @Test
         @DisplayName(" unknown Licence ")
         void unknownLicence() {
             callDocument(LICENCE_TYPE.getKey(), UNKNOWN_ID, new FunctionalException(LICENCE_NOT_FOUND, UNKNOWN_ID));
@@ -128,6 +127,13 @@ class DocumentTest {
             ConfigLoader.getInstance().setProperties(JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE, "one;blue.png;two;blue.png");
             callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019",
                 new TechnicalException(JASPER_TEMPLATE_ERROR, "src/main/resources/templates/licence/licence.jrxml"));
+        }
+
+        @Test
+        @DisplayName(" two licences in a row ")
+        void twoLicencesInARow() {
+            callDocument(LICENCE_TYPE.getKey(), "1666KBAR20182019", null);
+            callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019", null);
         }
     }
 
