@@ -18,6 +18,7 @@ import com.boschat.sikb.tables.pojos.Licence;
 import com.boschat.sikb.tables.pojos.Licencetype;
 import com.boschat.sikb.tables.pojos.Person;
 import com.boschat.sikb.tables.pojos.Season;
+import com.boschat.sikb.tables.pojos.Team;
 import com.boschat.sikb.tables.pojos.User;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -132,7 +133,18 @@ public class Helper {
     public static List<com.boschat.sikb.model.Licence> convertLicenceBeansToModels(List<Licence> beans) {
         return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
-    
+
+    public static List<com.boschat.sikb.model.Team> convertTeamBeansToModels(List<Team> beans) {
+        return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static com.boschat.sikb.model.Team convertBeanToModel(Team bean) {
+        com.boschat.sikb.model.Team team = new com.boschat.sikb.model.Team();
+        team.setId(bean.getId());
+        team.setName(bean.getName());
+        return team;
+    }
+
     public static com.boschat.sikb.model.Licence convertBeanToModel(Licence bean) {
         com.boschat.sikb.model.Licence licence = new com.boschat.sikb.model.Licence();
 

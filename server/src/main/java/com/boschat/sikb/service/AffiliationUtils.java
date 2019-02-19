@@ -46,12 +46,10 @@ public class AffiliationUtils {
         Affiliation affiliationBean;
         if (isCreation) {
             affiliationBean = new Affiliation();
-            String seasonId = MyThreadLocal.get().getSeasonId();
-            Integer clubId = MyThreadLocal.get().getClubId();
 
-            checkSeasonExists(seasonId);
-            checkClubExists(clubId);
-            affiliationBean.setSeason(seasonId);
+            checkSeasonExists();
+            checkClubExists();
+            affiliationBean.setSeason(MyThreadLocal.get().getSeasonId());
             affiliationBean.setClubid(MyThreadLocal.get().getClubId());
 
         } else {

@@ -41,8 +41,10 @@ public enum ResponseCode {
     DOCUMENT_TYPE_NOT_FOUND(INFO, 404, 9, "Document Type (%s) not found"),
     MEDICAL_CERTIFICATE_NOT_FOUND(INFO, 404, 10, "Medical Certificate (%s) not found"),
     PHOTO_NOT_FOUND(INFO, 404, 11, "Photo (%s) not found"),
+    TEAM_NOT_FOUND(INFO, 404, 12, "Team (%s) not found"),
 
-    
+
+
     METHOD_NOT_ALLOWED(ERROR, 405, 0, "Method Not Allowed"),
 
     // 5xx codes tell the client that they did everything correctly and it’s the server itself who caused the problem

@@ -6,6 +6,7 @@ import com.boschat.sikb.context.CreateOrUpdateClubContext;
 import com.boschat.sikb.context.CreateOrUpdateLicenceContext;
 import com.boschat.sikb.context.CreateOrUpdatePersonContext;
 import com.boschat.sikb.context.CreateOrUpdateSeasonContext;
+import com.boschat.sikb.context.CreateOrUpdateTeamContext;
 import com.boschat.sikb.context.CreateOrUpdateUserContext;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.AffiliationForCreation;
@@ -20,6 +21,8 @@ import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.SeasonForCreation;
 import com.boschat.sikb.model.SeasonForUpdate;
+import com.boschat.sikb.model.TeamForCreation;
+import com.boschat.sikb.model.TeamForUpdate;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.UserForCreation;
 import com.boschat.sikb.model.UserForUpdate;
@@ -34,6 +37,7 @@ import static com.boschat.sikb.Helper.convertLicenceBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
 import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
+import static com.boschat.sikb.Helper.convertTeamBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
 import static com.boschat.sikb.common.configuration.ResponseCode.CREATED;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
@@ -64,6 +68,12 @@ import static com.boschat.sikb.service.SeasonUtils.createSeason;
 import static com.boschat.sikb.service.SeasonUtils.deleteSeason;
 import static com.boschat.sikb.service.SeasonUtils.findSeasons;
 import static com.boschat.sikb.service.SeasonUtils.updateSeason;
+import static com.boschat.sikb.service.TeamUtils.createTeam;
+import static com.boschat.sikb.service.TeamUtils.deleteTeam;
+import static com.boschat.sikb.service.TeamUtils.findTeamMembers;
+import static com.boschat.sikb.service.TeamUtils.findTeams;
+import static com.boschat.sikb.service.TeamUtils.getTeam;
+import static com.boschat.sikb.service.TeamUtils.updateTeam;
 import static com.boschat.sikb.service.UserUtils.confirmUser;
 import static com.boschat.sikb.service.UserUtils.createUser;
 import static com.boschat.sikb.service.UserUtils.deleteUser;
@@ -506,6 +516,85 @@ public enum CallType {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
             MyThreadLocal.get().setCreateOrUpdatePersonContext(
                 CreateOrUpdatePersonContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
+        }
+    },
+    TEAM_CREATE("Create a team", CREATED, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(createTeam());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+            MyThreadLocal.get().setCreateOrUpdateTeamContext(CreateOrUpdateTeamContext.create((TeamForCreation) params[2]));
+        }
+    },
+    TEAM_FIND("Find club's teams", OK, true) {
+        @Override
+        public Object call() {
+            return convertTeamBeansToModels(findTeams());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+        }
+    },
+    TEAM_MEMBERS_FIND("Find team's members", OK, true) {
+        @Override
+        public Object call() {
+            return findTeamMembers();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+            MyThreadLocal.get().setTeamId((Integer) params[2]);
+        }
+    },
+    TEAM_GET("Get a Team", OK, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(getTeam());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+            MyThreadLocal.get().setTeamId((Integer) params[2]);
+        }
+    },
+    TEAM_DELETE("Delete a team", NO_CONTENT, true) {
+        @Override
+        public Object call() {
+            deleteTeam();
+            return null;
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+            MyThreadLocal.get().setTeamId((Integer) params[2]);
+        }
+    },
+    TEAM_UPDATE("Update a licence", OK, true) {
+        @Override
+        public Object call() {
+            return convertBeanToModel(updateTeam());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setSeasonId((String) params[1]);
+            MyThreadLocal.get().setTeamId((Integer) params[2]);
+            MyThreadLocal.get().setCreateOrUpdateTeamContext(CreateOrUpdateTeamContext.create((TeamForUpdate) params[3]));
         }
     };
 

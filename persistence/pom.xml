@@ -129,14 +129,14 @@
 									<userType>com.fasterxml.jackson.databind.JsonNode</userType>
 									<binding>com.boschat.sikb.persistence.binding.PostgresJSONJacksonJsonNodeBinding</binding>
 									<expression>.*</expression>
-									<types>json</types>
+									<types>jsonb</types>
 								</forcedType>
 
 								<forcedType>
 									<userType>com.fasterxml.jackson.databind.JsonNode</userType>
 									<converter>com.boschat.sikb.persistence.converter.PostgresJSONJacksonJsonNodeConverter</converter>
 									<expression>.*</expression>
-									<types>json</types>
+									<types>jsonb</types>
 								</forcedType>
 							</forcedTypes>
 

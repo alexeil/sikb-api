@@ -52,6 +52,10 @@ public class Context {
 
     private CreateOrUpdateLicenceContext createOrUpdateLicenceContext;
 
+    private CreateOrUpdateTeamContext createOrUpdateTeamContext;
+
+    private Integer teamId;
+
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
         this.accessToken = accessToken;
@@ -197,5 +201,21 @@ public class Context {
 
     public void setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext createOrUpdateLicenceContext) {
         this.createOrUpdateLicenceContext = createOrUpdateLicenceContext;
+    }
+
+    public CreateOrUpdateTeamContext getCreateOrUpdateTeamContext() {
+        return createOrUpdateTeamContext;
+    }
+
+    public void setCreateOrUpdateTeamContext(CreateOrUpdateTeamContext createOrUpdateTeamContext) {
+        this.createOrUpdateTeamContext = createOrUpdateTeamContext;
+    }
+
+    public Integer getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Integer teamId) {
+        this.teamId = teamId;
     }
 }

@@ -105,9 +105,9 @@ public class PersonUtils {
         return DAOFactory.getInstance().getPersonDAO().findAll();
     }
 
-    public static void checkPersonExists(Integer personId) {
-        if (!DAOFactory.getInstance().getPersonDAO().existsById(personId)) {
-            throw new FunctionalException(PERSON_NOT_FOUND, personId);
+    public static void checkPersonExists() {
+        if (!DAOFactory.getInstance().getPersonDAO().existsById(MyThreadLocal.get().getPersonId())) {
+            throw new FunctionalException(PERSON_NOT_FOUND, MyThreadLocal.get().getPersonId());
         }
     }
 

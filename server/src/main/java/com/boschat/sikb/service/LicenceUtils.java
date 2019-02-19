@@ -39,13 +39,13 @@ public class LicenceUtils {
             Integer clubId = MyThreadLocal.get().getClubId();
             Integer personId = MyThreadLocal.get().getPersonId();
 
-            checkSeasonExists(seasonId);
+            checkSeasonExists();
             licenceBean.setSeason(seasonId);
 
-            checkClubExists(clubId);
+            checkClubExists();
             licenceBean.setClubid(clubId);
 
-            checkPersonExists(personId);
+            checkPersonExists();
             licenceBean.setPersonid(personId);
 
             licenceBean.setNumber(personId + clubId + seasonId);
@@ -86,9 +86,9 @@ public class LicenceUtils {
         Integer clubId = MyThreadLocal.get().getClubId();
         Integer personId = MyThreadLocal.get().getPersonId();
 
-        checkSeasonExists(seasonId);
-        checkClubExists(clubId);
-        checkPersonExists(personId);
+        checkSeasonExists();
+        checkClubExists();
+        checkPersonExists();
 
         return DAOFactory.getInstance().getLicenceDAO().findAllByPersonIdClubIdSeason(personId, clubId, seasonId);
     }

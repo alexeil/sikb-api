@@ -4,19 +4,28 @@ import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.LicenceType;
+import com.boschat.sikb.model.MemberType;
+import com.boschat.sikb.model.TeamMember;
+import com.boschat.sikb.model.TeamMemberForCreation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import com.boschat.sikb.tables.pojos.Formationtype;
 import com.boschat.sikb.tables.pojos.Licencetype;
+import com.boschat.sikb.tables.pojos.Person;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertFormationTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.common.configuration.ResponseCode.JSON_PARSE_ERROR;
+import static com.boschat.sikb.common.utils.IntegerUtils.toIntegerArray;
 
 public class JsonUtils {
 
@@ -38,8 +47,25 @@ public class JsonUtils {
         return objectToJsonNode(formations);
     }
 
-    public static List<Formation> jsonNodeToFormations(JsonNode formations) {
-        return Arrays.asList(jsonNodeToObject(formations, Formation[].class));
+    public static JsonNode teamEnrollmentToJsonNode(List<TeamMemberForCreation> teamEnrollments) {
+        return objectToJsonNode(teamEnrollments);
+    }
+
+    public static List<Formation> jsonNodeToFormations(JsonNode jsonNode) {
+        return Arrays.asList(jsonNodeToObject(jsonNode, Formation[].class));
+    }
+
+    public static List<TeamMember> jsonNodeToTeamMembers(JsonNode jsonNode) {
+        List<TeamMember> members = new ArrayList<>();
+        if (!jsonNode.isNull()) {
+            List<TeamMemberForCreation> beans = Arrays.asList(jsonNodeToObject(jsonNode, TeamMemberForCreation[].class));
+            Map<Integer, MemberType> map = beans.stream().collect(Collectors.toMap(TeamMemberForCreation::getId, TeamMemberForCreation::getType));
+            List<Person> persons = DAOFactory.getInstance().getPersonDAO().fetchById(toIntegerArray(new ArrayList<>(map.keySet())));
+
+            members = persons.stream().map(person -> new TeamMember().member(convertBeanToModel(person)).type(map.get(person.getId()))).collect(
+                Collectors.toList());
+        }
+        return members;
     }
 
     private static <T> JsonNode objectToJsonNode(T object) {

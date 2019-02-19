@@ -79,9 +79,9 @@ public class SeasonUtils {
         return DAOFactory.getInstance().getSeasonDAO().findAll();
     }
 
-    public static void checkSeasonExists(String seasonId) {
-        if (!DAOFactory.getInstance().getSeasonDAO().existsById(seasonId)) {
-            throw new FunctionalException(SEASON_NOT_FOUND, seasonId);
+    public static void checkSeasonExists() {
+        if (!DAOFactory.getInstance().getSeasonDAO().existsById(MyThreadLocal.get().getSeasonId())) {
+            throw new FunctionalException(SEASON_NOT_FOUND, MyThreadLocal.get().getSeasonId());
         }
     }
 

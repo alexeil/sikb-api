@@ -527,6 +527,31 @@ paths:
         - affiliations
 
   '/clubs/{clubId}/seasons/{seasonId}/teams':
+    get:
+      summary: find all the club's teams
+      description: ''
+      operationId: findTeams
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+        - $ref: '#/components/parameters/seasonId'
+      responses:
+        200:
+          description: Find all the club teams
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/team'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - teams
     post:
       summary: Create the club team for a season
       description: ''
@@ -1356,16 +1381,10 @@ components:
       properties:
         name:
           type: string
-        players:
+        members:
           type: array
           items:
-            type: integer
-            format: int32
-        coaches:
-          type: array
-          items:
-            type: integer
-            format: int32
+            $ref: '#/components/schemas/teamMemberForCreation'
 
     team:
       properties:
@@ -1374,6 +1393,14 @@ components:
           format: int32
         name:
           type: string
+
+    teamMemberForCreation:
+      properties:
+        id:
+          type: integer
+          format: int32
+        type:
+          $ref: '#/components/schemas/memberType'
 
     teamMember:
       properties:

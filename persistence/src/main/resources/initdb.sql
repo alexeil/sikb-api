@@ -9,15 +9,13 @@ CREATE TABLE sikb.application
   "password" text
 );
 
-
-
 CREATE TABLE sikb.user
 (
   "id"                            serial PRIMARY KEY,
   "email"                         text UNIQUE,
   "password"                      text,
   "salt"                          text,
-  "information"                   json,
+  "information"                   jsonb,
   "activationToken"               text,
   "activationTokenExpirationDate" timestamp,
   "resetToken"                    text,
@@ -91,7 +89,7 @@ CREATE TABLE sikb.person
   "phoneNumber"                         varchar(255),
   "email"                               varchar(255),
   "nationality"                         varchar(255),
-  "formations"                          json,
+  "formations"                          jsonb,
   "photoKey"                            varchar(255) unique,
   "photoData"                           bytea,
   "medicalCertificateKey"               varchar(255) unique,
@@ -148,14 +146,9 @@ CREATE TABLE sikb.team
   "id"               serial PRIMARY KEY,
   "name"             varchar(255),
   "season"           varchar(8) REFERENCES sikb.season (id),
+  "clubId"           integer REFERENCES sikb.club (id),
+  "teamMembers"      jsonb,
   "creationDate"     timestamp,
   "modificationDate" timestamp
 );
 
-CREATE TABLE sikb.team_enrollment
-(
-  "playerId" integer,
-  "player"   boolean,
-  "coach"    boolean,
-  "clubId"   integer REFERENCES sikb.club (id)
-)

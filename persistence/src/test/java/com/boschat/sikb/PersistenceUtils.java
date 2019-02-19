@@ -16,15 +16,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.boschat.sikb.Sequences.AFFILIATION_ID_SEQ;
-import static com.boschat.sikb.Sequences.CLUB_ID_SEQ;
-import static com.boschat.sikb.Sequences.LICENCE_ID_SEQ;
-import static com.boschat.sikb.Sequences.PERSON_ID_SEQ;
 import static com.boschat.sikb.Sequences.USER_ID_SEQ;
 import static com.boschat.sikb.Tables.AFFILIATION;
 import static com.boschat.sikb.Tables.LICENCE;
 import static com.boschat.sikb.Tables.PERSON;
 import static com.boschat.sikb.Tables.SEASON;
+import static com.boschat.sikb.Tables.TEAM;
 import static com.boschat.sikb.Tables.USER;
 import static com.boschat.sikb.common.utils.IntegerUtils.toIntegerArray;
 import static com.boschat.sikb.tables.Club.CLUB;
@@ -70,13 +67,11 @@ public class PersistenceUtils {
 
     public static void loadClubs() throws IOException {
         DAOFactory.getInstance().truncateClub();
-        DAOFactory.getInstance().getDslContext().alterSequence(CLUB_ID_SEQ).restart().execute();
         loadClubs("sql/insertClub.csv");
     }
 
     public static void loadLicences() throws Exception {
         DAOFactory.getInstance().truncateLicence();
-        DAOFactory.getInstance().getDslContext().alterSequence(LICENCE_ID_SEQ).restart().execute();
         loadLicences("sql/insertLicence.csv");
     }
 
@@ -85,9 +80,13 @@ public class PersistenceUtils {
         loadDataSuite("sql/insertSeason.csv", SEASON, SEASON.ID, SEASON.DESCRIPTION, SEASON.BEGIN, SEASON.END);
     }
 
+    public static void loadTeams() throws IOException {
+        DAOFactory.getInstance().truncateTeam();
+        loadDataSuite("sql/insertTeam.csv", TEAM, TEAM.NAME, TEAM.SEASON, TEAM.CLUBID, TEAM.TEAMMEMBERS, TEAM.CREATIONDATE, TEAM.MODIFICATIONDATE);
+    }
+
     public static void loadAffiliations() throws IOException {
         DAOFactory.getInstance().truncateAffiliation();
-        DAOFactory.getInstance().getDslContext().alterSequence(AFFILIATION_ID_SEQ).restart().execute();
         loadAffiliations("sql/insertAffiliation.csv");
     }
 
@@ -104,7 +103,6 @@ public class PersistenceUtils {
 
     public static void loadPersons() throws IOException {
         DAOFactory.getInstance().truncatePerson();
-        DAOFactory.getInstance().getDslContext().alterSequence(PERSON_ID_SEQ).restart().execute();
         loadPersons("sql/insertPerson.csv");
     }
 

@@ -70,9 +70,9 @@ public class ClubUtils {
         return clubBean;
     }
 
-    public static void checkClubExists(Integer clubId) {
-        if (!DAOFactory.getInstance().getClubDAO().existsById(clubId)) {
-            throw new FunctionalException(CLUB_NOT_FOUND, clubId);
+    public static void checkClubExists() {
+        if (!DAOFactory.getInstance().getClubDAO().existsById(MyThreadLocal.get().getClubId())) {
+            throw new FunctionalException(CLUB_NOT_FOUND, MyThreadLocal.get().getClubId());
         }
     }
 

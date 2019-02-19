@@ -31,6 +31,11 @@ import com.boschat.sikb.model.SeasonForCreation;
 import com.boschat.sikb.model.SeasonForUpdate;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
+import com.boschat.sikb.model.Team;
+import com.boschat.sikb.model.TeamForCreation;
+import com.boschat.sikb.model.TeamForUpdate;
+import com.boschat.sikb.model.TeamMember;
+import com.boschat.sikb.model.TeamMemberForCreation;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.model.User;
 import com.boschat.sikb.model.UserForCreation;
@@ -78,6 +83,8 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.model.MemberType.COACH;
+import static com.boschat.sikb.model.MemberType.PLAYER;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
@@ -160,6 +167,14 @@ public abstract class AbstractTest {
     protected static final String CLUB_DEFAULT_SHORT_NAME = "KBAR";
 
     protected static final String CLUB_DEFAULT_LOGO = "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/KBAR-Rennes.jpg?resize=100%2C100&ssl=1";
+
+    protected static final Integer TEAM_DEFAULT_ID = 1;
+
+    protected static final String TEAM_DEFAULT_NAME = "Rennes 1 M";
+
+    protected static final List<TeamMemberForCreation> TEAM_DEFAULT_MEMBERS = Arrays.asList(
+        new TeamMemberForCreation().id(1).type(PLAYER),
+        new TeamMemberForCreation().id(2).type(COACH));
 
     protected static final String AFFILIATION_DEFAULT_PREFECTURE_NUMBER = "W333333333";
 
@@ -286,6 +301,18 @@ public abstract class AbstractTest {
         return Arrays.asList(getBody(result, Club[].class));
     }
 
+    protected static Team getTeam(Response result) throws IOException {
+        return getBody(result, Team.class);
+    }
+
+    protected static List<Team> getTeams(Response result) throws IOException {
+        return Arrays.asList(getBody(result, Team[].class));
+    }
+
+    protected static List<TeamMember> getTeamMembers(Response result) throws IOException {
+        return Arrays.asList(getBody(result, TeamMember[].class));
+    }
+
     private static <T> T getBody(Response result, Class<T> clazz) throws IOException {
         String body = result.readEntity(String.class);
         return JacksonJsonProvider.getMapper().readValue(body, clazz);
@@ -380,18 +407,18 @@ public abstract class AbstractTest {
     }
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
-        String path = buildPath(version, clubId, season);
+        String path = buildPathClubs(version, clubId, season, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response affiliationDelete(ApiVersion version, Integer clubId, String season) {
-        String path = buildPath(version, clubId, season);
+        String path = buildPathClubs(version, clubId, season, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
     protected Response affiliationCreate(ApiVersion version, Integer clubId, String season, AffiliationForCreation affiliationForCreation) {
         Entity<AffiliationForCreation> entity = Entity.json(affiliationForCreation);
-        String path = buildPath(version, clubId, season);
+        String path = buildPathClubs(version, clubId, season, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
@@ -419,7 +446,7 @@ public abstract class AbstractTest {
 
     protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForUpdate> entity = Entity.json(affiliationForUpdate);
-        String path = buildPath(version, clubId, season);
+        String path = buildPathClubs(version, clubId, season, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
@@ -527,28 +554,60 @@ public abstract class AbstractTest {
 
     protected Response clubCreate(ApiVersion version, ClubForCreation clubForCreation) {
         Entity<ClubForCreation> entity = Entity.json(clubForCreation);
-        String path = buildPath(version, null, null);
+        String path = buildPathClubs(version, null, null, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
     protected Response clubGet(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null);
+        String path = buildPathClubs(version, clubId, null, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response clubFind(ApiVersion version) {
-        String path = buildPath(version, null, null);
+        String path = buildPathClubs(version, null, null, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response clubUpdate(ApiVersion version, Integer clubId, ClubForUpdate clubForUpdate) {
         Entity<ClubForUpdate> entity = Entity.json(clubForUpdate);
-        String path = buildPath(version, clubId, null);
+        String path = buildPathClubs(version, clubId, null, true, false, null, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response clubDelete(ApiVersion version, Integer clubId) {
-        String path = buildPath(version, clubId, null);
+        String path = buildPathClubs(version, clubId, null, true, false, null, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
+    }
+
+    protected Response teamCreate(ApiVersion version, Integer clubId, String seasonId, TeamForCreation teamForCreation) {
+        Entity<TeamForCreation> entity = Entity.json(teamForCreation);
+        String path = buildPathClubs(version, clubId, seasonId, false, true, null, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
+    }
+
+    protected Response teamGet(ApiVersion version, Integer clubId, String seasonId, Integer teamId) {
+        String path = buildPathClubs(version, clubId, seasonId, false, true, teamId, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response teamFind(ApiVersion version, Integer clubId, String seasonId) {
+        String path = buildPathClubs(version, clubId, seasonId, false, true, null, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response teamMembersFind(ApiVersion version, Integer clubId, String seasonId, Integer teamId) {
+        String path = buildPathClubs(version, clubId, seasonId, false, true, teamId, true);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response teamUpdate(ApiVersion version, Integer clubId, String seasonId, Integer teamId, TeamForUpdate teamForUpdate) {
+        Entity<TeamForUpdate> entity = Entity.json(teamForUpdate);
+        String path = buildPathClubs(version, clubId, seasonId, false, true, teamId, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
+    }
+
+    protected Response teamDelete(ApiVersion version, Integer clubId, String seasonId, Integer teamId) {
+        String path = buildPathClubs(version, clubId, seasonId, false, true, teamId, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
@@ -657,7 +716,8 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    protected String buildPath(ApiVersion version, Integer clubId, String season) {
+    protected String buildPathClubs(ApiVersion version, Integer clubId, String season, boolean isAffiliation, boolean isTeam, Integer teamId,
+        boolean isMembers) {
         StringBuilder path = new StringBuilder("/" + version.getName() + "/clubs");
         if (clubId != null) {
             path.append("/");
@@ -666,7 +726,23 @@ public abstract class AbstractTest {
         if (season != null) {
             path.append("/seasons/");
             path.append(season);
+        }
+
+        if (isAffiliation) {
             path.append("/affiliations");
+        }
+
+        if (isTeam) {
+            path.append("/teams");
+        }
+
+        if (teamId != null) {
+            path.append("/");
+            path.append(teamId);
+        }
+
+        if (isMembers) {
+            path.append("/members");
         }
         return path.toString();
     }
@@ -731,6 +807,14 @@ public abstract class AbstractTest {
                 () -> assertEquals(electedDate, board.getElectedDate(), " electedDate incorrect")
             );
         }
+    }
+
+    protected void checkTeam(Team team, String name) {
+        assertAll("Check Team " + team.getName(),
+            () -> assertNotNull(team, " Team shouldn't be null"),
+            () -> assertNotNull(team.getId(), "Id shouldn't be null"),
+            () -> assertEquals(name, team.getName(), " name incorrect")
+        );
     }
 
     protected void checkClub(Club club, String name, String shortName, String logo) {

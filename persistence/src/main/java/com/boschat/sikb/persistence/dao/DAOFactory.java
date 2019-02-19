@@ -21,6 +21,11 @@ import org.jooq.impl.DefaultRecordListenerProvider;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+import static com.boschat.sikb.Sequences.AFFILIATION_ID_SEQ;
+import static com.boschat.sikb.Sequences.CLUB_ID_SEQ;
+import static com.boschat.sikb.Sequences.LICENCE_ID_SEQ;
+import static com.boschat.sikb.Sequences.PERSON_ID_SEQ;
+import static com.boschat.sikb.Sequences.TEAM_ID_SEQ;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_HOST;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_PASSWORD;
@@ -32,6 +37,7 @@ import static com.boschat.sikb.tables.Club.CLUB;
 import static com.boschat.sikb.tables.Licence.LICENCE;
 import static com.boschat.sikb.tables.Person.PERSON;
 import static com.boschat.sikb.tables.Season.SEASON;
+import static com.boschat.sikb.tables.Team.TEAM;
 import static com.boschat.sikb.tables.User.USER;
 
 public class DAOFactory {
@@ -43,6 +49,8 @@ public class DAOFactory {
     private AffiliationDAOExtended affiliationDAO = null;
 
     private ClubDao clubDAO = null;
+
+    private TeamDAOExtended teamDAO = null;
 
     private UserDao userDAO = null;
 
@@ -104,6 +112,13 @@ public class DAOFactory {
         return clubDAO;
     }
 
+    public TeamDAOExtended getTeamDAO() {
+        if (teamDAO == null) {
+            teamDAO = new TeamDAOExtended(configuration);
+        }
+        return teamDAO;
+    }
+
     public SeasonDAOExtended getSeasonDAO() {
         if (seasonDAO == null) {
             seasonDAO = new SeasonDAOExtended(configuration);
@@ -163,14 +178,18 @@ public class DAOFactory {
 
     public void truncateClub() {
         truncate(CLUB);
+        DAOFactory.getInstance().getDslContext().alterSequence(CLUB_ID_SEQ).restart().execute();
+
     }
 
     public void truncateLicence() {
         truncate(LICENCE);
+        DAOFactory.getInstance().getDslContext().alterSequence(LICENCE_ID_SEQ).restart().execute();
     }
 
     public void truncateAffiliation() {
         truncate(AFFILIATION);
+        DAOFactory.getInstance().getDslContext().alterSequence(AFFILIATION_ID_SEQ).restart().execute();
     }
 
     public void truncateUser() {
@@ -181,7 +200,13 @@ public class DAOFactory {
         truncate(SEASON);
     }
 
+    public void truncateTeam() {
+        truncate(TEAM);
+        DAOFactory.getInstance().getDslContext().alterSequence(TEAM_ID_SEQ).restart().execute();
+    }
+
     public void truncatePerson() {
         truncate(PERSON);
+        DAOFactory.getInstance().getDslContext().alterSequence(PERSON_ID_SEQ).restart().execute();
     }
 }
