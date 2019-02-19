@@ -13,7 +13,6 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.boschat.sikb.Sequences.USER_ID_SEQ;
@@ -52,7 +51,7 @@ public class PersistenceUtils {
         for (int i = 0; values.length > i; i++) {
             String currentLine = line[i];
             if (line[i].contains(",")) {
-                Integer[] numbers = toIntegerArray(Stream.of(currentLine.split(",")).map(Integer::parseInt).collect(Collectors.toList()));
+                Integer[] numbers = toIntegerArray(Stream.of(currentLine.split(",")).map(Integer::parseInt).collect(toList()));
                 values[i] = numbers;
             } else {
                 values[i] = currentLine;

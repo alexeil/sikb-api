@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-echo "\n=== CHECK SUREFIRE REPORTS ===\n"
+echo "=== CHECK SUREFIRE REPORTS ==="
 
 error=false
 

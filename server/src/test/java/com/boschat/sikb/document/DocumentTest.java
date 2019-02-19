@@ -98,7 +98,7 @@ class DocumentTest {
     class Licence {
 
         @BeforeEach
-        void setup() {
+        void init() {
             ReloadServlet.reloadProperties();
             PDFGeneratorUtils.reset();
         }
