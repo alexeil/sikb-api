@@ -21,7 +21,7 @@ public class ReloadServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(ReloadServlet.class);
 
-    public static void reloadProperties() {
+    private static void reloadProperties() {
         ConfigLoader.getInstance().loadAndCheckTechnicalConfig(CONFIG_PATH.getValue(), "application.properties");
     }
 

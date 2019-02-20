@@ -89,6 +89,7 @@ import static com.boschat.sikb.model.MemberType.COACH;
 import static com.boschat.sikb.model.MemberType.PLAYER;
 import static com.boschat.sikb.model.Sex.FEMALE;
 import static com.boschat.sikb.model.Sex.MALE;
+import static com.boschat.sikb.servlet.ReloadServlet.reloadEverything;
 import static com.boschat.sikb.utils.HashUtils.basicEncode;
 import static org.glassfish.jersey.test.TestProperties.CONTAINER_PORT;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -221,6 +222,8 @@ public abstract class AbstractTest {
     protected static final OffsetDateTime NOW = OffsetDateTime.of(2018, 1, 18, 13, 11, 0, 0, DateUtils.getCurrentZoneOffSet());
 
     protected static Wiser wiser;
+
+    private static String wiserServerPort;
 
     private static String serverPort;
 
@@ -383,7 +386,7 @@ public abstract class AbstractTest {
         jerseyTest.setUp();
     }
 
-    public static void setTestsProperties() {
+    public static void setEnvVariablesTests() {
         System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
         System.setProperty(POSTGRES_DB.getEnv(), "sikb");
         System.setProperty(POSTGRES_HOST.getEnv(), "localhost");
@@ -392,16 +395,28 @@ public abstract class AbstractTest {
         System.setProperty(POSTGRES_PASSWORD.getEnv(), "postgres");
     }
 
+    public static void reloadEverythingForTests() throws IOException {
+        reloadEverything();
+        setPropertiesTests();
+    }
+
+    public static void setPropertiesTests() throws IOException {
+        if (null == wiserServerPort) {
+            wiserServerPort = findRandomOpenPortOnAllLocalInterfaces().toString();
+        }
+        ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
+        ConfigLoader.getInstance().setProperties(SMTP_PORT, wiserServerPort);
+        ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
+    }
+
     public static void initContext() throws IOException {
         DateUtils.useFixedClockAt(NOW);
-        setTestsProperties();
+        setEnvVariablesTests();
 
         initServlet = new InitServlet();
         initServlet.init();
 
-        ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
-        ConfigLoader.getInstance().setProperties(SMTP_PORT, findRandomOpenPortOnAllLocalInterfaces().toString());
-        ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
+        setPropertiesTests();
 
         wiser = new Wiser(SMTP_PORT.getIntegerValue());
         wiser.start();

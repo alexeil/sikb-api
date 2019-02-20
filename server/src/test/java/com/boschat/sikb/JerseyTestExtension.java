@@ -8,11 +8,9 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import static com.boschat.sikb.AbstractTest.initContext;
 import static com.boschat.sikb.AbstractTest.initJerseyTest;
 import static com.boschat.sikb.AbstractTest.initServlet;
-import static com.boschat.sikb.AbstractTest.setTestsProperties;
 import static com.boschat.sikb.AbstractTest.shutDownJerseyTest;
 import static com.boschat.sikb.AbstractTest.wiser;
 import static com.boschat.sikb.PersistenceUtils.executeScript;
-import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
 
 public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
@@ -25,11 +23,10 @@ public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.
         if (!started) {
             long start = System.currentTimeMillis();
             started = true;
-            
-            setTestsProperties();
-            reloadProperties();
-            initJerseyTest();
+
             initContext();
+            initJerseyTest();
+
             executeScript("../persistence/src/main/resources/initdb.sql");
             executeScript("../persistence/src/main/resources/initData.sql");
 

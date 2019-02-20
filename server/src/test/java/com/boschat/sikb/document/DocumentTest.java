@@ -4,7 +4,6 @@ import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.DocumentType;
-import com.boschat.sikb.utils.PDFGeneratorUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,11 +11,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static com.boschat.sikb.AbstractTest.CLUB_LOGO_KEY;
 import static com.boschat.sikb.AbstractTest.PERSON_MEDICAL_CERTIFICATE_KEY;
 import static com.boschat.sikb.AbstractTest.PERSON_PHOTO_KEY;
-import static com.boschat.sikb.AbstractTest.setTestsProperties;
+import static com.boschat.sikb.AbstractTest.reloadEverythingForTests;
+import static com.boschat.sikb.AbstractTest.setEnvVariablesTests;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadLicences;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
@@ -34,7 +35,6 @@ import static com.boschat.sikb.model.DocumentType.LICENCE_TYPE;
 import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
-import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -46,8 +46,8 @@ class DocumentTest {
 
     @BeforeAll
     static void start() throws Exception {
-        setTestsProperties();
-        reloadProperties();
+        setEnvVariablesTests();
+        reloadEverythingForTests();
         loadPersons();
         loadSeasons();
         loadClubs();
@@ -130,9 +130,8 @@ class DocumentTest {
         class errors {
 
             @BeforeEach
-            void init() {
-                reloadProperties();
-                PDFGeneratorUtils.reset();
+            void init() throws IOException {
+                reloadEverythingForTests();
             }
 
             @Test
