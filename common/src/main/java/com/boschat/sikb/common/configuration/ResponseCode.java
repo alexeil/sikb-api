@@ -42,6 +42,7 @@ public enum ResponseCode {
     MEDICAL_CERTIFICATE_NOT_FOUND(INFO, 404, 10, "Medical Certificate (%s) not found"),
     PHOTO_NOT_FOUND(INFO, 404, 11, "Photo (%s) not found"),
     TEAM_NOT_FOUND(INFO, 404, 12, "Team (%s) not found"),
+    LOGO_NOT_FOUND(INFO, 404, 13, "Logo (%s) not found"),
 
 
 

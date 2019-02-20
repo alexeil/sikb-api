@@ -32,7 +32,7 @@ class ClubGetTest extends AbstractTest {
 
         checkResponse(response, OK);
         Club club = getClub(response);
-        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, true);
     }
 
     @Test

@@ -3,12 +3,15 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateClubContext;
 import com.boschat.sikb.context.MyThreadLocal;
+import com.boschat.sikb.model.Logo;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Club;
 
 import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
+import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
+import static com.boschat.sikb.utils.HashUtils.generateToken;
 
 public class ClubUtils {
 
@@ -57,9 +60,6 @@ public class ClubUtils {
         if (createContext.getShortName() != null) {
             clubBean.setShortname(createContext.getShortName());
         }
-        if (createContext.getLogo() != null) {
-            clubBean.setLogo(createContext.getLogo());
-        }
 
         if (isModification) {
             DAOFactory.getInstance().getClubDAO().insert(clubBean);
@@ -74,6 +74,18 @@ public class ClubUtils {
         if (!DAOFactory.getInstance().getClubDAO().existsById(MyThreadLocal.get().getClubId())) {
             throw new FunctionalException(CLUB_NOT_FOUND, MyThreadLocal.get().getClubId());
         }
+    }
+
+    public static Logo createLogo() {
+        Club club = getClub();
+
+        club.setLogodata(MyThreadLocal.get().getCreateOrUpdateClubContext().getLogoInputStream());
+        club.setLogokey(generateToken());
+        DAOFactory.getInstance().getClubDAO().update(club);
+
+        Logo logo = new Logo();
+        logo.setLocation(LOGO_TYPE.buildUrl(club.getLogokey()));
+        return logo;
     }
 
 }

@@ -31,7 +31,7 @@ class ClubFindTest extends AbstractTest {
 
     @Test
     @DisplayName(" (default) ")
-    void getDefaultClub() throws Exception {
+    void getClubs() throws Exception {
         Response response = clubFind(V1);
 
         checkResponse(response, OK);
@@ -40,9 +40,9 @@ class ClubFindTest extends AbstractTest {
         assertAll("Check clubs ",
             () -> assertNotNull(clubs, " clubs shouldn't be null"),
             () -> assertEquals(2, clubs.size(), " only 2 clubs "),
-            () -> checkClub(clubs.get(0), CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO),
+            () -> checkClub(clubs.get(0), CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, true),
             () -> checkClub(clubs.get(1), "Nantes Atlantique Kin-ball Club", "NAKC",
-                "https://i1.wp.com/www.kin-ball.fr/wp-content/uploads/2016/11/NAKC-Nantes.jpg?resize=100%2C100&ssl=1")
+                false)
         );
     }
 

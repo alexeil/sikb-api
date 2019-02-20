@@ -60,6 +60,18 @@ public enum DocumentType {
                 outputStream.write(data);
             }
         }
+    },
+    LOGO_TYPE("photo", "image/png", "image/jpeg") {
+        @Override
+        public void writeDocument(String id, OutputStream outputStream) throws IOException {
+            Club club = DAOFactory.getInstance().getClubDAO().fetchOneByLogokey(id);
+            if (club == null) {
+                throw new FunctionalException(PHOTO_NOT_FOUND, id);
+            } else {
+                byte[] data = club.getLogodata();
+                outputStream.write(data);
+            }
+        }
     };
 
     private String key;

@@ -16,13 +16,13 @@ import static com.boschat.sikb.api.CallType.LICENCE_CREATE;
 import static com.boschat.sikb.api.CallType.LICENCE_DELETE;
 import static com.boschat.sikb.api.CallType.LICENCE_FIND;
 import static com.boschat.sikb.api.CallType.LICENCE_UPDATE;
-import static com.boschat.sikb.api.CallType.MEDICAL_CERTIFICATE_CREATE;
+import static com.boschat.sikb.api.CallType.MEDICAL_CERTIFICATE_UPLOAD;
 import static com.boschat.sikb.api.CallType.PERSON_CREATE;
 import static com.boschat.sikb.api.CallType.PERSON_DELETE;
 import static com.boschat.sikb.api.CallType.PERSON_FIND;
 import static com.boschat.sikb.api.CallType.PERSON_GET;
 import static com.boschat.sikb.api.CallType.PERSON_UPDATE;
-import static com.boschat.sikb.api.CallType.PHOTO_CREATE;
+import static com.boschat.sikb.api.CallType.PHOTO_UPLOAD;
 
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJerseyServerCodegen", date = "2019-01-17T10:05:39.503+01:00[Europe/Paris]")
 public class PersonsApiServiceImpl extends PersonsApiService {
@@ -35,9 +35,8 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response uploadMedicalCertificate(String accessToken, Integer personId, InputStream medicalCertificateFileNameInputStream,
         FormDataContentDisposition medicalCertificateFileNameDetail, String medicalCertificateBeginValidityDate, SecurityContext securityContext) {
-        return runService(MEDICAL_CERTIFICATE_CREATE, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
-            medicalCertificateFileNameDetail,
-            medicalCertificateBeginValidityDate);
+        return runService(MEDICAL_CERTIFICATE_UPLOAD, accessToken, securityContext, personId, medicalCertificateFileNameInputStream,
+            medicalCertificateFileNameDetail, medicalCertificateBeginValidityDate);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class PersonsApiServiceImpl extends PersonsApiService {
     @Override
     public Response uploadPhoto(String accessToken, Integer personId, InputStream photoFileNameInputStream, FormDataContentDisposition photoFileNameDetail,
         SecurityContext securityContext) {
-        return runService(PHOTO_CREATE, accessToken, securityContext, personId, photoFileNameInputStream, photoFileNameDetail);
+        return runService(PHOTO_UPLOAD, accessToken, securityContext, personId, photoFileNameInputStream, photoFileNameDetail);
     }
 
     @Override

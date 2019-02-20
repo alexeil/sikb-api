@@ -3,9 +3,12 @@ package com.boschat.sikb;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
+import static com.boschat.sikb.AbstractTest.initContext;
 import static com.boschat.sikb.AbstractTest.initJerseyTest;
+import static com.boschat.sikb.AbstractTest.initServlet;
 import static com.boschat.sikb.AbstractTest.shutDownJerseyTest;
-import static org.junit.jupiter.api.extension.ExtensionContext.Namespace.GLOBAL;
+import static com.boschat.sikb.AbstractTest.wiser;
+import static com.boschat.sikb.PersistenceUtils.executeScript;
 
 public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 
@@ -16,13 +19,15 @@ public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.
         if (!started) {
             started = true;
             initJerseyTest();
-            // Your "before all tests" startup logic goes here
-            // The following line registers a callback hook when the root test context is shut down
-            context.getRoot().getStore(GLOBAL).put("any unique name", this);
+            initContext();
+            executeScript("initDb.sql");
+            executeScript("initData.sql");
         }
     }
 
     public void close() throws Exception {
         shutDownJerseyTest();
+        initServlet.destroy();
+        wiser.stop();
     }
 }

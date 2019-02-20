@@ -10,7 +10,7 @@ import org.jooq.impl.TableImpl;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Path;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
@@ -43,7 +43,7 @@ public class PersistenceUtils {
     }
 
     public static void loadClubs(String fileName) throws IOException {
-        loadDataSuite(fileName, CLUB, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGO, CLUB.CREATIONDATE);
+        loadDataSuite(fileName, CLUB, CLUB.NAME, CLUB.SHORTNAME, CLUB.LOGOKEY, CLUB.LOGODATA, CLUB.CREATIONDATE);
     }
 
     private static Object[] buildObjectFromLine(String[] line) {
@@ -113,15 +113,19 @@ public class PersistenceUtils {
     }
 
     private static <T extends TableImpl> void loadCustomDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException, URISyntaxException {
-        Path path = Paths.get(PersistenceUtils.class.getClassLoader().getResource(resourcePath).toURI());
-        List<String[]> lines = lines(path).map(l -> l.split(";")).collect(toList());
-        Stream<Object[]> values = lines.stream().skip(1).map(PersistenceUtils::buildObjectFromLine);
+        URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
+        if (url == null) {
+            LOGGER.error("resourcePath notFound : " + resourcePath);
+        } else {
+            List<String[]> lines = lines(Paths.get(url.toURI())).map(l -> l.split(";")).collect(toList());
+            Stream<Object[]> values = lines.stream().skip(1).map(PersistenceUtils::buildObjectFromLine);
 
-        DAOFactory.getInstance().getDslContext()
-                  .loadInto(clazz)
-                  .loadArrays(values)
-                  .fields(fields)
-                  .execute();
+            DAOFactory.getInstance().getDslContext()
+                      .loadInto(clazz)
+                      .loadArrays(values)
+                      .fields(fields)
+                      .execute();
+        }
     }
 
     private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
@@ -142,6 +146,16 @@ public class PersistenceUtils {
             int ignored = loader.ignored();
 
             LOGGER.trace(" processed {} - stored {} - ignored {}", processed, stored, ignored);
+        }
+    }
+
+    public static void executeScript(String resourcePath) throws Exception {
+        URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
+        if (url == null) {
+            LOGGER.error("resourcePath notFound : " + resourcePath);
+        } else {
+            String content = new String(Files.readAllBytes(Paths.get(url.toURI())));
+            DAOFactory.getInstance().getDslContext().execute(content);
         }
     }
 }

@@ -37,7 +37,7 @@ class AdministrationTest extends AbstractTest {
     }
 
     private Response affiliationGetWithCredentials(String basic, String accessToken) {
-        String path = buildPathClubs(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, true, false, null, false);
+        String path = buildPathClubs(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, true, false, null, false, false);
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
         Invocation.Builder builder = target.request();
         if (basic != null) {

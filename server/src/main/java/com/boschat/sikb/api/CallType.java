@@ -47,6 +47,7 @@ import static com.boschat.sikb.service.AffiliationUtils.deleteAffiliation;
 import static com.boschat.sikb.service.AffiliationUtils.getAffiliation;
 import static com.boschat.sikb.service.AffiliationUtils.updateAffiliation;
 import static com.boschat.sikb.service.ClubUtils.createClub;
+import static com.boschat.sikb.service.ClubUtils.createLogo;
 import static com.boschat.sikb.service.ClubUtils.deleteClub;
 import static com.boschat.sikb.service.ClubUtils.findClubs;
 import static com.boschat.sikb.service.ClubUtils.getClub;
@@ -492,7 +493,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForUpdate) params[4]));
         }
     },
-    MEDICAL_CERTIFICATE_CREATE("Upload a person's medical certificate", OK, true) {
+    MEDICAL_CERTIFICATE_UPLOAD("Upload a person's medical certificate", OK, true) {
         @Override
         public Object call() {
             return createMedicalCertificate();
@@ -505,7 +506,7 @@ public enum CallType {
                 params[2], (String) params[3]));
         }
     },
-    PHOTO_CREATE("Upload a person's photo", OK, true) {
+    PHOTO_UPLOAD("Upload a person's photo", OK, true) {
         @Override
         public Object call() {
             return createPhoto();
@@ -516,6 +517,19 @@ public enum CallType {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
             MyThreadLocal.get().setCreateOrUpdatePersonContext(
                 CreateOrUpdatePersonContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
+        }
+    },
+    LOGO_UPLOAD("Upload a club's logo", OK, true) {
+        @Override
+        public Object call() {
+            return createLogo();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
+            MyThreadLocal.get().setCreateOrUpdateClubContext(
+                CreateOrUpdateClubContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
         }
     },
     TEAM_CREATE("Create a team", CREATED, true) {

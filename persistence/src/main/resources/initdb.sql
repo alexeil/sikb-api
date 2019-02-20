@@ -31,7 +31,8 @@ CREATE TABLE sikb.club
   "id"               serial PRIMARY KEY,
   "name"             varchar(255),
   "shortName"        varchar(255),
-  "logo"             varchar(255),
+  "logoKey"          varchar(255) unique,
+  "logoData"         bytea,
   "creationDate"     timestamp,
   "modificationDate" timestamp
 );

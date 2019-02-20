@@ -37,7 +37,7 @@ class ClubCreateTest extends AbstractTest {
 
         checkResponse(response, CREATED);
         Club club = getClub(response);
-        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, null);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, false);
     }
 
     @Test
@@ -46,13 +46,12 @@ class ClubCreateTest extends AbstractTest {
         ClubForCreation clubForCreation = new ClubForCreation();
         clubForCreation.setName(CLUB_DEFAULT_NAME);
         clubForCreation.setShortName(CLUB_DEFAULT_SHORT_NAME);
-        clubForCreation.setLogo(CLUB_DEFAULT_LOGO);
 
         Response response = clubCreate(V1, clubForCreation);
 
         checkResponse(response, CREATED);
         Club club = getClub(response);
-        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, CLUB_DEFAULT_LOGO);
+        checkClub(club, CLUB_DEFAULT_NAME, CLUB_DEFAULT_SHORT_NAME, false);
     }
 
     @Test

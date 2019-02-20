@@ -4,6 +4,7 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 
 import java.io.IOException;
 
+import static com.boschat.sikb.PersistenceUtils.executeScript;
 import static com.boschat.sikb.PersistenceUtils.loadAffiliations;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
@@ -18,13 +19,15 @@ public class ImportCSVUtils {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         System.setProperty(POSTGRES_DB.getEnv(), "sikb");
         System.setProperty(POSTGRES_HOST.getEnv(), "localhost");
         System.setProperty(POSTGRES_PORT.getEnv(), "5432");
         System.setProperty(POSTGRES_USER.getEnv(), "postgres");
         System.setProperty(POSTGRES_PASSWORD.getEnv(), "postgres");
 
+        executeScript("initDb.sql");
+        executeScript("initData.sql");
         truncateAndImportClub();
         truncateAndImportAffiliation();
     }

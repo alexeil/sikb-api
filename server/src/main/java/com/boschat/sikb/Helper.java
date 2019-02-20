@@ -6,6 +6,7 @@ import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.Logo;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.model.Sex;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
+import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
@@ -270,7 +272,9 @@ public class Helper {
         club.setId(clubBean.getId());
         club.setName(clubBean.getName());
         club.setShortName(clubBean.getShortname());
-        club.setLogo(clubBean.getLogo());
+        if (StringUtils.isNotEmpty(clubBean.getLogokey())) {
+            club.setLogo(new Logo().location(LOGO_TYPE.buildUrl(clubBean.getLogokey())));
+        }
         return club;
     }
 

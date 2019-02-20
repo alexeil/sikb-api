@@ -418,6 +418,42 @@ paths:
                 $ref: "#/components/schemas/ZError"
       tags:
         - clubs
+  '/clubs/{clubId}/logo':
+    post:
+      summary: Upload a club's
+      description: ''
+      operationId: uploadLogo
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/logoForCreation'
+            encoding:
+              medicalCertificateFileName:
+                contentType: image/png, image/jpeg
+
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Created or updated club's logo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/photo'
+        400:
+          description: Default error sample response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZError"
+      tags:
+        - clubs
+
   '/clubs/{clubId}/seasons/{seasonId}/affiliations':
     post:
       summary: Create the club affiliation for a season
@@ -1277,7 +1313,8 @@ components:
         shortName:
           type: string
         logo:
-          type: string
+          $ref: '#/components/schemas/logo'
+
 
     clubForCreation:
       allOf:
@@ -1291,8 +1328,6 @@ components:
         name:
           type: string
         shortName:
-          type: string
-        logo:
           type: string
 
     affiliation:
@@ -1631,6 +1666,20 @@ components:
         photoFileName:
           type: string
           format: binary
+
+    logoForCreation:
+      type: object
+      required:
+        - logoFileName
+      properties:
+        logoFileName:
+          type: string
+          format: binary
+
+    logo:
+      properties:
+        location:
+          type: string
 
     photo:
       properties:

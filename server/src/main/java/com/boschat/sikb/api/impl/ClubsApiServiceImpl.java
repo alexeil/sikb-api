@@ -7,9 +7,11 @@ import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.TeamForCreation;
 import com.boschat.sikb.model.TeamForUpdate;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import java.io.InputStream;
 
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.AFFILIATION_CREATE;
@@ -21,6 +23,7 @@ import static com.boschat.sikb.api.CallType.CLUB_DELETE;
 import static com.boschat.sikb.api.CallType.CLUB_FIND;
 import static com.boschat.sikb.api.CallType.CLUB_GET;
 import static com.boschat.sikb.api.CallType.CLUB_UPDATE;
+import static com.boschat.sikb.api.CallType.LOGO_UPLOAD;
 import static com.boschat.sikb.api.CallType.TEAM_CREATE;
 import static com.boschat.sikb.api.CallType.TEAM_DELETE;
 import static com.boschat.sikb.api.CallType.TEAM_FIND;
@@ -90,6 +93,12 @@ public class ClubsApiServiceImpl extends ClubsApiService {
         SecurityContext securityContext) {
         return runService(TEAM_UPDATE, accessToken, securityContext, clubId, seasonId, teamId, teamForUpdate);
 
+    }
+
+    @Override
+    public Response uploadLogo(String accessToken, Integer clubId, InputStream logoFileNameInputStream, FormDataContentDisposition logoFileNameDetail,
+        SecurityContext securityContext) {
+        return runService(LOGO_UPLOAD, accessToken, securityContext, clubId, logoFileNameInputStream, logoFileNameDetail);
     }
 
     @Override

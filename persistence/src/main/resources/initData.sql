@@ -6,7 +6,7 @@ INSERT INTO sikb.application
 values (3, 'test', 'test', 'test');
 
 INSERT INTO sikb.user
-VALUES ('myEmail@kin-ball.fr', 'bGKpbc0W5ILoIyoN8N9Qd3PttwOtqqYKUwInP+CTW37j0+inXEpq8Yh4nDp+oBo477C94ltwdhWIQnUYA2dlqQ',
+VALUES (default, 'myEmail@kin-ball.fr', 'bGKpbc0W5ILoIyoN8N9Qd3PttwOtqqYKUwInP+CTW37j0+inXEpq8Yh4nDp+oBo477C94ltwdhWIQnUYA2dlqQ',
         'gy7eniQ5OpIB83ufcBYgpZdgKpS/PQjvGUfcjyp1G5eFIjcF6B52AGS93+lmvnb7CDy3hq0rDQahxKN+/sYcvA', null, null, null, null, null,
         'Y2RjY2QzMzUtNjRiNy00ZmRiLTkwOGUtZGYxNGYxYzM2ZGRkMjAxOS0wMi0xOVQxNzozODoyMC40ODNa', true, '2018-01-18 13:11:00.000000', '2019-02-19 17:38:20.483000');
 
