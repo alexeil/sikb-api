@@ -13,13 +13,14 @@ import org.subethamail.wiser.Wiser;
 import java.io.IOException;
 
 import static com.boschat.sikb.AbstractTest.checkEmailWithWiser;
-import static com.boschat.sikb.AbstractTest.reloadEverythingForTests;
+import static com.boschat.sikb.AbstractTest.findRandomOpenPortOnAllLocalInterfaces;
 import static com.boschat.sikb.AbstractTest.setEnvVariablesTests;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
+import static com.boschat.sikb.servlet.ReloadServlet.reloadEverything;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName(" email service ")
@@ -36,11 +37,14 @@ class MailUtilsTest {
     @BeforeAll
     static void beforeAll() throws IOException {
         setEnvVariablesTests();
-        reloadEverythingForTests();
+        reloadEverything();
+        MailUtils.reset();
+        ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
+        ConfigLoader.getInstance().setProperties(SMTP_PORT, findRandomOpenPortOnAllLocalInterfaces().toString());
+        ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
 
         wiser = new Wiser(SMTP_PORT.getIntegerValue());
         wiser.start();
-        MailUtils.reset();
     }
 
     @AfterAll
