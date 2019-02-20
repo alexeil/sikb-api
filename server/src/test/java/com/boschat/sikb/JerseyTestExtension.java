@@ -24,9 +24,10 @@ public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.
     public void beforeAll(ExtensionContext context) throws Exception {
         if (!started) {
             long start = System.currentTimeMillis();
+            started = true;
+            
             setTestsProperties();
             reloadProperties();
-            started = true;
             initJerseyTest();
             initContext();
             executeScript("../persistence/src/main/resources/initDb.sql");

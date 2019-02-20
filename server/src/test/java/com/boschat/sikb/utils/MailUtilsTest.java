@@ -2,7 +2,6 @@ package com.boschat.sikb.utils;
 
 import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.exceptions.TechnicalException;
-import com.boschat.sikb.servlet.ReloadServlet;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,12 +14,13 @@ import java.io.IOException;
 
 import static com.boschat.sikb.AbstractTest.checkEmailWithWiser;
 import static com.boschat.sikb.AbstractTest.findRandomOpenPortOnAllLocalInterfaces;
+import static com.boschat.sikb.AbstractTest.setTestsProperties;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_CREATE_USER_TITLE;
-import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
+import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName(" email service ")
@@ -36,8 +36,10 @@ class MailUtilsTest {
 
     @BeforeAll
     static void beforeAll() throws IOException {
-        System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
-        ReloadServlet.reloadProperties();
+        setTestsProperties();
+        reloadProperties();
+
+        ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
         ConfigLoader.getInstance().setProperties(SMTP_PORT, findRandomOpenPortOnAllLocalInterfaces().toString());
         wiser = new Wiser(SMTP_PORT.getIntegerValue());
         wiser.start();
