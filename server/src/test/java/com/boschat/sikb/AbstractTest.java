@@ -45,6 +45,8 @@ import com.boschat.sikb.model.UserForUpdate;
 import com.boschat.sikb.model.ZError;
 import com.boschat.sikb.servlet.InitServlet;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
@@ -96,6 +98,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class AbstractTest {
+
+    private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
 
     protected static final String LICENCE_DEFAULT_NUMBER = "1234KBAR20182019";
 
@@ -167,7 +171,6 @@ public abstract class AbstractTest {
     protected static final String CLUB_DEFAULT_SHORT_NAME = "KBAR";
 
     public static final String CLUB_LOGO_KEY = "ABC3OTcyZTMtODg3MS00Yjg0LWJlZjUtNGRhNmM0Y2RlMGY3MjAxOS0wMi0xNFQxNTo1NDo0My40OTYrMDE6MDA";
-
 
     protected static final Integer TEAM_DEFAULT_ID = 1;
 
@@ -380,14 +383,18 @@ public abstract class AbstractTest {
         jerseyTest.setUp();
     }
 
-    public static void initContext() throws IOException {
-        DateUtils.useFixedClockAt(NOW);
+    public static void setTestsProperties() {
         System.setProperty(CONFIG_PATH.getEnv(), "src/main/resources");
         System.setProperty(POSTGRES_DB.getEnv(), "sikb");
         System.setProperty(POSTGRES_HOST.getEnv(), "localhost");
         System.setProperty(POSTGRES_PORT.getEnv(), "5432");
         System.setProperty(POSTGRES_USER.getEnv(), "postgres");
         System.setProperty(POSTGRES_PASSWORD.getEnv(), "postgres");
+    }
+
+    public static void initContext() throws IOException {
+        DateUtils.useFixedClockAt(NOW);
+        setTestsProperties();
 
         initServlet = new InitServlet();
         initServlet.init();
@@ -398,6 +405,7 @@ public abstract class AbstractTest {
 
         wiser = new Wiser(SMTP_PORT.getIntegerValue());
         wiser.start();
+        LOGGER.info("wiser started");
     }
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {

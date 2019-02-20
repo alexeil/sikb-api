@@ -17,6 +17,7 @@ import java.util.Set;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.DOCUMENT_BASE_PATH;
 import static com.boschat.sikb.common.configuration.ResponseCode.DOCUMENT_TYPE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.LOGO_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.MEDICAL_CERTIFICATE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.PHOTO_NOT_FOUND;
 
@@ -61,12 +62,12 @@ public enum DocumentType {
             }
         }
     },
-    LOGO_TYPE("photo", "image/png", "image/jpeg") {
+    LOGO_TYPE("logo", "image/png", "image/jpeg") {
         @Override
         public void writeDocument(String id, OutputStream outputStream) throws IOException {
             Club club = DAOFactory.getInstance().getClubDAO().fetchOneByLogokey(id);
             if (club == null) {
-                throw new FunctionalException(PHOTO_NOT_FOUND, id);
+                throw new FunctionalException(LOGO_NOT_FOUND, id);
             } else {
                 byte[] data = club.getLogodata();
                 outputStream.write(data);

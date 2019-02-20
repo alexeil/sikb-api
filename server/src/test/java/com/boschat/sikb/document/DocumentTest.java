@@ -4,7 +4,6 @@ import com.boschat.sikb.common.configuration.ConfigLoader;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.model.DocumentType;
-import com.boschat.sikb.servlet.ReloadServlet;
 import com.boschat.sikb.utils.PDFGeneratorUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 
+import static com.boschat.sikb.AbstractTest.CLUB_LOGO_KEY;
 import static com.boschat.sikb.AbstractTest.PERSON_MEDICAL_CERTIFICATE_KEY;
 import static com.boschat.sikb.AbstractTest.PERSON_PHOTO_KEY;
-import static com.boschat.sikb.AbstractTest.initContext;
+import static com.boschat.sikb.AbstractTest.setTestsProperties;
 import static com.boschat.sikb.PersistenceUtils.loadClubs;
 import static com.boschat.sikb.PersistenceUtils.loadLicences;
 import static com.boschat.sikb.PersistenceUtils.loadPersons;
@@ -27,23 +27,27 @@ import static com.boschat.sikb.common.configuration.ResponseCode.DOCUMENT_TYPE_N
 import static com.boschat.sikb.common.configuration.ResponseCode.EXPORT_PDF_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.JASPER_TEMPLATE_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.LICENCE_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.LOGO_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.MEDICAL_CERTIFICATE_NOT_FOUND;
 import static com.boschat.sikb.common.configuration.ResponseCode.PHOTO_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.LICENCE_TYPE;
+import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.servlet.ReloadServlet.reloadProperties;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@DisplayName("Test Servlet")
+@DisplayName("Document Servlet")
 class DocumentTest {
 
     private static final String UNKNOWN_ID = "AAAAA";
 
     @BeforeAll
     static void start() throws Exception {
-        initContext();
+        setTestsProperties();
+        reloadProperties();
         loadPersons();
         loadSeasons();
         loadClubs();
@@ -69,8 +73,14 @@ class DocumentTest {
         }
     }
 
+    @Test
+    @DisplayName(" Generate unknown Type ")
+    void unknownType() {
+        callDocument("unknownType", UNKNOWN_ID, new FunctionalException(DOCUMENT_TYPE_NOT_FOUND, "unknownType"));
+    }
+
     @Nested
-    @DisplayName(" medical Certificate ")
+    @DisplayName(" Generate medical Certificate ")
     class MedicalCertificateTests {
 
         @Test
@@ -87,14 +97,8 @@ class DocumentTest {
     }
 
     @Nested
-    @DisplayName(" Licence ")
+    @DisplayName(" Generate Licence ")
     class Licence {
-
-        @BeforeEach
-        void init() {
-            ReloadServlet.reloadProperties();
-            PDFGeneratorUtils.reset();
-        }
 
         @Test
         @DisplayName(" right case ")
@@ -115,36 +119,41 @@ class DocumentTest {
         }
 
         @Test
-        @DisplayName(" logo not found ")
-        void logoNotFound() {
-            ConfigLoader.getInstance().setProperties(JASPER_TEMPLATE_LICENCE_LOGO, "test.jpg");
-            callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019", new TechnicalException(EXPORT_PDF_ERROR));
-        }
-
-        @Test
-        @DisplayName(" licence types with wrong format ")
-        void licenceTypesWrongFormat() {
-            ConfigLoader.getInstance().setProperties(JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE, "one;blue.png;two;blue.png");
-            callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019",
-                new TechnicalException(JASPER_TEMPLATE_ERROR, "src/main/resources/templates/licence/licence.jrxml"));
-        }
-
-        @Test
         @DisplayName(" two licences in a row ")
         void twoLicencesInARow() {
             callDocument(LICENCE_TYPE.getKey(), "1666KBAR20182019", null);
             callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019", null);
         }
-    }
 
-    @Test
-    @DisplayName(" unknown Type ")
-    void unknownType() {
-        callDocument("unknownType", UNKNOWN_ID, new FunctionalException(DOCUMENT_TYPE_NOT_FOUND, "unknownType"));
+        @Nested
+        @DisplayName(" with errors ")
+        class errors {
+
+            @BeforeEach
+            void init() {
+                reloadProperties();
+                PDFGeneratorUtils.reset();
+            }
+
+            @Test
+            @DisplayName(" logo not found ")
+            void logoNotFound() {
+                ConfigLoader.getInstance().setProperties(JASPER_TEMPLATE_LICENCE_LOGO, "test.jpg");
+                callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019", new TechnicalException(EXPORT_PDF_ERROR));
+            }
+
+            @Test
+            @DisplayName(" licence types with wrong format ")
+            void licenceTypesWrongFormat() {
+                ConfigLoader.getInstance().setProperties(JASPER_TEMPLATE_LICENCE_COLORS_BY_LICENCE_TYPE, "one;blue.png;two;blue.png");
+                callDocument(LICENCE_TYPE.getKey(), "1234KBAR20182019",
+                    new TechnicalException(JASPER_TEMPLATE_ERROR, "src/main/resources/templates/licence/licence.jrxml"));
+            }
+        }
     }
 
     @Nested
-    @DisplayName(" Photo ")
+    @DisplayName(" Generate Photo ")
     class Photo {
 
         @Test
@@ -161,4 +170,21 @@ class DocumentTest {
 
     }
 
+    @Nested
+    @DisplayName(" Generate Logo ")
+    class Logo {
+
+        @Test
+        @DisplayName(" right case ")
+        void rightCase() {
+            callDocument(LOGO_TYPE.getKey(), CLUB_LOGO_KEY, null);
+        }
+
+        @Test
+        @DisplayName(" unknown Logo ")
+        void unknownPhoto() {
+            callDocument(LOGO_TYPE.getKey(), UNKNOWN_ID, new FunctionalException(LOGO_NOT_FOUND, UNKNOWN_ID));
+        }
+
+    }
 }

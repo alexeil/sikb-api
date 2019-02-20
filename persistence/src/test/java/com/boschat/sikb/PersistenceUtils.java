@@ -7,6 +7,7 @@ import org.jooq.Loader;
 import org.jooq.TableField;
 import org.jooq.impl.TableImpl;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -115,7 +116,7 @@ public class PersistenceUtils {
     private static <T extends TableImpl> void loadCustomDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException, URISyntaxException {
         URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
         if (url == null) {
-            LOGGER.error("resourcePath notFound : " + resourcePath);
+            LOGGER.error("resourcePath notFound : " + resourcePath + ". here " + new File("").getAbsolutePath());
         } else {
             List<String[]> lines = lines(Paths.get(url.toURI())).map(l -> l.split(";")).collect(toList());
             Stream<Object[]> values = lines.stream().skip(1).map(PersistenceUtils::buildObjectFromLine);
@@ -131,7 +132,7 @@ public class PersistenceUtils {
     private static <T extends TableImpl> void loadDataSuite(String resourcePath, T clazz, TableField... fields) throws IOException {
         URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
         if (url == null) {
-            LOGGER.error("resourcePath notFound : " + resourcePath);
+            LOGGER.error("resourcePath notFound : " + resourcePath + ". here " + new File("").getAbsolutePath());
         } else {
             Loader loader = DAOFactory.getInstance().getDslContext()
                                       .loadInto(clazz)
@@ -150,12 +151,14 @@ public class PersistenceUtils {
     }
 
     public static void executeScript(String resourcePath) throws Exception {
-        URL url = PersistenceUtils.class.getClassLoader().getResource(resourcePath);
-        if (url == null) {
-            LOGGER.error("resourcePath notFound : " + resourcePath);
+        File file = new File(resourcePath);
+        if (!file.exists()) {
+            LOGGER.error("resourcePath notFound : " + resourcePath + ". here " + new File("").getAbsolutePath());
         } else {
-            String content = new String(Files.readAllBytes(Paths.get(url.toURI())));
+            String content = new String(Files.readAllBytes(Paths.get(resourcePath)));
             DAOFactory.getInstance().getDslContext().execute(content);
+            LOGGER.error(resourcePath + " executed !");
+
         }
     }
 }
