@@ -30,7 +30,7 @@ public class JerseyTestExtension implements BeforeAllCallback, ExtensionContext.
             reloadProperties();
             initJerseyTest();
             initContext();
-            executeScript("../persistence/src/main/resources/initDb.sql");
+            executeScript("../persistence/src/main/resources/initdb.sql");
             executeScript("../persistence/src/main/resources/initData.sql");
 
             LOGGER.info("Init full Tests context : " + (System.currentTimeMillis() - start) + " ms");
