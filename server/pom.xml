@@ -404,6 +404,9 @@
 							<goal>integration-test</goal>
 							<goal>verify</goal>
 						</goals>
+						<configuration>
+							<argLine>${failsafeArgLine}</argLine>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
