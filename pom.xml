@@ -45,7 +45,7 @@
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
 		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
 
-		<javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
+		<jakarta.ws.rs-api.version>2.1.5</jakarta.ws.rs-api.version>
 		<jetty.version>9.4.15.v20190215</jetty.version>
 		<jersey-server.version>2.28</jersey-server.version>
 		<jackson.version>2.9.8</jackson.version>
@@ -77,6 +77,16 @@
 				<groupId>net.sf.jasperreports</groupId>
 				<artifactId>jasperreports</artifactId>
 				<version>${jasperreports.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.inject</groupId>
+						<artifactId>javax.inject</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>stax</groupId>
+						<artifactId>stax-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -91,12 +101,6 @@
 				<artifactId>swagger-jaxrs2</artifactId>
 				<version>${swagger.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>io.swagger.core.v3</groupId>
-				<artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
-				<version>${swagger.version}</version>
-			</dependency>
-
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
@@ -104,7 +108,6 @@
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
-
 
 			<dependency>
 				<groupId>org.subethamail</groupId>
@@ -227,9 +230,9 @@
 			</dependency>
 
 			<dependency>
-				<groupId>javax.ws.rs</groupId>
-				<artifactId>javax.ws.rs-api</artifactId>
-				<version>${javax.ws.rs-api.version}</version>
+				<groupId>jakarta.ws.rs</groupId>
+				<artifactId>jakarta.ws.rs-api</artifactId>
+				<version>${jakarta.ws.rs-api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
@@ -416,6 +419,7 @@
 					<version>${maven-surefire-plugin.version}</version>
 					<configuration>
 						<argLine>${surefireArgLine}</argLine>
+						<skipTests>${skip.unit.tests}</skipTests>
 						<excludes>
 							<exclude>**/*IT.java</exclude>
 						</excludes>

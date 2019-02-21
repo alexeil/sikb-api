@@ -83,10 +83,6 @@
 			<artifactId>mail</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>io.swagger.core.v3</groupId>
-			<artifactId>swagger-jaxrs2-servlet-initializer</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
@@ -100,16 +96,18 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
+			<groupId>jakarta.ws.rs</groupId>
+			<artifactId>jakarta.ws.rs-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-servlet</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-webapp</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -406,6 +404,7 @@
 						</goals>
 						<configuration>
 							<argLine>${failsafeArgLine}</argLine>
+							<skipTests>${skip.integration.tests}</skipTests>
 						</configuration>
 					</execution>
 				</executions>
