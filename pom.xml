@@ -43,9 +43,11 @@
 		<maven-assembly-plugin.version>3.1.1</maven-assembly-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
 
 		<javax.ws.rs-api.version>2.1.1</javax.ws.rs-api.version>
 		<jetty-server.version>9.4.15.v20190215</jetty-server.version>
+		<jetty-maven-plugin.version>9.4.14.v20181114</jetty-maven-plugin.version>
 		<jersey-server.version>2.28</jersey-server.version>
 		<jackson.version>2.9.8</jackson.version>
 		<openapi-generator-maven-plugin-version>3.3.4</openapi-generator-maven-plugin-version>
@@ -315,6 +317,18 @@
 			<plugins>
 
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${maven-failsafe-plugin.version}</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty-maven-plugin.version}</version>
+				</plugin>
+
+				<plugin>
 					<groupId>org.jooq</groupId>
 					<artifactId>jooq-codegen-maven</artifactId>
 					<version>${jooq.version}</version>
@@ -402,6 +416,9 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
 					<configuration>
+						<excludes>
+							<exclude>**/*IT.java</exclude>
+						</excludes>
 						<testFailureIgnore>true</testFailureIgnore>
 					</configuration>
 
@@ -456,10 +473,24 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
-
 					<execution>
 						<id>report</id>
 						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>pre-integration-test</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-integration-test</id>
+						<phase>post-integration-test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>

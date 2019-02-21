@@ -8,12 +8,16 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_CONTROL_ALLOW_HEADERS;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_CONTROL_ALLOW_METHODS;
+import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_CONTROL_ALLOW_ORIGIN;
 
 /**
  * Servlet Filter implementation class CORSFilter
@@ -32,12 +36,12 @@ public class CORSFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
-        resp.setHeader("Access-Control-Allow-Origin", CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN.getValue());
-        resp.setHeader("Access-Control-Allow-Methods", CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS.getValue());
-        resp.setHeader("Access-Control-Allow-Headers", CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS.getValue());
+        resp.setHeader(HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_ORIGIN.getValue());
+        resp.setHeader(HEADER_ACCESS_CONTROL_ALLOW_METHODS, CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_METHODS.getValue());
+        resp.setHeader(HEADER_ACCESS_CONTROL_ALLOW_HEADERS, CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS.getValue());
 
         // For HTTP OPTIONS verb/method reply with ACCEPTED status code -- per CORS handshake
-        if (request.getMethod().equals("OPTIONS")) {
+        if (request.getMethod().equals(HttpMethod.OPTIONS)) {
             // Authorize (allow) all domains to consume the content
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             return;

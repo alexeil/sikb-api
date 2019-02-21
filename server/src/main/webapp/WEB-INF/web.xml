@@ -19,6 +19,10 @@
 		<filter-name>CORSFilter</filter-name>
 		<url-pattern>/api/*</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CORSFilter</filter-name>
+		<url-pattern>/document/*</url-pattern>
+	</filter-mapping>
 
 	<servlet>
 		<servlet-name>Init Servlet</servlet-name>

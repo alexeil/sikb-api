@@ -18,8 +18,12 @@ public class DocumentServlet extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(DocumentServlet.class);
 
     private static void logAndBuildResponse(HttpServletResponse response, Level level, Short codeHttp,
-        Throwable e) throws IOException {
-        LOGGER.log(level, e.getMessage(), e);
+        Throwable e, boolean printStackTrace) throws IOException {
+        if (printStackTrace) {
+            LOGGER.log(level, e.getMessage(), e);
+        } else {
+            LOGGER.log(level, e.getMessage());
+        }
         response.getOutputStream().println(e.getMessage());
         response.setStatus(codeHttp);
     }
@@ -32,11 +36,11 @@ public class DocumentServlet extends HttpServlet {
 
         try {
             DocumentType.fromValue(type).writeDocument(id, response.getOutputStream());
+            LOGGER.info("{} with id {} generated !", type, id);
         } catch (FunctionalException e) {
-            logAndBuildResponse(response, e.getErrorCode().getLevel(), e.getErrorCode().getCodeHttp(), e);
+            logAndBuildResponse(response, e.getErrorCode().getLevel(), e.getErrorCode().getCodeHttp(), e, false);
         } catch (Throwable e) {
-            logAndBuildResponse(response, ERROR, (short) 500, e);
+            logAndBuildResponse(response, ERROR, (short) 500, e, true);
         }
-        LOGGER.info("{} with id {} generated !", type, id);
     }
 }

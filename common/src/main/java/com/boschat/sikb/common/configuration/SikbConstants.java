@@ -2,6 +2,12 @@ package com.boschat.sikb.common.configuration;
 
 public class SikbConstants {
 
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_METHODS = "Access-Control-Allow-Methods";
+
+    public static final String HEADER_ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
+
     public static final String HEADER_ACCESS_TOKEN = "Access_token";
 
     public static final String HEADER_AUTHORIZATION = "Authorization";
