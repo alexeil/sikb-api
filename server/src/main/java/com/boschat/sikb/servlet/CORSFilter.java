@@ -9,7 +9,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.HttpMethod;
-import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CORS_HEADER_ACCESS_CONTROL_HEADER_ALLOW_ALL_HEADERS;
@@ -22,9 +21,6 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_
 /**
  * Servlet Filter implementation class CORSFilter
  */
-// Enable it for Servlet 3.x implementations
-/* @ WebFilter(asyncSupported = true, urlPatterns = { "/*" }) */
-@Provider
 public class CORSFilter implements Filter {
 
     /**
