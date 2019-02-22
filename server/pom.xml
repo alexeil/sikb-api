@@ -15,9 +15,6 @@
 
 	<properties>
 		<root.basedir>${basedir}/..</root.basedir>
-		<local.server.port>8889</local.server.port>
-		<local.server.path>/</local.server.path>
-		<local.server.stop-port>9999</local.server.stop-port>
 	</properties>
 
 	<dependencies>
@@ -325,6 +322,7 @@
 				</configuration>
 			</plugin>
 
+
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
@@ -337,43 +335,27 @@
 					</httpConnector>
 					<stopKey>rest-tests-jetty</stopKey>
 					<stopPort>${local.server.stop-port}</stopPort>
-					<systemProperties>
-						<systemProperty>
-							<name>CONFIG_PATH</name>
-							<value>${project.basedir}/src/main/resources</value>
-						</systemProperty>
-						<systemProperty>
-							<name>POSTGRES_DB</name>
-							<value>sikb</value>
-						</systemProperty>
-						<systemProperty>
-							<name>POSTGRES_USER</name>
-							<value>postgres</value>
-						</systemProperty>
-						<systemProperty>
-							<name>POSTGRES_PASSWORD</name>
-							<value>postgres</value>
-						</systemProperty>
-						<systemProperty>
-							<name>POSTGRES_HOST</name>
-							<value>localhost</value>
-						</systemProperty>
-						<systemProperty>
-							<name>POSTGRES_PORT</name>
-							<value>5432</value>
-						</systemProperty>
-					</systemProperties>
+					<stopWait>1</stopWait>
 				</configuration>
 				<executions>
 					<execution>
 						<id>start-jetty</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>deploy-war</goal>
+							<goal>run-forked</goal>
 						</goals>
 						<configuration>
-							<daemon>true</daemon>
-							<scanIntervalSeconds>0</scanIntervalSeconds>
+							<env>
+								<CONFIG_PATH>${project.basedir}/src/main/resources</CONFIG_PATH>
+								<POSTGRES_DB>sikb</POSTGRES_DB>
+								<POSTGRES_USER>postgres</POSTGRES_USER>
+								<POSTGRES_PASSWORD>postgres</POSTGRES_PASSWORD>
+								<POSTGRES_HOST>localhost</POSTGRES_HOST>
+								<POSTGRES_PORT>5432</POSTGRES_PORT>
+							</env>
+							<waitForChild>false</waitForChild>
+							<jvmArgs>${integrationTestArgLine} -Djetty.port=${local.server.port}</jvmArgs>
+							<contextXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
 						</configuration>
 					</execution>
 					<execution>
@@ -386,30 +368,9 @@
 				</executions>
 			</plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<configuration>
-					<testFailureIgnore>true</testFailureIgnore>
-					<systemPropertyVariables>
-						<api.server.port>${local.server.port}</api.server.port>
-						<api.server.path>${local.server.path}</api.server.path>
-					</systemPropertyVariables>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-						<configuration>
-							<argLine>${failsafeArgLine}</argLine>
-							<skipTests>${skip.integration.tests}</skipTests>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
+
+
 	</build>
 
 </project>

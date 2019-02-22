@@ -22,6 +22,11 @@
 	<properties>
 		<application.code>sikb-api</application.code>
 		<root.basedir>${basedir}</root.basedir>
+
+		<local.server.port>8889</local.server.port>
+		<local.server.path>/</local.server.path>
+		<local.server.stop-port>9999</local.server.stop-port>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
@@ -467,23 +472,46 @@
 		<plugins>
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<testFailureIgnore>true</testFailureIgnore>
+							<skipTests>${skip.integration.tests}</skipTests>
+							<systemPropertyVariables>
+								<api.server.port>${local.server.port}</api.server.port>
+								<api.server.path>${local.server.path}</api.server.path>
+							</systemPropertyVariables>
+							<argLine>${integrationTestArgLine}</argLine>
+						</configuration>
+
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>${jacoco-plugin.version}</version>
 				<executions>
 					<execution>
-						<id>pre-unit-test</id>
+						<id>prepare-agent-ut-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 						<configuration>
 							<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
 							<propertyName>surefireArgLine</propertyName>
+							<append>true</append>
 						</configuration>
 					</execution>
 					<execution>
-						<id>report</id>
-						<phase>test</phase>
+						<id>report-ut</id>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -494,21 +522,23 @@
 					</execution>
 
 					<execution>
-						<id>pre-integration-test</id>
+						<id>prepare-it-agent</id>
 						<phase>pre-integration-test</phase>
 						<goals>
-							<goal>prepare-agent</goal>
+							<goal>prepare-agent-integration</goal>
 						</goals>
 						<configuration>
 							<destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
-							<propertyName>failsafeArgLine</propertyName>
+							<propertyName>integrationTestArgLine</propertyName>
+							<append>true</append>
 						</configuration>
 					</execution>
+
 					<execution>
-						<id>post-integration-test</id>
-						<phase>post-integration-test</phase>
+						<id>generate-integration-test-report</id>
+						<phase>verify</phase>
 						<goals>
-							<goal>report</goal>
+							<goal>report-integration</goal>
 						</goals>
 						<configuration>
 							<dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
