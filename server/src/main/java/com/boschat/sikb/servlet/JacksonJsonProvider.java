@@ -27,8 +27,7 @@ public class JacksonJsonProvider extends JacksonJaxbJsonProvider {
         ObjectMapper mapper = new ObjectMapper();
 
         return mapper
-            //.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
-            //.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING)
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
             .registerModule(new JavaTimeModule());
