@@ -52,3 +52,12 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  provider: releases
+  api_key: "23986566cf2e78bc3931ae7c88743edc72225a99"
+  file_glob: true
+  file: /home/travis/build/alexeil/sikb-api/delivery/target/*.tar.gz
+  skip_cleanup: true
+  on:
+    tags: true
