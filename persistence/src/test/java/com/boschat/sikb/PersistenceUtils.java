@@ -154,6 +154,7 @@ public class PersistenceUtils {
         File file = new File(resourcePath);
         if (!file.exists()) {
             LOGGER.error("resourcePath notFound : " + resourcePath + ". here " + new File("").getAbsolutePath());
+            throw new RuntimeException("resourcePath notFound : " + resourcePath + ". here " + new File("").getAbsolutePath());
         } else {
             String content = new String(Files.readAllBytes(Paths.get(resourcePath)));
             DAOFactory.getInstance().getDslContext().execute(content);

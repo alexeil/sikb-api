@@ -29,7 +29,7 @@
 		</file>
 
 		<file>
-			<outputDirectory>${project.version}/conf</outputDirectory>
+			<outputDirectory>${project.version}/config</outputDirectory>
 			<source>${root.basedir}/server/src/main/resources/application-prod.properties</source>
 			<destName>application.properties</destName>
 			<lineEnding>unix</lineEnding>
@@ -37,7 +37,7 @@
 		</file>
 
 		<file>
-			<outputDirectory>${project.version}/conf</outputDirectory>
+			<outputDirectory>${project.version}/config</outputDirectory>
 			<source>${root.basedir}/server/src/main/resources/log4j2-prod.xml</source>
 			<destName>log4j2.xml</destName>
 			<lineEnding>unix</lineEnding>
@@ -48,7 +48,7 @@
 	<fileSets>
 		<fileSet>
 			<directory>${root.basedir}/server/src/main/resources/templates</directory>
-			<outputDirectory>${project.version}/conf/templates</outputDirectory>
+			<outputDirectory>${project.version}/config/templates</outputDirectory>
 			<includes>
 				<include>**</include>
 			</includes>

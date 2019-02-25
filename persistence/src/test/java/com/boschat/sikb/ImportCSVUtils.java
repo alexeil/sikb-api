@@ -26,8 +26,8 @@ public class ImportCSVUtils {
         System.setProperty(POSTGRES_USER.getEnv(), "postgres");
         System.setProperty(POSTGRES_PASSWORD.getEnv(), "postgres");
 
-        executeScript("initDb.sql");
-        executeScript("initData.sql");
+        executeScript("persistence/src/main/resources/initDb.sql");
+        executeScript("persistence/src/main/resources/initData.sql");
         truncateAndImportClub();
         truncateAndImportAffiliation();
     }
