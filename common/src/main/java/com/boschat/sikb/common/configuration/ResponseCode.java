@@ -11,6 +11,8 @@ public enum ResponseCode {
     NO_CONTENT(INFO, 204),
 
     // 4xx code indicates an error caused by the user
+    VALIDATION_ERROR(ERROR, 400, 0, "The request contains validation errors : %s"),
+
     MISSING_BODY_FIELD(ERROR, 400, 1, "The body field %s is missing"),
     INVALID_BODY_FIELD(ERROR, 400, 2, "The body field value %s is invalid : %s"),
     INVALID_BODY_FIELD_WITHOUT_VALUE(ERROR, 400, 3, "The field value %s is invalid"),

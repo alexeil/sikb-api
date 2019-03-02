@@ -18,6 +18,12 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-bean-validation</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
@@ -169,18 +175,20 @@
 						</goals>
 						<configuration>
 							<inputSpec>${root.basedir}/docs/swagger/swagger.yaml</inputSpec>
-							<!-- language file, like e.g. JavaJaxRSCodegen shipped with swagger -->
 							<generatorName>jaxrs-jersey</generatorName>
-							<!--   <templateDirectory>src/gen/main/java</templateDirectory>-->
 							<configOptions>
 								<dateLibrary>java8</dateLibrary>
+								<performBeanValidation>true</performBeanValidation>
+								<useBeanValidation>true</useBeanValidation>
 							</configOptions>
 							<output>${project.build.directory}/generated-sources</output>
+							<templateDirectory>${basedir}/src/main/resources/mustaches/JavaJaxRS</templateDirectory>
 							<apiPackage>com.boschat.sikb.api</apiPackage>
 							<modelPackage>com.boschat.sikb.model</modelPackage>
 							<invokerPackage>com.boschat.sikb.api</invokerPackage>
 							<addCompileSourceRoot>true</addCompileSourceRoot>
 							<ignoreFileOverride>${basedir}/src/main/resources/.openapi-generator-ignore</ignoreFileOverride>
+							<verbose>false</verbose>
 						</configuration>
 					</execution>
 				</executions>
@@ -211,9 +219,17 @@
 										public class
 									</value>
 								</replacement>
+
+								<replacement>
+									<token>public String getEmail</token>
+									<value>@Email
+										public String getEmail
+									</value>
+								</replacement>
 							</replacements>
 						</configuration>
 					</execution>
+
 
 					<execution>
 						<id>add version</id>
@@ -254,6 +270,23 @@
 								<replacement>
 									<token>@Path("/licenceTypes")</token>
 									<value>@Path("/v1/licenceTypes")</value>
+								</replacement>
+							</replacements>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>fix bug double valid</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+						<configuration>
+							<file>${project.build.directory}/generated-sources/src/gen/java/com/boschat/sikb/model/AffiliationForCreation.java</file>
+							<replacements>
+								<replacement>
+									<token>@Valid</token>
+									<value/>
 								</replacement>
 							</replacements>
 						</configuration>
@@ -327,6 +360,8 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<configuration>
+					<!--suppress UnresolvedMavenProperty -->
+					<skip>${skipTests}</skip>
 					<webApp>
 						<contextPath>${local.server.path}</contextPath>
 					</webApp>
@@ -354,6 +389,7 @@
 								<POSTGRES_PORT>5432</POSTGRES_PORT>
 							</env>
 							<waitForChild>false</waitForChild>
+							<!--suppress UnresolvedMavenProperty -->
 							<jvmArgs>${integrationTestArgLine} -Djetty.port=${local.server.port}</jvmArgs>
 							<contextXml>${project.basedir}/src/main/webapp/WEB-INF/jetty-web.xml</contextXml>
 						</configuration>

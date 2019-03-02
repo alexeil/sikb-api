@@ -16,9 +16,8 @@ import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_BODY_FIELD;
 import static com.boschat.sikb.common.configuration.ResponseCode.NEW_PASSWORD_CANNOT_BE_SAME;
 import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
+import static com.boschat.sikb.common.configuration.ResponseCode.VALIDATION_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
-import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
-import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
 
 @DisplayName(" Update a User password ")
@@ -43,7 +42,7 @@ class UserUpdatePasswordTest extends AbstractTest {
         UpdatePassword updatePassword = new UpdatePassword();
         updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
         Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
-        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_OLD_PASSWORD);
+        checkResponse(response, VALIDATION_ERROR, "userUpdatePassword.arg0.oldPassword: must not be null");
 
     }
 
@@ -53,7 +52,7 @@ class UserUpdatePasswordTest extends AbstractTest {
         UpdatePassword updatePassword = new UpdatePassword();
         updatePassword.setOldPassword(USER_DEFAULT_PASSWORD);
         Response response = userUpdatePassword(V1, updatePassword, USER_DEFAULT_ACCESS_TOKEN);
-        checkResponse(response, MISSING_BODY_FIELD, BODY_FIELD_NEW_PASSWORD);
+        checkResponse(response, VALIDATION_ERROR, "userUpdatePassword.arg0.newPassword: must not be null");
 
     }
 

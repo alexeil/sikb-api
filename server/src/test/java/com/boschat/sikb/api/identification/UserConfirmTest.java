@@ -2,7 +2,7 @@ package com.boschat.sikb.api.identification;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.JerseyTestExtension;
-import com.boschat.sikb.model.UpdatePassword;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,9 +34,9 @@ class UserConfirmTest extends AbstractTest {
     @Test
     @DisplayName(" existing ")
     void existing() throws Exception {
-        UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
-        Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA");
+        ConfirmPassword confirmPassword = new ConfirmPassword();
+        confirmPassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userConfirm(V1, confirmPassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMTowMA");
 
         checkResponse(response, NO_CONTENT);
         com.boschat.sikb.tables.pojos.User userBean = DAOFactory.getInstance().getUserDAO().findById(3);
@@ -53,9 +53,9 @@ class UserConfirmTest extends AbstractTest {
     @Test
     @DisplayName(" unknown token ")
     void unknownToken() throws Exception {
-        UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
-        Response response = userConfirm(V1, updatePassword, "test");
+        ConfirmPassword confirmPassword = new ConfirmPassword();
+        confirmPassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userConfirm(V1, confirmPassword, "test");
 
         checkResponse(response, CONFIRM_TOKEN_NOT_FOUND);
     }
@@ -63,9 +63,9 @@ class UserConfirmTest extends AbstractTest {
     @Test
     @DisplayName(" no token ")
     void noToken() throws Exception {
-        UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
-        Response response = userConfirm(V1, updatePassword, null);
+        ConfirmPassword confirmPassword = new ConfirmPassword();
+        confirmPassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userConfirm(V1, confirmPassword, null);
 
         checkResponse(response, CONFIRM_TOKEN_NOT_FOUND);
     }
@@ -73,9 +73,9 @@ class UserConfirmTest extends AbstractTest {
     @Test
     @DisplayName(" expired ")
     void expired() throws Exception {
-        UpdatePassword updatePassword = new UpdatePassword();
-        updatePassword.setNewPassword(USER_DEFAULT_PASSWORD);
-        Response response = userConfirm(V1, updatePassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMToold");
+        ConfirmPassword confirmPassword = new ConfirmPassword();
+        confirmPassword.setNewPassword(USER_DEFAULT_PASSWORD);
+        Response response = userConfirm(V1, confirmPassword, "ZDhjMTc3NTctMTk2Yi00Y2QyLWIzM2MtYjJiNDhlMWNiMjczMjAxOC0wMS0xOFQxMzoxMSswMToold");
 
         checkResponse(response, CONFIRM_TOKEN_EXPIRED);
     }

@@ -1,14 +1,14 @@
 package com.boschat.sikb.context;
 
 import com.boschat.sikb.api.CallType;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CHECK_QUERY_STRING_SEASON_ID_REGEXP;
-import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_NEW_PASSWORD;
-import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_OLD_PASSWORD;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_CONFIRM_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.QUERY_STRING_SEASON_ID;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
@@ -55,6 +55,8 @@ public class Context {
     private CreateOrUpdateTeamContext createOrUpdateTeamContext;
 
     private Integer teamId;
+
+    private ConfirmPassword confirmPassword;
 
     public Context(CallType callType, String accessToken) {
         this.callType = callType;
@@ -125,13 +127,8 @@ public class Context {
         return updatePassword;
     }
 
-    public void setUpdatePassword(UpdatePassword updatePassword, boolean checkOldPassword) {
-        checkRequestBodyField(updatePassword, BODY_FIELD_UPDATE_PASSWORD);
-        checkRequestBodyField(updatePassword.getNewPassword(), BODY_FIELD_NEW_PASSWORD);
-        if (checkOldPassword) {
-            checkRequestBodyField(updatePassword.getOldPassword(), BODY_FIELD_OLD_PASSWORD);
-        }
-        this.updatePassword = updatePassword;
+    public void setUpdatePassword(UpdatePassword updatePassword) {
+        this.updatePassword = checkRequestBodyField(updatePassword, BODY_FIELD_UPDATE_PASSWORD);
     }
 
     public String getAccessToken() {
@@ -175,8 +172,7 @@ public class Context {
     }
 
     public void setSeasonId(String seasonId) {
-        checkRequestQueryStringParam(seasonId, QUERY_STRING_SEASON_ID, CHECK_QUERY_STRING_SEASON_ID_REGEXP.getValue());
-        this.seasonId = seasonId;
+        this.seasonId = checkRequestQueryStringParam(seasonId, QUERY_STRING_SEASON_ID, CHECK_QUERY_STRING_SEASON_ID_REGEXP.getValue());
     }
 
     public CreateOrUpdateSeasonContext getCreateOrUpdateSeasonContext() {
@@ -217,5 +213,13 @@ public class Context {
 
     public void setTeamId(Integer teamId) {
         this.teamId = teamId;
+    }
+
+    public ConfirmPassword getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(ConfirmPassword confirmPassword) {
+        this.confirmPassword = checkRequestBodyField(confirmPassword, BODY_FIELD_CONFIRM_PASSWORD);
     }
 }

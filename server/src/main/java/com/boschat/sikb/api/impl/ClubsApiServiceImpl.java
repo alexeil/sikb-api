@@ -9,6 +9,8 @@ import com.boschat.sikb.model.TeamForCreation;
 import com.boschat.sikb.model.TeamForUpdate;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.InputStream;
@@ -40,7 +42,8 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     }
 
     @Override
-    public Response createTeam(String accessToken, Integer clubId, String seasonId, TeamForCreation teamForCreation, SecurityContext securityContext) {
+    public Response createTeam(String accessToken, Integer clubId, @Pattern(regexp = "^([0-9]){8}$") @Size(min = 8, max = 8) String seasonId,
+        TeamForCreation teamForCreation, SecurityContext securityContext) {
         return runService(TEAM_CREATE, accessToken, securityContext, clubId, seasonId, teamForCreation);
     }
 

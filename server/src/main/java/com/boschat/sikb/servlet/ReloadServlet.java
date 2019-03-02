@@ -6,12 +6,16 @@ import com.boschat.sikb.utils.MailUtils;
 import com.boschat.sikb.utils.PDFGeneratorUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Validation;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.io.File;
 
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 
@@ -30,6 +34,12 @@ public class ReloadServlet {
         DAOFactory.reset();
         PDFGeneratorUtils.reset();
         reloadProperties();
+
+        File properties = new File(CONFIG_PATH.getValue(), "ValidationMessages.properties");
+        Validation.byDefaultProvider()
+                  .configure()
+                  .messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator(properties.getAbsolutePath())))
+                  .buildValidatorFactory();
     }
 
     /**

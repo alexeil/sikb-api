@@ -4,7 +4,7 @@ import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
-import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.BoardForCreation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class AffiliationCreateTest extends AbstractTest {
         affiliationForCreation.setEmail(AFFILIATION_DEFAULT_EMAIL);
         affiliationForCreation.setWebSite(AFFILIATION_DEFAULT_WEBSITE);
 
-        Board board = new Board();
+        BoardForCreation board = new BoardForCreation();
         board.setPresident(AFFILIATION_DEFAULT_PRESIDENT);
         board.setPresidentSex(AFFILIATION_DEFAULT_PRESIDENT_SEX);
         board.setSecretary(AFFILIATION_DEFAULT_SECRETARY);

@@ -1,8 +1,9 @@
 package com.boschat.sikb.service;
 
+import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateUserContext;
 import com.boschat.sikb.context.MyThreadLocal;
-import com.boschat.sikb.common.exceptions.FunctionalException;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Session;
@@ -63,22 +64,22 @@ public class UserUtils {
             throw new FunctionalException(NEW_PASSWORD_CANNOT_BE_SAME);
         }
         if (isExpectedPassword(oldPassword, salt, user.getPassword())) {
-            setSaltAndPassword(user, updatePassword);
+            setSaltAndPassword(user, updatePassword.getNewPassword());
             DAOFactory.getInstance().getUserDAO().update(user);
         } else {
             throw new FunctionalException(WRONG_OLD_PASSWORD);
         }
     }
 
-    private static void setSaltAndPassword(User user, UpdatePassword updatePassword) {
+    private static void setSaltAndPassword(User user, String password) {
         String salt = generateSalt();
-        user.setPassword(hash(updatePassword.getNewPassword(), salt));
+        user.setPassword(hash(password, salt));
         user.setSalt(salt);
     }
 
     public static Session confirmUser() {
         String token = MyThreadLocal.get().getToken();
-        UpdatePassword updatePassword = MyThreadLocal.get().getUpdatePassword();
+        ConfirmPassword confirmPassword = MyThreadLocal.get().getConfirmPassword();
         List<User> users = DAOFactory.getInstance().getUserDAO().fetchByActivationtoken(token);
 
         if (CollectionUtils.isEmpty(users)) {
@@ -90,7 +91,7 @@ public class UserUtils {
             if (isExpired) {
                 throw new FunctionalException(CONFIRM_TOKEN_EXPIRED);
             } else {
-                setSaltAndPassword(user, updatePassword);
+                setSaltAndPassword(user, confirmPassword.getNewPassword());
                 user.setEnabled(true);
                 user.setActivationtoken(null);
                 user.setActivationtokenexpirationdate(null);

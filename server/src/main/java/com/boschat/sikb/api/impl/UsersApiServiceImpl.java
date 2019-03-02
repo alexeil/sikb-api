@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.impl;
 
 import com.boschat.sikb.api.UsersApiService;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
@@ -41,8 +42,8 @@ public class UsersApiServiceImpl extends UsersApiService {
     }
 
     @Override
-    public Response userConfirm(String token, UpdatePassword updatePassword, SecurityContext securityContext) {
-        return runService(USER_CONFIRM, null, securityContext, token, updatePassword);
+    public Response userConfirm(String token, ConfirmPassword confirmPassword, SecurityContext securityContext) {
+        return runService(USER_CONFIRM, null, securityContext, token, confirmPassword);
     }
 
     @Override

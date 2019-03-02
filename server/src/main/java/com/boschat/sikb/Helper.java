@@ -257,9 +257,6 @@ public class Helper {
             board.setElectedDate(affiliationBean.getElecteddate());
             affiliation.setBoard(board);
         }
-        affiliation.setCreationDateTime(affiliationBean.getCreationdate());
-        affiliation.setModificationDateTime(affiliationBean.getModificationdate());
-
         return affiliation;
     }
 

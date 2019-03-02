@@ -95,6 +95,12 @@
 			</dependency>
 
 			<dependency>
+				<groupId>org.glassfish.jersey.ext</groupId>
+				<artifactId>jersey-bean-validation</artifactId>
+				<version>${jersey-server.version}</version>
+			</dependency>
+
+			<dependency>
 				<groupId>io.swagger</groupId>
 				<artifactId>swagger-jersey2-jaxrs</artifactId>
 				<scope>compile</scope>
@@ -423,8 +429,8 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>${maven-surefire-plugin.version}</version>
 					<configuration>
+						<!--suppress UnresolvedMavenProperty -->
 						<argLine>${surefireArgLine}</argLine>
-						<skipTests>${skip.unit.tests}</skipTests>
 						<excludes>
 							<exclude>**/*IT.java</exclude>
 						</excludes>
@@ -482,11 +488,11 @@
 						</goals>
 						<configuration>
 							<testFailureIgnore>true</testFailureIgnore>
-							<skipTests>${skip.integration.tests}</skipTests>
 							<systemPropertyVariables>
 								<api.server.port>${local.server.port}</api.server.port>
 								<api.server.path>${local.server.path}</api.server.path>
 							</systemPropertyVariables>
+							<!--suppress UnresolvedMavenProperty -->
 							<argLine>${integrationTestArgLine}</argLine>
 						</configuration>
 

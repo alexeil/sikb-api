@@ -58,7 +58,23 @@ public class CreateOrUpdatePersonContext {
 
     private byte[] photoFileNameInputStream;
 
-    private static CreateOrUpdatePersonContext buildCommon(PersonForUpdate person) {
+   /* private static CreateOrUpdatePersonContext buildCommon(PersonForUpdate person) {
+        CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
+        createOrUpdateContext.setFirstName(person.getFirstName());
+        createOrUpdateContext.setName(person.getName());
+        createOrUpdateContext.setSex(person.getSex());
+        createOrUpdateContext.setBirthDate(person.getBirthDate());
+        createOrUpdateContext.setAddress(person.getAddress());
+        createOrUpdateContext.setPostalCode(person.getPostalCode());
+        createOrUpdateContext.setCity(person.getCity());
+        createOrUpdateContext.setPhoneNumber(person.getPhoneNumber());
+        createOrUpdateContext.setEmail(person.getEmail());
+        createOrUpdateContext.setNationality(person.getNationality());
+        createOrUpdateContext.setFormations(person.getFormations());
+        return createOrUpdateContext;
+    }*/
+
+    public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
         CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
         createOrUpdateContext.setFirstName(person.getFirstName());
         createOrUpdateContext.setName(person.getName());
@@ -74,15 +90,23 @@ public class CreateOrUpdatePersonContext {
         return createOrUpdateContext;
     }
 
-    public static CreateOrUpdatePersonContext create(PersonForUpdate person) {
-        return buildCommon(person);
-    }
-
     public static CreateOrUpdatePersonContext create(PersonForCreation person) {
         checkRequestBodyField(person.getFirstName(), BODY_FIELD_FIRST_NAME);
         checkRequestBodyField(person.getName(), BODY_FIELD_NAME);
         checkRequestBodyField(person.getEmail(), BODY_FIELD_EMAIL);
-        return buildCommon(person);
+        CreateOrUpdatePersonContext createOrUpdateContext = new CreateOrUpdatePersonContext();
+        createOrUpdateContext.setFirstName(person.getFirstName());
+        createOrUpdateContext.setName(person.getName());
+        createOrUpdateContext.setSex(person.getSex());
+        createOrUpdateContext.setBirthDate(person.getBirthDate());
+        createOrUpdateContext.setAddress(person.getAddress());
+        createOrUpdateContext.setPostalCode(person.getPostalCode());
+        createOrUpdateContext.setCity(person.getCity());
+        createOrUpdateContext.setPhoneNumber(person.getPhoneNumber());
+        createOrUpdateContext.setEmail(person.getEmail());
+        createOrUpdateContext.setNationality(person.getNationality());
+        createOrUpdateContext.setFormations(person.getFormations());
+        return createOrUpdateContext;
     }
 
     public static CreateOrUpdatePersonContext create(InputStream medicalCertificateStream, FormDataContentDisposition medicalCertificateFileNameDetail,

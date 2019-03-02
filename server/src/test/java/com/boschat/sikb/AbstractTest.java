@@ -11,6 +11,7 @@ import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
@@ -52,6 +53,7 @@ import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.test.JerseyTest;
 import org.subethamail.wiser.Wiser;
 
@@ -141,7 +143,7 @@ public abstract class AbstractTest {
 
     protected static final String PERSON_DEFAULT_CITY = "Rennes";
 
-    protected static final String PERSON_DEFAULT_PHONE_NUMBER = "070707070707";
+    protected static final String PERSON_DEFAULT_PHONE_NUMBER = "0707070707";
 
     protected static final String PERSON_DEFAULT_EMAIL = "person@kin-ball.fr";
 
@@ -376,6 +378,10 @@ public abstract class AbstractTest {
                     }
                 }
                 return new ResourceConfig().register(MultiPartFeature.class)
+                                           // Now you can expect validation errors to be sent to the client.
+                                           .property(ServerProperties.BV_SEND_ERROR_IN_RESPONSE, true)
+                                           // @ValidateOnExecution annotations on subclasses won't cause errors.
+                                           .property(ServerProperties.BV_DISABLE_VALIDATE_ON_EXECUTABLE_OVERRIDE_CHECK, true)
                                            .packages(
                                                "com.boschat.sikb.api",
                                                "com.boschat.sikb.servlet",
@@ -814,9 +820,7 @@ public abstract class AbstractTest {
             () -> assertEquals(phoneNumber, affiliation.getPhoneNumber(), " phoneNumber incorrect"),
             () -> assertEquals(email, affiliation.getEmail(), " email incorrect"),
             () -> assertEquals(webSite, affiliation.getWebSite(), " webSite incorrect"),
-            () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate),
-            () -> assertEquals(creationDateTime, affiliation.getCreationDateTime(), " creationDateTime incorrect"),
-            () -> assertEquals(modificationDateTime, affiliation.getModificationDateTime(), " modificationDateTime incorrect")
+            () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate)
         );
     }
 
@@ -957,8 +961,8 @@ public abstract class AbstractTest {
             .withSubject(title);
     }
 
-    protected Response userConfirm(ApiVersion version, UpdatePassword credentials, String token) {
-        Entity<UpdatePassword> entity = Entity.json(credentials);
+    protected Response userConfirm(ApiVersion version, ConfirmPassword credentials, String token) {
+        Entity<ConfirmPassword> entity = Entity.json(credentials);
         String path = buildPathUser(version, null, false, false, false, true, false);
         return createRequest(path, token, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }

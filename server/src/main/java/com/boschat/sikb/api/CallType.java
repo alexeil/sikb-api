@@ -13,6 +13,7 @@ import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
+import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceForUpdate;
@@ -176,7 +177,7 @@ public enum CallType {
         @Override
         public void fillContext(Object... params) {
             MyThreadLocal.get().setToken((String) params[0]);
-            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[1], false);
+            MyThreadLocal.get().setConfirmPassword((ConfirmPassword) params[1]);
         }
     },
     USER_UPDATE_PASSWORD("Update user password", NO_CONTENT, true) {
@@ -188,7 +189,7 @@ public enum CallType {
 
         @Override
         public void fillContext(Object... params) {
-            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[0], true);
+            MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[0]);
         }
     },
     USER_RESET("Ask to reset user password", NO_CONTENT, false) {

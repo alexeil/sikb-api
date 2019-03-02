@@ -15,8 +15,6 @@ info:
 servers:
   - url: http://ec2-35-180-42-251.eu-west-3.compute.amazonaws.com:8080/sikb/api/v1
     description: AWS URL
-  - url: https://sikb-api.herokuapp.com/api/v1
-    description: Heroku URL
   - url: http://localhost:8080/sikb/api/v1
     description: Local URL
 
@@ -208,7 +206,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/updatePassword'
+              $ref: '#/components/schemas/confirmPassword'
         required:
           true
         description: body
@@ -1268,15 +1266,16 @@ components:
       description: "Token to reset password"
   schemas:
     user:
+      allOf:
+        - $ref: '#/components/schemas/userForUpdate'
+        - properties:
+            id:
+              type: integer
+              format: int32
       required:
         - id
         - email
-      properties:
-        id:
-          type: integer
-          format: int32
-        email:
-          type: string
+
 
     userForCreation:
       allOf:
@@ -1288,6 +1287,8 @@ components:
       properties:
         email:
           type: string
+          format: email
+          maxLength: 255
 
     formationType:
       required:
@@ -1299,21 +1300,22 @@ components:
           format: int32
         name:
           type: string
+          maxLength: 255
 
     club:
+      allOf:
+        - $ref: '#/components/schemas/clubForUpdate'
+        - properties:
+            id:
+              type: integer
+              format: int32
+            logo:
+              $ref: '#/components/schemas/logo'
       required:
         - id
         - name
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
-        shortName:
-          type: string
-        logo:
-          $ref: '#/components/schemas/logo'
+        - shortName
+
 
 
     clubForCreation:
@@ -1327,48 +1329,36 @@ components:
       properties:
         name:
           type: string
+          maxLength: 255
         shortName:
           type: string
+          maxLength: 255
 
     affiliation:
+      allOf:
+        - $ref: '#/components/schemas/affiliationForUpdate'
+        - properties:
+            id:
+              type: integer
+              format: int32
       required:
         - id
-        - associationName
-      properties:
-        id:
-          type: integer
-          format: int32
-        prefectureNumber:
-          type: string
-        prefectureCity:
-          type: string
-        siretNumber:
-          type: string
-        address:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        phoneNumber:
-          type: string
-        email:
-          type: string
-          format: email
-        webSite:
-          type: string
-        creationDateTime:
-          type: string
-          format: date-time
-        modificationDateTime:
-          type: string
-          format: date-time
-        board:
-          $ref: '#/components/schemas/board'
+        - prefectureNumber
+        - prefectureCity
+        - siretNumber
+        - address
+        - postalCode
+        - city
+        - email
+        - board
+
 
     affiliationForCreation:
       allOf:
         - $ref: '#/components/schemas/affiliationForUpdate'
+        - properties:
+            board:
+              $ref: '#/components/schemas/boardForCreation'
       required:
         - prefectureNumber
         - prefectureCity
@@ -1378,31 +1368,38 @@ components:
         - city
         - email
         - board
-      properties:
-        board:
-          $ref: '#/components/schemas/boardForCreation'
+
 
     affiliationForUpdate:
       properties:
         prefectureNumber:
           type: string
+          maxLength: 255
         prefectureCity:
           type: string
+          maxLength: 255
         siretNumber:
           type: string
+          maxLength: 255
         address:
           type: string
+          maxLength: 255
         postalCode:
           type: string
+          maxLength: 255
         city:
           type: string
+          maxLength: 255
         phoneNumber:
           type: string
+          pattern: ^((\+)33|0)[1-9](\d{2}){4}$
         email:
           type: string
           format: email
+          maxLength: 255
         webSite:
           type: string
+          maxLength: 255
         board:
           $ref: '#/components/schemas/board'
 
@@ -1416,6 +1413,7 @@ components:
       properties:
         name:
           type: string
+          maxLength: 255
         members:
           type: array
           items:
@@ -1430,6 +1428,9 @@ components:
           type: string
 
     teamMemberForCreation:
+      required:
+        - id
+        - type
       properties:
         id:
           type: integer
@@ -1455,6 +1456,8 @@ components:
     boardForCreation:
       allOf:
         - $ref: '#/components/schemas/board'
+
+    board:
       required:
         - president
         - presidentSex
@@ -1464,19 +1467,20 @@ components:
         - treasurerSex
         - membersNumber
         - electedDate
-
-    board:
       properties:
         president:
           type: string
+          maxLength: 255
         presidentSex:
           $ref: '#/components/schemas/sex'
         secretary:
           type: string
+          maxLength: 255
         secretarySex:
           $ref: '#/components/schemas/sex'
         treasurer:
           type: string
+          maxLength: 255
         treasurerSex:
           $ref: '#/components/schemas/sex'
         membersNumber:
@@ -1497,6 +1501,7 @@ components:
       properties:
         login:
           type: string
+          maxLength: 255
 
     credentials:
       required:
@@ -1506,10 +1511,12 @@ components:
         login:
           type: string
           minLength: 1
+          maxLength: 255
         password:
           type: string
           format: password
           minLength: 1
+          maxLength: 255
 
     session:
       required:
@@ -1517,6 +1524,7 @@ components:
       properties:
         access_token:
           type: string
+          maxLength: 255
 
     updatePassword:
       required:
@@ -1527,54 +1535,36 @@ components:
           type: string
           format: password
           minLength: 1
+          maxLength: 255
         newPassword:
           type: string
           format: password
           minLength: 1
+          maxLength: 255
+
+    confirmPassword:
+      required:
+        - newPassword
+      properties:
+        newPassword:
+          type: string
+          format: password
+          minLength: 1
+          maxLength: 255
 
     person:
+      allOf:
+        - $ref: '#/components/schemas/personForCreation'
+        - properties:
+            id:
+              type: integer
+              format: int32
+            photo:
+              $ref: "#/components/schemas/photo"
+            medicalCertificate:
+              $ref: "#/components/schemas/medicalCertificate"
       required:
         - id
-      properties:
-        id:
-          type: integer
-          format: int32
-        firstName:
-          type: string
-        name:
-          type: string
-        sex:
-          $ref: '#/components/schemas/sex'
-        photo:
-          $ref: "#/components/schemas/photo"
-        birthDate:
-          type: string
-          format: date
-        address:
-          type: string
-        postalCode:
-          type: string
-        city:
-          type: string
-        phoneNumber:
-          type: string
-        email:
-          type: string
-          format: email
-        nationality:
-          type: string
-        creationDateTime:
-          type: string
-          format: date-time
-        modificationDateTime:
-          type: string
-          format: date-time
-        formations:
-          type: array
-          items:
-            $ref: "#/components/schemas/formation"
-        medicalCertificate:
-          $ref: "#/components/schemas/medicalCertificate"
 
     personForCreation:
       allOf:
@@ -1589,8 +1579,10 @@ components:
       properties:
         firstName:
           type: string
+          maxLength: 255
         name:
           type: string
+          maxLength: 255
         sex:
           $ref: '#/components/schemas/sex'
         birthDate:
@@ -1598,52 +1590,65 @@ components:
           format: date
         address:
           type: string
+          maxLength: 255
         postalCode:
           type: string
+          maxLength: 255
         city:
           type: string
+          maxLength: 255
         phoneNumber:
           type: string
+          pattern: ^((\+)33|0)[1-9](\d{2}){4}$
         email:
           type: string
           format: email
         nationality:
           type: string
+          maxLength: 255
         formations:
           type: array
           items:
             $ref: "#/components/schemas/formation"
 
     season:
+      allOf:
+        - $ref: '#/components/schemas/seasonForCreation'
+        - properties:
+            id:
+              type: string
+              pattern: ^([0-9]){8}$
       required:
         - id
         - description
         - begin
         - end
+
+      example:
+        id: "20172018"
+        description: 'Season 2017/2018'
+        begin: '2017-09-01'
+        end: '2018-08-31'
+
+    seasonForCreation:
+      allOf:
+        - $ref: '#/components/schemas/seasonForUpdate'
+      required:
+        - description
+        - begin
+        - end
+
+    seasonForUpdate:
       properties:
-        id:
-          type: string
         description:
           type: string
+          maxLength: 255
         begin:
           type: string
           format: date
         end:
           type: string
           format: date
-      example:
-        - id: "20172018"
-          description: 'Season 2017/2018'
-          begin: '2017-09-01'
-          end: '2018-08-31'
-        - id: "20162017"
-          description: 'Season 2016/2017'
-          begin: '2016-09-01'
-          end: '2017-08-31'
-        - id: "20152016"
-          description: 'Season 2015/2016'
-          begin: '2015-09-01'
-          end: '2016-08-31'
 
     medicalCertificateForCreation:
       type: object
@@ -1656,6 +1661,7 @@ components:
           format: binary
         medicalCertificateBeginValidityDate:
           type: string
+          pattern: ^(19|20)\\d\\d([-])(0[1-9]|1[012])\\2(0[1-9]|[12][0-9]|3[01])$
           description: "Format is YYYY-MM-DD. <br> There is a bug in some client so the date is sent as string without format:date"
 
     photoForCreation:
@@ -1677,16 +1683,23 @@ components:
           format: binary
 
     logo:
+      required:
+        - location
       properties:
         location:
           type: string
 
     photo:
+      required:
+        - location
       properties:
         location:
           type: string
 
     medicalCertificate:
+      required:
+        - location
+        - beginValidityDate
       properties:
         location:
           type: string
@@ -1694,24 +1707,7 @@ components:
           type: string
           format: date
 
-    seasonForCreation:
-      allOf:
-        - $ref: '#/components/schemas/seasonForUpdate'
-      required:
-        - description
-        - begin
-        - end
 
-    seasonForUpdate:
-      properties:
-        description:
-          type: string
-        begin:
-          type: string
-          format: date
-        end:
-          type: string
-          format: date
 
     formation:
       required:
@@ -1724,6 +1720,7 @@ components:
           format: int32
         name:
           type: string
+          maxLength: 255
         date:
           type: string
           format: date
@@ -1752,6 +1749,11 @@ components:
 
 
     licence:
+      required:
+        - number
+        - typeLicences
+        - season
+        - clubId
       properties:
         number:
           type: string

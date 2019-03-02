@@ -14,9 +14,10 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_UPDATE_PASSWORD = "updatePassword";
 
+    public static final String BODY_FIELD_CONFIRM_PASSWORD = "confirmPassword";
+
     public static final String BODY_FIELD_NEW_PASSWORD = "newPassword";
 
-    public static final String BODY_FIELD_OLD_PASSWORD = "oldPassword";
 
     public static final String QUERY_STRING_SEASON_ID = "seasonId";
 
