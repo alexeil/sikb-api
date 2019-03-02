@@ -56,12 +56,14 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/user'
-        400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+                400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - users
     post:
@@ -86,11 +88,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/user'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - users
   '/users/login':
@@ -114,11 +118,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/session'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - identifications
   '/users/logout':
@@ -132,11 +138,13 @@ paths:
         204:
           description: Access token is revoked and user logged out
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - identifications
   '/users/reset':
@@ -156,11 +164,13 @@ paths:
         204:
           description: A mail will be send allowing user to reset his password
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - identifications
   '/users/updatePassword':
@@ -188,11 +198,13 @@ paths:
         204:
           description: The password was updated
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - identifications
   '/users/confirm':
@@ -214,11 +226,13 @@ paths:
         204:
           description: A mail was sent allowing to reset the password
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - identifications
   '/users/{userId}':
@@ -237,11 +251,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/user'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - users
     put:
@@ -267,11 +283,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/user'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - users
     delete:
@@ -285,11 +303,13 @@ paths:
         204:
           description: The user is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - users
   '/clubs':
@@ -309,11 +329,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/club'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
     post:
@@ -338,11 +360,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/club'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
   '/clubs/{clubId}':
@@ -361,11 +385,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/club'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
     put:
@@ -391,11 +417,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/club'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
     delete:
@@ -409,11 +437,13 @@ paths:
         204:
           description: The club is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
   '/clubs/{clubId}/logo':
@@ -444,11 +474,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/photo'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - clubs
 
@@ -477,11 +509,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/affiliation'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - affiliations
     get:
@@ -500,11 +534,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/affiliation'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - affiliations
     put:
@@ -530,14 +566,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/affiliation'
-        '401':
-          description: unauthorized
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - affiliations
     delete:
@@ -552,11 +588,13 @@ paths:
         204:
           description: the club affiliation is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - affiliations
 
@@ -579,11 +617,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/team'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
     post:
@@ -610,11 +650,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/team'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
   '/clubs/{clubId}/seasons/{seasonId}/teams/{teamId}':
@@ -635,11 +677,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/team'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
     put:
@@ -666,14 +710,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/team'
-        '401':
-          description: unauthorized
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
     delete:
@@ -689,11 +733,13 @@ paths:
         204:
           description: the club team is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
 
@@ -717,11 +763,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/teamMember'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - teams
 
@@ -742,11 +790,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/person'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
     post:
@@ -771,11 +821,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/person'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
 
@@ -795,11 +847,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/person'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
     put:
@@ -825,11 +879,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/person'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
     delete:
@@ -843,11 +899,13 @@ paths:
         204:
           description: The person is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
 
@@ -879,11 +937,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/medicalCertificate'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
 
@@ -915,11 +975,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/photo'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - persons
 
@@ -944,11 +1006,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/licence'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - licences
     post:
@@ -976,11 +1040,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/licence'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - licences
   '/persons/{personId}/clubs/{clubId}/seasons/{seasonId}/licences/{licenceId}':
@@ -1010,11 +1076,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/licence'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - licences
     delete:
@@ -1031,11 +1099,13 @@ paths:
         204:
           description: The person's licence is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - licences
   '/seasons':
@@ -1055,11 +1125,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/season'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
     post:
@@ -1084,11 +1156,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/season'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
   '/seasons/{seasonId}':
@@ -1115,11 +1189,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/season'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
     delete:
@@ -1133,11 +1209,13 @@ paths:
         204:
           description: The season is deleted
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
 
@@ -1158,11 +1236,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/formationType'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
 
@@ -1183,11 +1263,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/licenceType'
         400:
-          description: Default error sample response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ZError"
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
       tags:
         - configurations
 
@@ -1196,6 +1278,35 @@ components:
     basicAuth:
       type: http
       scheme: basic
+
+  responses:
+    400:
+      description: All errors due to incorrect client input
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ZError"
+
+    404:
+      description: Entity not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ZError"
+
+    500:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ZError"
+
+    401:
+      description: Not authorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ZError"
 
   parameters:
     teamId:
