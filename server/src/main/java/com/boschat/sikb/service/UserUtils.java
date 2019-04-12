@@ -12,10 +12,12 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.User;
 import com.boschat.sikb.utils.MailUtils;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.jooq.tools.StringUtils;
 
 import java.util.List;
 
+import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.ACTIVATION_TOKEN_EXPIRATION_DAYS;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.RESET_TOKEN_EXPIRATION_DAYS;
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIRM_TOKEN_EXPIRED;
@@ -26,10 +28,12 @@ import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_LOGIN_OR_
 import static com.boschat.sikb.common.configuration.ResponseCode.WRONG_OLD_PASSWORD;
 import static com.boschat.sikb.common.utils.DateUtils.now;
 import static com.boschat.sikb.common.utils.DateUtils.nowPlusDays;
+import static com.boschat.sikb.service.ClubUtils.findClubIds;
 import static com.boschat.sikb.utils.HashUtils.generateSalt;
 import static com.boschat.sikb.utils.HashUtils.generateToken;
 import static com.boschat.sikb.utils.HashUtils.hash;
 import static com.boschat.sikb.utils.HashUtils.isExpectedPassword;
+import static com.boschat.sikb.utils.JsonUtils.profileToJsonNode;
 
 public class UserUtils {
 
@@ -125,7 +129,7 @@ public class UserUtils {
             String accessToken = generateToken();
             user.setAccesstoken(accessToken);
             DAOFactory.getInstance().getUserDAO().update(user);
-            return new Session().accessToken(accessToken);
+            return new Session().accessToken(accessToken).user(convertBeanToModel(user));
         } else {
             throw new FunctionalException(WRONG_LOGIN_OR_PASSWORD);
         }
@@ -170,6 +174,13 @@ public class UserUtils {
 
         if (createContext.getEmail() != null) {
             userBean.setEmail(createContext.getEmail());
+        }
+
+        if (createContext.getProfile() != null) {
+            if (BooleanUtils.isTrue(createContext.getProfile().getAllClubs())) {
+                createContext.getProfile().setClubIds(findClubIds());
+            }
+            userBean.setProfile(profileToJsonNode(createContext.getProfile()));
         }
 
         if (isModification) {

@@ -43,6 +43,13 @@ L'application devra fournir une variété de fonctionnalités essentielles à la
 
 ### gestion de droit/périmètre
 
+| Profile      | User Management  | Club Management    | Event Management   | Person Management         | Licence Management        | Referee Management        |
+|--------------|------------------|--------------------|--------------------|---------------------------|---------------------------|---------------------------|
+| Administrator| All (CRUD)       | All (CRUD)         | All (CRUD)         | All (CRUD)                | All (CRUD)                | All (CRUD)                |
+| Club         | only one (RU)    | Only one (RU)      | Only one (RU)      | Only its perimeter (CRUD) | Only its perimeter (CRUD) | only its perimeter (R)    |
+| Ligue        | only one (RU)    | multiple club (R)  | multiple club (R)  | only its perimeter (CRUD) | only its perimeter (CRUD) | only its perimeter (R)    |
+| FKBF         | All (CRUD)       | All (CRUD)         | All (R)            | All (CRUD)                | All (CRUD)                | All (CRUD)                |
+
 Il existe plusieurs type de compte :
 * Club
 * Ligue

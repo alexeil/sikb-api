@@ -32,7 +32,8 @@ class UserGetTest extends AbstractTest {
 
         checkResponse(response, OK);
         User user = getUser(response);
-        checkUser(user, USER_DEFAULT_EMAIL);
+        checkUser(user, USER_DEFAULT_EMAIL, PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR, PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR,
+            PROFILE_CLUB_IDS);
     }
 
     @Test

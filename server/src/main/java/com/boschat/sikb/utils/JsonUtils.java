@@ -5,6 +5,8 @@ import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.LicenceType;
 import com.boschat.sikb.model.MemberType;
+import com.boschat.sikb.model.Profile;
+import com.boschat.sikb.model.ProfileForCreation;
 import com.boschat.sikb.model.TeamMember;
 import com.boschat.sikb.model.TeamMemberForCreation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
@@ -53,6 +55,20 @@ public class JsonUtils {
 
     public static List<Formation> jsonNodeToFormations(JsonNode jsonNode) {
         return Arrays.asList(jsonNodeToObject(jsonNode, Formation[].class));
+    }
+
+    public static Profile jsonNodeToProfile(JsonNode jsonNode) {
+
+        ProfileForCreation profileFromDatabase = jsonNodeToObject(jsonNode, ProfileForCreation.class);
+
+        Profile profile = new Profile();
+        profile.setType(convertBeanToModel(DAOFactory.getInstance().getProfileTypeDAO().fetchOneById(profileFromDatabase.getType().getId())));
+        profile.setClubIds(profileFromDatabase.getClubIds());
+        return profile;
+    }
+
+    public static JsonNode profileToJsonNode(ProfileForCreation profile) {
+        return objectToJsonNode(profile);
     }
 
     public static List<TeamMember> jsonNodeToTeamMembers(JsonNode jsonNode) {

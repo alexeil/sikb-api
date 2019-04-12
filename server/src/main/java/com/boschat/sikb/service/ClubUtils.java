@@ -8,6 +8,7 @@ import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Club;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.CLUB_NOT_FOUND;
 import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
@@ -32,6 +33,12 @@ public class ClubUtils {
     public static List<Club> findClubs() {
         return DAOFactory.getInstance().getClubDAO().findAll();
     }
+
+    public static List<Integer> findClubIds() {
+        return findClubs().stream().map(Club::getId).collect(Collectors.toList());
+    }
+
+  
 
     public static Club updateClub() {
         return saveClub(false);

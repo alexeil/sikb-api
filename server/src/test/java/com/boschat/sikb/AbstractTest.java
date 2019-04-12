@@ -15,6 +15,7 @@ import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
 import com.boschat.sikb.model.Formation;
 import com.boschat.sikb.model.FormationType;
+import com.boschat.sikb.model.Functionality;
 import com.boschat.sikb.model.Licence;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceForUpdate;
@@ -28,6 +29,7 @@ import com.boschat.sikb.model.PersonForCreation;
 import com.boschat.sikb.model.PersonForUpdate;
 import com.boschat.sikb.model.Photo;
 import com.boschat.sikb.model.PhotoForCreation;
+import com.boschat.sikb.model.ProfileType;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Season;
 import com.boschat.sikb.model.SeasonForCreation;
@@ -68,6 +70,7 @@ import java.net.ServerSocket;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.boschat.sikb.WiserAssertions.assertReceivedMessage;
@@ -75,6 +78,7 @@ import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_D
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_LOGIN;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_PORT;
+import static com.boschat.sikb.common.configuration.ApplicationProperties.TEMPLATE_PATH;
 import static com.boschat.sikb.common.configuration.EnvVar.CONFIG_PATH;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_DB;
 import static com.boschat.sikb.common.configuration.EnvVar.POSTGRES_HOST;
@@ -88,6 +92,22 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.model.Functionality.CLUB_CREATE;
+import static com.boschat.sikb.model.Functionality.CLUB_DELETE;
+import static com.boschat.sikb.model.Functionality.CLUB_READ;
+import static com.boschat.sikb.model.Functionality.CLUB_UPDATE;
+import static com.boschat.sikb.model.Functionality.PERSON_CREATE;
+import static com.boschat.sikb.model.Functionality.PERSON_DELETE;
+import static com.boschat.sikb.model.Functionality.PERSON_READ;
+import static com.boschat.sikb.model.Functionality.PERSON_UPDATE;
+import static com.boschat.sikb.model.Functionality.SEASON_CREATE;
+import static com.boschat.sikb.model.Functionality.SEASON_DELETE;
+import static com.boschat.sikb.model.Functionality.SEASON_READ;
+import static com.boschat.sikb.model.Functionality.SEASON_UPDATE;
+import static com.boschat.sikb.model.Functionality.USER_CREATE;
+import static com.boschat.sikb.model.Functionality.USER_DELETE;
+import static com.boschat.sikb.model.Functionality.USER_READ;
+import static com.boschat.sikb.model.Functionality.USER_UPDATE;
 import static com.boschat.sikb.model.MemberType.COACH;
 import static com.boschat.sikb.model.MemberType.PLAYER;
 import static com.boschat.sikb.model.Sex.FEMALE;
@@ -119,6 +139,17 @@ public abstract class AbstractTest {
     protected static final List<FormationType> LICENCE_DEFAULT_FORMATION_NEED = Arrays.asList(
         new FormationType().id(2).name("Arbitre Niveau 2"),
         new FormationType().id(3).name("Arbitre Niveau 3"));
+
+    protected static final Integer PROFILE_TYPE_ID_ADMINISTRATOR = 1;
+
+    protected static final String PROFILE_TYPE_NAME_ADMINISTRATOR = "Administrator";
+
+    protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR = Arrays.asList(USER_READ, USER_CREATE, USER_UPDATE, USER_DELETE,
+        CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ, SEASON_CREATE, SEASON_UPDATE,
+        SEASON_DELETE
+    );
+
+    protected static final List<Integer> PROFILE_CLUB_IDS = Collections.singletonList(1);
 
     protected static final String SEASON_DEFAULT_ID = "20182019";
 
@@ -307,6 +338,10 @@ public abstract class AbstractTest {
         return Arrays.asList(getBody(result, FormationType[].class));
     }
 
+    protected static List<ProfileType> getProfileTypes(Response result) throws IOException {
+        return Arrays.asList(getBody(result, ProfileType[].class));
+    }
+
     protected static List<LicenceType> getLicenceTypes(Response result) throws IOException {
         return Arrays.asList(getBody(result, LicenceType[].class));
     }
@@ -360,11 +395,11 @@ public abstract class AbstractTest {
 
     }
 
-    public static void shutDownJerseyTest() throws Exception {
+    static void shutDownJerseyTest() throws Exception {
         jerseyTest.tearDown();
     }
 
-    public static void initJerseyTest() throws Exception {
+    static void initJerseyTest() throws Exception {
         jerseyTest = new JerseyTest() {
 
             @Override
@@ -411,16 +446,17 @@ public abstract class AbstractTest {
         setPropertiesTests();
     }
 
-    public static void setPropertiesTests() throws IOException {
+    private static void setPropertiesTests() throws IOException {
         if (null == wiserServerPort) {
             wiserServerPort = findRandomOpenPortOnAllLocalInterfaces().toString();
         }
         ConfigLoader.getInstance().setProperties(SMTP_HOST, "localhost");
         ConfigLoader.getInstance().setProperties(SMTP_PORT, wiserServerPort);
         ConfigLoader.getInstance().setProperties(SMTP_DEFAULT_RECIPIENT, "");
+        ConfigLoader.getInstance().setProperties(TEMPLATE_PATH, "src/main/resources/templates");
     }
 
-    public static void initContext() throws IOException {
+    static void initContext() throws IOException {
         DateUtils.useFixedClockAt(NOW);
         setEnvVariablesTests();
 
@@ -655,34 +691,39 @@ public abstract class AbstractTest {
     }
 
     protected Response licenceTypesFind(ApiVersion version) {
-        String path = buildPathConfiguration(version, null, false, false, true);
+        String path = buildPathConfiguration(version, null, false, false, true, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response formationTypesFind(ApiVersion version) {
-        String path = buildPathConfiguration(version, null, false, true, false);
+        String path = buildPathConfiguration(version, null, false, true, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response profileTypesFind(ApiVersion version) {
+        String path = buildPathConfiguration(version, null, false, false, false, true);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response seasonCreate(ApiVersion version, SeasonForCreation seasonForCreation) {
         Entity<SeasonForCreation> entity = Entity.json(seasonForCreation);
-        String path = buildPathConfiguration(version, null, true, false, false);
+        String path = buildPathConfiguration(version, null, true, false, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).post(entity);
     }
 
     protected Response seasonFind(ApiVersion version) {
-        String path = buildPathConfiguration(version, null, true, false, false);
+        String path = buildPathConfiguration(version, null, true, false, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 
     protected Response seasonUpdate(ApiVersion version, String SeasonId, SeasonForUpdate bean) {
         Entity<SeasonForUpdate> entity = Entity.json(bean);
-        String path = buildPathConfiguration(version, SeasonId, true, false, false);
+        String path = buildPathConfiguration(version, SeasonId, true, false, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
     }
 
     protected Response seasonDelete(ApiVersion version, String seasonId) {
-        String path = buildPathConfiguration(version, seasonId, true, false, false);
+        String path = buildPathConfiguration(version, seasonId, true, false, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
@@ -794,7 +835,8 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType) {
+    private String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType,
+        boolean isProfileType) {
         StringBuilder path = new StringBuilder("/" + version.getName());
         if (isSeason) {
             path.append("/seasons");
@@ -804,6 +846,9 @@ public abstract class AbstractTest {
         }
         if (isLicenceType) {
             path.append("/licenceTypes");
+        }
+        if (isProfileType) {
+            path.append("/profileTypes");
         }
 
         if (id != null) {
@@ -894,11 +939,17 @@ public abstract class AbstractTest {
         );
     }
 
-    protected void checkUser(User user, String email) {
+    protected void checkUser(User user, String email, Integer profileTypeId, String profileTypeName, List<Functionality> functionalities,
+        List<Integer> clubIds) {
         assertAll("Check User " + user.getEmail(),
             () -> assertNotNull(user, " User shouldn't be null"),
+            () -> assertNotNull(user.getProfile(), " Profile shouldn't be null"),
             () -> assertNotNull(user.getId(), "Id shouldn't be null"),
-            () -> assertEquals(email, user.getEmail(), " email incorrect")
+            () -> assertEquals(email, user.getEmail(), " email incorrect"),
+            () -> assertEquals(profileTypeId, user.getProfile().getType().getId(), " profileTypeId incorrect"),
+            () -> assertEquals(profileTypeName, user.getProfile().getType().getName(), " profileTypeName incorrect"),
+            () -> assertEquals(functionalities, user.getProfile().getType().getFunctionalities(), " functionalities incorrect"),
+            () -> assertEquals(clubIds, user.getProfile().getClubIds(), " clubIds incorrect")
         );
     }
 
@@ -960,7 +1011,9 @@ public abstract class AbstractTest {
     protected void checkSession(Session session) {
         assertAll("Check Session ",
             () -> assertNotNull(session, " User shouldn't be null"),
-            () -> assertNotNull(session.getAccessToken(), "AccessToken  shouldn't be null")
+            () -> assertNotNull(session.getAccessToken(), "AccessToken  shouldn't be null"),
+            () -> checkUser(session.getUser(), AFFILIATION_DEFAULT_EMAIL, PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR,
+                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS)
         );
     }
 

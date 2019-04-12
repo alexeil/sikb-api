@@ -271,6 +271,10 @@
 									<token>@Path("/licenceTypes")</token>
 									<value>@Path("/v1/licenceTypes")</value>
 								</replacement>
+								<replacement>
+									<token>@Path("/profileTypes")</token>
+									<value>@Path("/v1/profileTypes")</value>
+								</replacement>
 							</replacements>
 						</configuration>
 					</execution>

@@ -10,7 +10,7 @@
             <AppenderRef ref="Console"/>
         </Root>
 
-		<Logger level="INFO" name="com.boschat.sikb" additivity="false">
+		<Logger level="TRACE" name="com.boschat.sikb" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
 

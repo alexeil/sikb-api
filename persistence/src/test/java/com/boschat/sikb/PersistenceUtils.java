@@ -40,7 +40,7 @@ public class PersistenceUtils {
         DAOFactory.getInstance().truncateUser();
         DAOFactory.getInstance().getDslContext().alterSequence(USER_ID_SEQ).restart().execute();
         loadDataSuite("sql/insertUser.csv", USER, USER.EMAIL, USER.PASSWORD, USER.SALT, USER.INFORMATION, USER.ACTIVATIONTOKEN,
-            USER.ACTIVATIONTOKENEXPIRATIONDATE, USER.ACCESSTOKEN, USER.ENABLED, USER.CREATIONDATE, USER.MODIFICATIONDATE);
+            USER.ACTIVATIONTOKENEXPIRATIONDATE, USER.ACCESSTOKEN, USER.PROFILE, USER.ENABLED, USER.CREATIONDATE, USER.MODIFICATIONDATE);
     }
 
     public static void loadClubs(String fileName) throws IOException {
@@ -158,8 +158,7 @@ public class PersistenceUtils {
         } else {
             String content = new String(Files.readAllBytes(Paths.get(resourcePath)));
             DAOFactory.getInstance().getDslContext().execute(content);
-            LOGGER.error(resourcePath + " executed !");
-
+            LOGGER.info(resourcePath + " executed !");
         }
     }
 }

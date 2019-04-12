@@ -37,6 +37,7 @@ import static com.boschat.sikb.Helper.convertFormationTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
+import static com.boschat.sikb.Helper.convertProfileTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
 import static com.boschat.sikb.Helper.convertTeamBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
@@ -56,6 +57,7 @@ import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
+import static com.boschat.sikb.service.ConfigurationUtils.findProfileTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
 import static com.boschat.sikb.service.LicenceUtils.deleteLicence;
 import static com.boschat.sikb.service.LicenceUtils.findLicences;
@@ -431,6 +433,17 @@ public enum CallType {
         @Override
         public Object call() {
             return convertFormationTypesBeansToModels(findFormationTypes());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
+        }
+    },
+    PROFILE_TYPE_FIND("Find profile types", OK, true) {
+        @Override
+        public Object call() {
+            return convertProfileTypesBeansToModels(findProfileTypes());
         }
 
         @Override
