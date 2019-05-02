@@ -5,6 +5,7 @@ import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.BoardForCreation;
+import com.boschat.sikb.model.BoardMember;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,12 +48,9 @@ class AffiliationCreateTest extends AbstractTest {
         affiliationForCreation.setWebSite(AFFILIATION_DEFAULT_WEBSITE);
 
         BoardForCreation board = new BoardForCreation();
-        board.setPresident(AFFILIATION_DEFAULT_PRESIDENT);
-        board.setPresidentSex(AFFILIATION_DEFAULT_PRESIDENT_SEX);
-        board.setSecretary(AFFILIATION_DEFAULT_SECRETARY);
-        board.setSecretarySex(AFFILIATION_DEFAULT_SECRETARY_SEX);
-        board.setTreasurer(AFFILIATION_DEFAULT_TREASURER);
-        board.setTreasurerSex(AFFILIATION_DEFAULT_TREASURER_SEX);
+        board.setPresident(new BoardMember().name(AFFILIATION_DEFAULT_PRESIDENT).sex(AFFILIATION_DEFAULT_PRESIDENT_SEX));
+        board.setSecretary(new BoardMember().name(AFFILIATION_DEFAULT_SECRETARY).sex(AFFILIATION_DEFAULT_SECRETARY_SEX));
+        board.setTreasurer(new BoardMember().name(AFFILIATION_DEFAULT_TREASURER).sex(AFFILIATION_DEFAULT_TREASURER_SEX));
         board.setMembersNumber(AFFILIATION_DEFAULT_MEMBERS_NUMBER);
         board.setElectedDate(AFFILIATION_DEFAULT_ELECTED_DATE);
         affiliationForCreation.setBoard(board);

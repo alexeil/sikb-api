@@ -16,9 +16,6 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_CONFIRM_PASSWORD = "confirmPassword";
 
-    public static final String BODY_FIELD_NEW_PASSWORD = "newPassword";
-
-
     public static final String QUERY_STRING_SEASON_ID = "seasonId";
 
     public static final String BODY_FIELD_MEDICAL_CERTIFICATE = "medicalCertificate";
@@ -43,13 +40,19 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_PRESIDENT = "president";
 
+    public static final String BODY_FIELD_PRESIDENT_NAME = "president name";
+
     public static final String BODY_FIELD_PRESIDENT_SEX = "presidentSex";
 
     public static final String BODY_FIELD_SECRETARY = "secretary";
 
+    public static final String BODY_FIELD_SECRETARY_NAME = "secretary name";
+
     public static final String BODY_FIELD_SECRETARY_SEX = "secretarySex";
 
     public static final String BODY_FIELD_TREASURER = "treasurer";
+
+    public static final String BODY_FIELD_TREASURER_NAME = "treasurer name";
 
     public static final String BODY_FIELD_TREASURER_SEX = "treasurerSex";
 

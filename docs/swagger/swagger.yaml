@@ -1571,34 +1571,33 @@ components:
     board:
       required:
         - president
-        - presidentSex
         - secretary
-        - secretarySex
         - treasurer
-        - treasurerSex
         - membersNumber
         - electedDate
       properties:
         president:
-          type: string
-          maxLength: 255
-        presidentSex:
-          $ref: '#/components/schemas/sex'
+          $ref: '#/components/schemas/boardMember'
         secretary:
-          type: string
-          maxLength: 255
-        secretarySex:
-          $ref: '#/components/schemas/sex'
+          $ref: '#/components/schemas/boardMember'
         treasurer:
-          type: string
-          maxLength: 255
-        treasurerSex:
-          $ref: '#/components/schemas/sex'
+          $ref: '#/components/schemas/boardMember'
         membersNumber:
           type: integer
         electedDate:
           type: string
           format: date
+
+    boardMember:
+      required:
+        - name
+        - sex
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        sex:
+          $ref: '#/components/schemas/sex'
 
     sex:
       type: string

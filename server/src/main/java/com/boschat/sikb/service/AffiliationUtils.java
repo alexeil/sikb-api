@@ -84,22 +84,22 @@ public class AffiliationUtils {
             affiliationBean.setWebsite(createContext.getWebSite());
         }
         if (createContext.getPresident() != null) {
-            affiliationBean.setPresident(createContext.getPresident());
-        }
-        if (createContext.getPresidentSex() != null) {
-            affiliationBean.setPresidentsex(createContext.getPresidentSex().toString());
+            affiliationBean.setPresident(createContext.getPresident().getName());
+            if (createContext.getPresident().getSex() != null) {
+                affiliationBean.setPresidentsex(createContext.getPresident().getSex().toString());
+            }
         }
         if (createContext.getSecretary() != null) {
-            affiliationBean.setSecretary(createContext.getSecretary());
-        }
-        if (createContext.getSecretarySex() != null) {
-            affiliationBean.setSecretarysex(createContext.getSecretarySex().toString());
+            affiliationBean.setSecretary(createContext.getSecretary().getName());
+            if (createContext.getSecretary().getSex() != null) {
+                affiliationBean.setSecretarysex(createContext.getSecretary().getSex().toString());
+            }
         }
         if (createContext.getTreasurer() != null) {
-            affiliationBean.setTreasurer(createContext.getTreasurer());
-        }
-        if (createContext.getTreasurerSex() != null) {
-            affiliationBean.setTreasurersex(createContext.getTreasurerSex().toString());
+            affiliationBean.setTreasurer(createContext.getTreasurer().getName());
+            if (createContext.getTreasurer().getSex() != null) {
+                affiliationBean.setTreasurersex(createContext.getTreasurer().getSex().toString());
+            }
         }
         if (createContext.getMembersNumber() != null) {
             affiliationBean.setMembersnumber(createContext.getMembersNumber());

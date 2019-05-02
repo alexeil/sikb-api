@@ -6,6 +6,7 @@ import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
+import com.boschat.sikb.model.BoardMember;
 import com.boschat.sikb.model.Logo;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
@@ -247,12 +248,9 @@ public class Helper {
 
         if (affiliationBean.getPresident() != null) {
             Board board = new Board();
-            board.setPresident(affiliationBean.getPresident());
-            board.setPresidentSex(Sex.fromValue(affiliationBean.getPresidentsex()));
-            board.setSecretary(affiliationBean.getSecretary());
-            board.setSecretarySex(Sex.fromValue(affiliationBean.getSecretarysex()));
-            board.setTreasurer(affiliationBean.getTreasurer());
-            board.setTreasurerSex(Sex.fromValue(affiliationBean.getTreasurersex()));
+            board.setPresident(new BoardMember().name(affiliationBean.getPresident()).sex(Sex.fromValue(affiliationBean.getPresidentsex())));
+            board.setSecretary(new BoardMember().name(affiliationBean.getSecretary()).sex(Sex.fromValue(affiliationBean.getSecretarysex())));
+            board.setTreasurer(new BoardMember().name(affiliationBean.getTreasurer()).sex(Sex.fromValue(affiliationBean.getTreasurersex())));
             board.setMembersNumber(affiliationBean.getMembersnumber());
             board.setElectedDate(affiliationBean.getElecteddate());
             affiliation.setBoard(board);

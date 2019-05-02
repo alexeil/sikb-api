@@ -3,7 +3,7 @@ package com.boschat.sikb.context;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.Board;
-import com.boschat.sikb.model.Sex;
+import com.boschat.sikb.model.BoardMember;
 
 import java.time.LocalDate;
 
@@ -17,11 +17,14 @@ import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_POS
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PREFECTURE_CITY;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PREFECTURE_NUMBER;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRESIDENT;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRESIDENT_NAME;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_PRESIDENT_SEX;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SECRETARY;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SECRETARY_NAME;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SECRETARY_SEX;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_SIRET_NUMBER;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_TREASURER;
+import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_TREASURER_NAME;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_TREASURER_SEX;
 import static com.boschat.sikb.utils.CheckUtils.checkRequestBodyField;
 
@@ -43,17 +46,11 @@ public class CreateOrUpdateAffiliationContext {
 
     private String webSite;
 
-    private String president;
+    private BoardMember president;
 
-    private Sex presidentSex;
+    private BoardMember secretary;
 
-    private String secretary;
-
-    private Sex secretarySex;
-
-    private String treasurer;
-
-    private Sex treasurerSex;
+    private BoardMember treasurer;
 
     private Integer membersNumber;
 
@@ -76,11 +73,8 @@ public class CreateOrUpdateAffiliationContext {
         Board board = affiliationForCreation.getBoard();
         if (board != null) {
             createOrUpdateContext.setPresident(board.getPresident());
-            createOrUpdateContext.setPresidentSex(board.getPresidentSex());
             createOrUpdateContext.setSecretary(board.getSecretary());
-            createOrUpdateContext.setSecretarySex(board.getSecretarySex());
             createOrUpdateContext.setTreasurer(board.getTreasurer());
-            createOrUpdateContext.setTreasurerSex(board.getTreasurerSex());
             createOrUpdateContext.setMembersNumber(board.getMembersNumber());
             createOrUpdateContext.setElectedDate(board.getElectedDate());
         }
@@ -102,11 +96,17 @@ public class CreateOrUpdateAffiliationContext {
         checkRequestBodyField(affiliationForCreation.getBoard(), BODY_FIELD_BOARD);
 
         checkRequestBodyField(affiliationForCreation.getBoard().getPresident(), BODY_FIELD_PRESIDENT);
-        checkRequestBodyField(affiliationForCreation.getBoard().getPresidentSex(), BODY_FIELD_PRESIDENT_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getPresident().getName(), BODY_FIELD_PRESIDENT_NAME);
+        checkRequestBodyField(affiliationForCreation.getBoard().getPresident().getSex(), BODY_FIELD_PRESIDENT_SEX);
+
         checkRequestBodyField(affiliationForCreation.getBoard().getSecretary(), BODY_FIELD_SECRETARY);
-        checkRequestBodyField(affiliationForCreation.getBoard().getSecretarySex(), BODY_FIELD_SECRETARY_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getSecretary().getName(), BODY_FIELD_SECRETARY_NAME);
+        checkRequestBodyField(affiliationForCreation.getBoard().getSecretary().getSex(), BODY_FIELD_SECRETARY_SEX);
+
         checkRequestBodyField(affiliationForCreation.getBoard().getTreasurer(), BODY_FIELD_TREASURER);
-        checkRequestBodyField(affiliationForCreation.getBoard().getTreasurerSex(), BODY_FIELD_TREASURER_SEX);
+        checkRequestBodyField(affiliationForCreation.getBoard().getTreasurer().getName(), BODY_FIELD_TREASURER_NAME);
+        checkRequestBodyField(affiliationForCreation.getBoard().getTreasurer().getSex(), BODY_FIELD_TREASURER_SEX);
+
         checkRequestBodyField(affiliationForCreation.getBoard().getMembersNumber(), BODY_FIELD_MEMBERS_NUMBER);
         checkRequestBodyField(affiliationForCreation.getBoard().getElectedDate(), BODY_FIELD_ELECTED_DATE);
 
@@ -177,52 +177,28 @@ public class CreateOrUpdateAffiliationContext {
         this.webSite = webSite;
     }
 
-    public String getPresident() {
+    public BoardMember getPresident() {
         return president;
     }
 
-    public void setPresident(String president) {
+    public void setPresident(BoardMember president) {
         this.president = president;
     }
 
-    public Sex getPresidentSex() {
-        return presidentSex;
-    }
-
-    public void setPresidentSex(Sex presidentSex) {
-        this.presidentSex = presidentSex;
-    }
-
-    public String getSecretary() {
+    public BoardMember getSecretary() {
         return secretary;
     }
 
-    public void setSecretary(String secretary) {
+    public void setSecretary(BoardMember secretary) {
         this.secretary = secretary;
     }
 
-    public Sex getSecretarySex() {
-        return secretarySex;
-    }
-
-    public void setSecretarySex(Sex secretarySex) {
-        this.secretarySex = secretarySex;
-    }
-
-    public String getTreasurer() {
+    public BoardMember getTreasurer() {
         return treasurer;
     }
 
-    public void setTreasurer(String treasurer) {
+    public void setTreasurer(BoardMember treasurer) {
         this.treasurer = treasurer;
-    }
-
-    public Sex getTreasurerSex() {
-        return treasurerSex;
-    }
-
-    public void setTreasurerSex(Sex treasurerSex) {
-        this.treasurerSex = treasurerSex;
     }
 
     public Integer getMembersNumber() {

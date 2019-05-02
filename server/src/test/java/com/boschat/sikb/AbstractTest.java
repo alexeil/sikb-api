@@ -832,12 +832,12 @@ public abstract class AbstractTest {
         } else {
             assertAll("Check board ",
                 () -> assertNotNull(board, " Affiliation shouldn't be null"),
-                () -> assertEquals(president, board.getPresident(), " president incorrect"),
-                () -> assertEquals(presidentSex, board.getPresidentSex(), " presidentSex incorrect"),
-                () -> assertEquals(secretary, board.getSecretary(), " secretary incorrect"),
-                () -> assertEquals(secretarySex, board.getSecretarySex(), " secretarySex incorrect"),
-                () -> assertEquals(treasurer, board.getTreasurer(), " treasurer incorrect"),
-                () -> assertEquals(treasurerSex, board.getTreasurerSex(), " treasurerSex incorrect"),
+                () -> assertEquals(president, board.getPresident().getName(), " president incorrect"),
+                () -> assertEquals(presidentSex, board.getPresident().getSex(), " presidentSex incorrect"),
+                () -> assertEquals(secretary, board.getSecretary().getName(), " secretary incorrect"),
+                () -> assertEquals(secretarySex, board.getSecretary().getSex(), " secretarySex incorrect"),
+                () -> assertEquals(treasurer, board.getTreasurer().getName(), " treasurer incorrect"),
+                () -> assertEquals(treasurerSex, board.getTreasurer().getSex(), " treasurerSex incorrect"),
                 () -> assertEquals(membersNumber, board.getMembersNumber(), " membersNumber incorrect"),
                 () -> assertEquals(electedDate, board.getElectedDate(), " electedDate incorrect")
             );
