@@ -21,7 +21,7 @@ public enum ResponseCode {
     MISSING_QUERY_STRING_PARAMETER(ERROR, 400, 6, "The query string %s is missing"),
     INVALID_QUERY_STRING_PARAMETER(ERROR, 400, 7, "The query string value %s is invalid : %s"),
     INVALID_BODY(INFO, 400, 8, "The body is invalid"),
-    INVALID_BODY_FIELD_FORMAT(INFO, 400, 9, "Body Field format error"),
+    INVALID_BODY_FIELD_FORMAT(INFO, 400, 9, "Body Field format error : %s"),
     WRONG_LOGIN_OR_PASSWORD(INFO, 400, 10, "Wrong login/password"),
     WRONG_OLD_PASSWORD(INFO, 400, 11, "Wrong old Password"),
     NEW_PASSWORD_CANNOT_BE_SAME(INFO, 400, 12, "New and old passwords cannot be the same"),

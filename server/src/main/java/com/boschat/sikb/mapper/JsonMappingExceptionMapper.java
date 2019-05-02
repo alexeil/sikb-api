@@ -17,7 +17,7 @@ public class JsonMappingExceptionMapper implements ExceptionMapper<JsonMappingEx
     @Override
     public Response toResponse(JsonMappingException e) {
         // all exception related to serialization or deserialization are caught here
-        return logAndBuildResponse(e, INVALID_BODY_FIELD_FORMAT);
+        return logAndBuildResponse(e, INVALID_BODY_FIELD_FORMAT, e.getMessage());
     }
 
 }

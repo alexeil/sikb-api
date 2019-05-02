@@ -20,7 +20,7 @@ public class MapperUtils {
         return buildResponse(error, params);
     }
 
-    public static Response buildResponse(ResponseCode error, Object... params) {
+    private static Response buildResponse(ResponseCode error, Object... params) {
         return Response.status(error.getCodeHttp()).entity(buildErrorResponse(error, params)).build();
     }
 
