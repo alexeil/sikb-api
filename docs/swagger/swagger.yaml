@@ -484,6 +484,33 @@ paths:
       tags:
         - clubs
 
+  '/clubs/{clubId}/affiliations':
+    get:
+      summary: find all club's affiliations
+      description: ''
+      operationId: findAllClubAffiliations
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/clubId'
+      responses:
+        200:
+          description: get the club affiliation for the season
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/seasonWithAffiliation'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+      tags:
+        - affiliations
   '/clubs/{clubId}/seasons/{seasonId}/affiliations':
     post:
       summary: Create the club affiliation for a season
@@ -1444,6 +1471,13 @@ components:
         shortName:
           type: string
           maxLength: 255
+
+    seasonWithAffiliation:
+      properties:
+        season:
+          $ref: '#/components/schemas/season'
+        affiliation:
+          $ref: '#/components/schemas/affiliation'
 
     affiliation:
       allOf:

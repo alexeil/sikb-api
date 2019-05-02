@@ -3,9 +3,16 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.context.MyThreadLocal;
+import com.boschat.sikb.model.SeasonWithAffiliation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
+import com.boschat.sikb.tables.pojos.Season;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
 import static com.boschat.sikb.service.ClubUtils.checkClubExists;
 import static com.boschat.sikb.service.SeasonUtils.checkSeasonExists;
@@ -18,6 +25,17 @@ public class AffiliationUtils {
 
     public static void deleteAffiliation() {
         DAOFactory.getInstance().getAffiliationDAO().delete(getAffiliation());
+    }
+
+    public static List<SeasonWithAffiliation> findClubAffiliations() {
+        Integer clubId = MyThreadLocal.get().getClubId();
+        Map<String, Affiliation> affiliationBySeason = DAOFactory.getInstance().getAffiliationDAO().fetchByClubIdMappedBySeason(clubId);
+        Map<String, Season> seasonsById = DAOFactory.getInstance().getSeasonDAO().findAllMappedById();
+
+        return affiliationBySeason.entrySet().stream()
+                                  .map(affiliationEntry -> new SeasonWithAffiliation().season(convertBeanToModel(seasonsById.get(affiliationEntry.getKey())))
+                                                                                      .affiliation(convertBeanToModel(affiliationEntry.getValue())))
+                                  .collect(Collectors.toList());
     }
 
     public static Affiliation getAffiliation() {

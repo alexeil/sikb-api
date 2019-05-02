@@ -45,6 +45,7 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.service.AffiliationUtils.createAffiliation;
 import static com.boschat.sikb.service.AffiliationUtils.deleteAffiliation;
+import static com.boschat.sikb.service.AffiliationUtils.findClubAffiliations;
 import static com.boschat.sikb.service.AffiliationUtils.getAffiliation;
 import static com.boschat.sikb.service.AffiliationUtils.updateAffiliation;
 import static com.boschat.sikb.service.ClubUtils.createClub;
@@ -272,6 +273,17 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
             MyThreadLocal.get().setSeasonId((String) params[1]);
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
+        }
+    },
+    AFFILIATION_FIND("Find all club's affiliations", OK, true) {
+        @Override
+        public Object call() {
+            return findClubAffiliations();
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
     AFFILIATION_GET("Get an affiliation", OK, true) {

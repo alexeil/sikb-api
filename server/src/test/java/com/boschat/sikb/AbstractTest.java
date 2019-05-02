@@ -32,6 +32,7 @@ import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.Season;
 import com.boschat.sikb.model.SeasonForCreation;
 import com.boschat.sikb.model.SeasonForUpdate;
+import com.boschat.sikb.model.SeasonWithAffiliation;
 import com.boschat.sikb.model.Session;
 import com.boschat.sikb.model.Sex;
 import com.boschat.sikb.model.Team;
@@ -250,6 +251,10 @@ public abstract class AbstractTest {
         return getBody(result, Affiliation.class);
     }
 
+    protected static List<SeasonWithAffiliation> getSeasonWithAffiliations(Response result) throws IOException {
+        return Arrays.asList(getBody(result, SeasonWithAffiliation[].class));
+    }
+
     protected static Licence getLicence(Response result) throws IOException {
         return getBody(result, Licence.class);
     }
@@ -431,6 +436,11 @@ public abstract class AbstractTest {
 
     protected Response affiliationGet(ApiVersion version, Integer clubId, String season) {
         String path = buildPathClubs(version, clubId, season, true, false, null, false, false);
+        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
+    }
+
+    protected Response affiliationFindAll(ApiVersion version, Integer clubId) {
+        String path = buildPathClubs(version, clubId, null, true, false, null, false, false);
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).get();
     }
 

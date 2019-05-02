@@ -1,6 +1,7 @@
 package com.boschat.sikb.api.impl;
 
 import com.boschat.sikb.api.ClubsApiService;
+import com.boschat.sikb.api.NotFoundException;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
 import com.boschat.sikb.model.ClubForCreation;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import static com.boschat.sikb.Helper.runService;
 import static com.boschat.sikb.api.CallType.AFFILIATION_CREATE;
 import static com.boschat.sikb.api.CallType.AFFILIATION_DELETE;
+import static com.boschat.sikb.api.CallType.AFFILIATION_FIND;
 import static com.boschat.sikb.api.CallType.AFFILIATION_GET;
 import static com.boschat.sikb.api.CallType.AFFILIATION_UPDATE;
 import static com.boschat.sikb.api.CallType.CLUB_CREATE;
@@ -56,6 +58,11 @@ public class ClubsApiServiceImpl extends ClubsApiService {
     public Response deleteTeam(String accessToken, Integer clubId, String seasonId, Integer teamId, SecurityContext securityContext) {
         return runService(TEAM_DELETE, accessToken, securityContext, clubId, seasonId, teamId);
 
+    }
+
+    @Override
+    public Response findAllClubAffiliations(String accessToken, Integer clubId, SecurityContext securityContext) throws NotFoundException {
+        return runService(AFFILIATION_FIND, accessToken, securityContext, clubId);
     }
 
     @Override
