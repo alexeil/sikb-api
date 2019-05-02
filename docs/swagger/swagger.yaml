@@ -56,7 +56,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/user'
-                400:
+        400:
           $ref: "#/components/responses/400"
         401:
           $ref: "#/components/responses/401"
