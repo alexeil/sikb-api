@@ -160,7 +160,7 @@ class testIT {
 
             assertAll("Check ",
                 () -> assertEquals(HttpServletResponse.SC_CREATED, connection.getResponseCode(), "Wrong http Code"),
-                () -> assertEquals("{\"id\":3,\"firstName\":\"testName\",\"name\":\"testFirstName\",\"email\":\"test@kin-ball.fr\"}",
+                () -> assertEquals("{\"firstName\":\"testName\",\"name\":\"testFirstName\",\"email\":\"test@kin-ball.fr\",\"id\":3}",
                     getBody(connection.getInputStream()), "body shouldn't be null")
             );
         }
@@ -174,7 +174,9 @@ class testIT {
 
             assertAll("Check ",
                 () -> assertEquals(HttpServletResponse.SC_BAD_REQUEST, connection.getResponseCode(), "Wrong http Code"),
-                () -> assertEquals("{\"code\":9,\"message\":\"Body Field format error\"}", getBody(connection.getErrorStream()), "body shouldn't be null")
+                () -> assertEquals(
+                    "{\"code\":9,\"message\":\"Body Field format error : Cannot construct instance of `com.boschat.sikb.model.PersonForCreation` (although at least one Creator exists): no String-argument constructor/factory method to deserialize from String value ('email')\\n at [Source: (org.glassfish.jersey.message.internal.ReaderInterceptorExecutor$UnCloseableInputStream); line: 1, column: 1]\"}",
+                    getBody(connection.getErrorStream()), "body shouldn't be null")
             );
         }
 
@@ -194,7 +196,7 @@ class testIT {
         @Test
         @DisplayName(" Missing required Field ")
         void missingRequiredField() throws Exception {
-            String body = "{\"email\": true}";
+            String body = "{\"email\": \"toto@gmail.com\"}";
             HttpURLConnection connection = sendRequest(HttpMethod.POST, POST_URL, body);
 
             assertAll("Check ",

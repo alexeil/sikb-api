@@ -1473,6 +1473,9 @@ components:
           maxLength: 255
 
     seasonWithAffiliation:
+      required:
+        - season
+        - affiliation
       properties:
         season:
           $ref: '#/components/schemas/season'
