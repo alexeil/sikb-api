@@ -42,7 +42,7 @@ class UserCreateTest extends AbstractTest {
         UserForCreation userForCreation = new UserForCreation();
         userForCreation.setEmail(AFFILIATION_DEFAULT_EMAIL);
         ProfileForCreation profile = new ProfileForCreation();
-        profile.setClubIds(PROFILE_CLUB_IDS);
+        profile.setClubIds(PROFILE_CLUB_IDS_DEFAULT);
         profile.setType(new ProfileTypeForCreation().id(1).name("Administrator"));
         profile.setAllClubs(allClubs);
         userForCreation.setProfile(profile);
@@ -68,7 +68,7 @@ class UserCreateTest extends AbstractTest {
     @Test
     @DisplayName(" with email and profile and allClub absent")
     void withEmailAndProfileAndAllClubAbsent() throws Exception {
-        executeCommon(null, PROFILE_CLUB_IDS);
+        executeCommon(null, PROFILE_CLUB_IDS_DEFAULT);
     }
 
     @Test
@@ -80,7 +80,7 @@ class UserCreateTest extends AbstractTest {
     @Test
     @DisplayName(" with email and profile and allClub false")
     void withEmailAndProfileAndAllClubFalse() throws Exception {
-        executeCommon(false, PROFILE_CLUB_IDS);
+        executeCommon(false, PROFILE_CLUB_IDS_DEFAULT);
     }
 
     @Test

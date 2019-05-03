@@ -41,9 +41,9 @@ class UserFindTest extends AbstractTest {
             () -> assertNotNull(users, " users shouldn't be null"),
             () -> assertEquals(4, users.size(), " only 2 users "),
             () -> checkUser(users.get(0), USER_DEFAULT_EMAIL, PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR,
-                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS),
-            () -> checkUser(users.get(1), "myEmail2@kin-ball.fr", PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR,
-                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS)
+                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS_DEFAULT),
+            () -> checkUser(users.get(1), "myEmail2@kin-ball.fr", PROFILE_TYPE_ID_CLUB, PROFILE_TYPE_NAME_CLUB,
+                PROFILE_TYPE_FUNCTIONALITIES_CLUB, PROFILE_CLUB_IDS)
         );
     }
 

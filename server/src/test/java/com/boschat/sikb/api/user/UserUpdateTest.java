@@ -42,7 +42,7 @@ class UserUpdateTest extends AbstractTest {
         checkResponse(response, OK);
         User user = getUser(response);
         checkUser(user, "newEmail@kin-ball.fr", PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR, PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR,
-            PROFILE_CLUB_IDS);
+            PROFILE_CLUB_IDS_DEFAULT);
     }
 
     @Test
@@ -53,7 +53,7 @@ class UserUpdateTest extends AbstractTest {
         checkResponse(response, OK);
         User user = getUser(response);
         checkUser(user, USER_DEFAULT_EMAIL, PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR, PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR,
-            PROFILE_CLUB_IDS);
+            PROFILE_CLUB_IDS_DEFAULT);
     }
 
     @Test

@@ -146,10 +146,19 @@ public abstract class AbstractTest {
 
     protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR = Arrays.asList(USER_READ, USER_CREATE, USER_UPDATE, USER_DELETE,
         CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ, SEASON_CREATE, SEASON_UPDATE,
-        SEASON_DELETE
-    );
+        SEASON_DELETE);
 
-    protected static final List<Integer> PROFILE_CLUB_IDS = Collections.singletonList(1);
+    protected static final List<Integer> PROFILE_CLUB_IDS_DEFAULT = Collections.singletonList(1);
+
+    protected static final Integer PROFILE_TYPE_ID_CLUB = 2;
+
+    protected static final String PROFILE_TYPE_NAME_CLUB = "Club";
+
+    protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_CLUB = Arrays.asList(CLUB_READ, CLUB_CREATE, CLUB_UPDATE, PERSON_READ,
+        PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE);
+
+    protected static final List<Integer> PROFILE_CLUB_IDS = Collections.singletonList(2);
+    
 
     protected static final String SEASON_DEFAULT_ID = "20182019";
 
@@ -1015,7 +1024,7 @@ public abstract class AbstractTest {
             () -> assertNotNull(session, " User shouldn't be null"),
             () -> assertNotNull(session.getAccessToken(), "AccessToken  shouldn't be null"),
             () -> checkUser(session.getUser(), AFFILIATION_DEFAULT_EMAIL, PROFILE_TYPE_ID_ADMINISTRATOR, PROFILE_TYPE_NAME_ADMINISTRATOR,
-                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS)
+                PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR, PROFILE_CLUB_IDS_DEFAULT)
         );
     }
 
