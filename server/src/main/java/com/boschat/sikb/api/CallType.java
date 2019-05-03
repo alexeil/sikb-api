@@ -15,6 +15,7 @@ import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.model.ClubForUpdate;
 import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Functionality;
 import com.boschat.sikb.model.LicenceForCreation;
 import com.boschat.sikb.model.LicenceForUpdate;
 import com.boschat.sikb.model.PersonForCreation;
@@ -30,6 +31,7 @@ import com.boschat.sikb.model.UserForUpdate;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.InputStream;
+import java.util.List;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
@@ -37,6 +39,7 @@ import static com.boschat.sikb.Helper.convertFormationTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceBeansToModels;
 import static com.boschat.sikb.Helper.convertLicenceTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertPersonsBeansToModels;
+import static com.boschat.sikb.Helper.convertProfileTypesBeansToModels;
 import static com.boschat.sikb.Helper.convertSeasonsBeansToModels;
 import static com.boschat.sikb.Helper.convertTeamBeansToModels;
 import static com.boschat.sikb.Helper.convertUserBeansToModels;
@@ -56,6 +59,7 @@ import static com.boschat.sikb.service.ClubUtils.getClub;
 import static com.boschat.sikb.service.ClubUtils.updateClub;
 import static com.boschat.sikb.service.ConfigurationUtils.findFormationTypes;
 import static com.boschat.sikb.service.ConfigurationUtils.findLicenceTypes;
+import static com.boschat.sikb.service.ConfigurationUtils.findProfileTypes;
 import static com.boschat.sikb.service.LicenceUtils.createLicence;
 import static com.boschat.sikb.service.LicenceUtils.deleteLicence;
 import static com.boschat.sikb.service.LicenceUtils.findLicences;
@@ -89,7 +93,7 @@ import static com.boschat.sikb.service.UserUtils.updateUser;
 import static com.boschat.sikb.service.UserUtils.updateUserPassword;
 
 public enum CallType {
-    USER_CREATE("Create a user", CREATED, true) {
+    USER_CREATE("Create a user", CREATED, true, Functionality.USER_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createUser());
@@ -100,7 +104,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForCreation) params[0]));
         }
     },
-    USER_DELETE("Delete a user", NO_CONTENT, true) {
+    USER_DELETE("Delete a user", NO_CONTENT, true, Functionality.USER_DELETE) {
         @Override
         public Object call() {
             deleteUser();
@@ -112,7 +116,7 @@ public enum CallType {
             MyThreadLocal.get().setUserId((Integer) params[0]);
         }
     },
-    USER_UPDATE("Update a User", OK, true) {
+    USER_UPDATE("Update a User", OK, true, Functionality.USER_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateUser());
@@ -124,7 +128,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateUserContext(CreateOrUpdateUserContext.create((UserForUpdate) params[1]));
         }
     },
-    USER_GET("get a user", OK, true) {
+    USER_GET("get a user", OK, true, Functionality.USER_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getUser());
@@ -135,7 +139,7 @@ public enum CallType {
             MyThreadLocal.get().setUserId((Integer) params[0]);
         }
     },
-    USER_FIND("find all users", OK, true) {
+    USER_FIND("find all users", OK, true, Functionality.USER_READ) {
         @Override
         public Object call() {
             return convertUserBeansToModels(findUsers());
@@ -146,7 +150,7 @@ public enum CallType {
             // No additional parameters
         }
     },
-    USER_LOGIN("Log in a user", CREATED, false) {
+    USER_LOGIN("Log in a user", CREATED, false, null) {
         @Override
         public Object call() {
             return loginUser();
@@ -157,7 +161,7 @@ public enum CallType {
             MyThreadLocal.get().setCredentials((Credentials) params[0]);
         }
     },
-    USER_LOGOUT("Log out a user", NO_CONTENT, true) {
+    USER_LOGOUT("Log out a user", NO_CONTENT, true, null) {
         @Override
         public Object call() {
             logoutUser();
@@ -169,7 +173,7 @@ public enum CallType {
             // no params
         }
     },
-    USER_CONFIRM("Confirm user email & password", NO_CONTENT, false) {
+    USER_CONFIRM("Confirm user email & password", NO_CONTENT, false, null) {
         @Override
         public Object call() {
             return confirmUser();
@@ -181,7 +185,7 @@ public enum CallType {
             MyThreadLocal.get().setConfirmPassword((ConfirmPassword) params[1]);
         }
     },
-    USER_UPDATE_PASSWORD("Update user password", NO_CONTENT, true) {
+    USER_UPDATE_PASSWORD("Update user password", NO_CONTENT, true, null) {
         @Override
         public Object call() {
             updateUserPassword();
@@ -193,7 +197,7 @@ public enum CallType {
             MyThreadLocal.get().setUpdatePassword((UpdatePassword) params[0]);
         }
     },
-    USER_RESET("Ask to reset user password", NO_CONTENT, false) {
+    USER_RESET("Ask to reset user password", NO_CONTENT, false, null) {
         @Override
         public Object call() {
             resetUserPassword();
@@ -205,7 +209,7 @@ public enum CallType {
             MyThreadLocal.get().setReset((Reset) params[0]);
         }
     },
-    CLUB_CREATE("Create a club", CREATED, true) {
+    CLUB_CREATE("Create a club", CREATED, true, Functionality.CLUB_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createClub());
@@ -216,7 +220,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForCreation) params[0]));
         }
     },
-    CLUB_DELETE("Delete a club", NO_CONTENT, true) {
+    CLUB_DELETE("Delete a club", NO_CONTENT, true, Functionality.CLUB_DELETE) {
         @Override
         public Object call() {
             deleteClub();
@@ -228,7 +232,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    CLUB_UPDATE("Update a club", OK, true) {
+    CLUB_UPDATE("Update a club", OK, true, Functionality.CLUB_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateClub());
@@ -240,7 +244,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateClubContext(CreateOrUpdateClubContext.create((ClubForUpdate) params[1]));
         }
     },
-    CLUB_GET("get a club", OK, true) {
+    CLUB_GET("get a club", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getClub());
@@ -251,7 +255,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    CLUB_FIND("find all clubs", OK, true) {
+    CLUB_FIND("find all clubs", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return convertBeansToModels(findClubs());
@@ -262,7 +266,7 @@ public enum CallType {
             // No additional parameters
         }
     },
-    AFFILIATION_CREATE("Create an affiliation", CREATED, true) {
+    AFFILIATION_CREATE("Create an affiliation", CREATED, true, Functionality.CLUB_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createAffiliation());
@@ -275,7 +279,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
         }
     },
-    AFFILIATION_FIND("Find all club's affiliations", OK, true) {
+    AFFILIATION_FIND("Find all club's affiliations", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return findClubAffiliations();
@@ -286,7 +290,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    AFFILIATION_GET("Get an affiliation", OK, true) {
+    AFFILIATION_GET("Get an affiliation", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getAffiliation());
@@ -298,7 +302,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
-    AFFILIATION_UPDATE("Update an affiliation", OK, true) {
+    AFFILIATION_UPDATE("Update an affiliation", OK, true, Functionality.CLUB_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateAffiliation());
@@ -311,7 +315,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForUpdate) params[2]));
         }
     },
-    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT, true) {
+    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT, true, Functionality.CLUB_DELETE) {
         @Override
         public Object call() {
             deleteAffiliation();
@@ -324,7 +328,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
-    PERSON_CREATE("Create a person", CREATED, true) {
+    PERSON_CREATE("Create a person", CREATED, true, Functionality.PERSON_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createPerson());
@@ -335,7 +339,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((PersonForCreation) params[0]));
         }
     },
-    PERSON_UPDATE("Update a person", OK, true) {
+    PERSON_UPDATE("Update a person", OK, true, Functionality.PERSON_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updatePerson());
@@ -347,7 +351,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdatePersonContext(CreateOrUpdatePersonContext.create((PersonForUpdate) params[1]));
         }
     },
-    PERSON_GET("Get a person", OK, true) {
+    PERSON_GET("Get a person", OK, true, Functionality.PERSON_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getPerson());
@@ -358,7 +362,7 @@ public enum CallType {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
         }
     },
-    PERSON_FIND("Find persons", OK, true) {
+    PERSON_FIND("Find persons", OK, true, Functionality.PERSON_READ) {
         @Override
         public Object call() {
             return convertPersonsBeansToModels(findPersons());
@@ -369,7 +373,7 @@ public enum CallType {
             // no params
         }
     },
-    PERSON_DELETE("Delete a person", NO_CONTENT, true) {
+    PERSON_DELETE("Delete a person", NO_CONTENT, true, Functionality.PERSON_DELETE) {
         @Override
         public Object call() {
             deletePerson();
@@ -381,7 +385,7 @@ public enum CallType {
             MyThreadLocal.get().setPersonId((Integer) params[0]);
         }
     },
-    SEASON_CREATE("Create a season", CREATED, true) {
+    SEASON_CREATE("Create a season", CREATED, true, Functionality.SEASON_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createSeason());
@@ -392,7 +396,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext.create((SeasonForCreation) params[0]));
         }
     },
-    SEASON_UPDATE("Update a season", OK, true) {
+    SEASON_UPDATE("Update a season", OK, true, Functionality.SEASON_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateSeason());
@@ -404,7 +408,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateSeasonContext(CreateOrUpdateSeasonContext.create((SeasonForUpdate) params[1]));
         }
     },
-    SEASON_FIND("Find Seasons", OK, true) {
+    SEASON_FIND("Find Seasons", OK, true, Functionality.SEASON_READ) {
         @Override
         public Object call() {
             return convertSeasonsBeansToModels(findSeasons());
@@ -415,7 +419,7 @@ public enum CallType {
             // no params
         }
     },
-    SEASON_DELETE("Delete a Season", NO_CONTENT, true) {
+    SEASON_DELETE("Delete a Season", NO_CONTENT, true, Functionality.SEASON_DELETE) {
         @Override
         public Object call() {
             deleteSeason();
@@ -427,7 +431,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[0]);
         }
     },
-    FORMATION_TYPE_FIND("Find formation types", OK, true) {
+    FORMATION_TYPE_FIND("Find formation types", OK, true, null) {
         @Override
         public Object call() {
             return convertFormationTypesBeansToModels(findFormationTypes());
@@ -438,7 +442,18 @@ public enum CallType {
             // no params
         }
     },
-    LICENCE_TYPE_FIND("Find licence types", OK, true) {
+    PROFILE_TYPE_FIND("Find profile types", OK, true, null) {
+        @Override
+        public Object call() {
+            return convertProfileTypesBeansToModels(findProfileTypes());
+        }
+
+        @Override
+        public void fillContext(Object... params) {
+            // no params
+        }
+    },
+    LICENCE_TYPE_FIND("Find licence types", OK, true, null) {
         @Override
         public Object call() {
             return convertLicenceTypesBeansToModels(findLicenceTypes());
@@ -449,7 +464,7 @@ public enum CallType {
             // no params
         }
     },
-    LICENCE_CREATE("Create a licence", CREATED, true) {
+    LICENCE_CREATE("Create a licence", CREATED, true, Functionality.PERSON_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createLicence());
@@ -463,7 +478,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForCreation) params[3]));
         }
     },
-    LICENCE_FIND("Find person's licences", OK, true) {
+    LICENCE_FIND("Find person's licences", OK, true, Functionality.PERSON_READ) {
         @Override
         public Object call() {
             return convertLicenceBeansToModels(findLicences());
@@ -476,7 +491,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[2]);
         }
     },
-    LICENCE_DELETE("Create a licence", NO_CONTENT, true) {
+    LICENCE_DELETE("Create a licence", NO_CONTENT, true, Functionality.PERSON_DELETE) {
         @Override
         public Object call() {
             deleteLicence();
@@ -491,7 +506,7 @@ public enum CallType {
             MyThreadLocal.get().setLicenceId((String) params[3]);
         }
     },
-    LICENCE_UPDATE("Update a licence", OK, true) {
+    LICENCE_UPDATE("Update a licence", OK, true, Functionality.PERSON_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateLicence());
@@ -506,7 +521,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateLicenceContext(CreateOrUpdateLicenceContext.create((LicenceForUpdate) params[4]));
         }
     },
-    MEDICAL_CERTIFICATE_UPLOAD("Upload a person's medical certificate", OK, true) {
+    MEDICAL_CERTIFICATE_UPLOAD("Upload a person's medical certificate", OK, true, Functionality.PERSON_CREATE) {
         @Override
         public Object call() {
             return createMedicalCertificate();
@@ -519,7 +534,7 @@ public enum CallType {
                 params[2], (String) params[3]));
         }
     },
-    PHOTO_UPLOAD("Upload a person's photo", OK, true) {
+    PHOTO_UPLOAD("Upload a person's photo", OK, true, Functionality.PERSON_CREATE) {
         @Override
         public Object call() {
             return createPhoto();
@@ -532,7 +547,7 @@ public enum CallType {
                 CreateOrUpdatePersonContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
         }
     },
-    LOGO_UPLOAD("Upload a club's logo", OK, true) {
+    LOGO_UPLOAD("Upload a club's logo", OK, true, Functionality.CLUB_CREATE) {
         @Override
         public Object call() {
             return createLogo();
@@ -545,7 +560,7 @@ public enum CallType {
                 CreateOrUpdateClubContext.create((InputStream) params[1], (FormDataContentDisposition) params[2]));
         }
     },
-    TEAM_CREATE("Create a team", CREATED, true) {
+    TEAM_CREATE("Create a team", CREATED, true, Functionality.CLUB_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createTeam());
@@ -558,7 +573,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateTeamContext(CreateOrUpdateTeamContext.create((TeamForCreation) params[2]));
         }
     },
-    TEAM_FIND("Find club's teams", OK, true) {
+    TEAM_FIND("Find club's teams", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return convertTeamBeansToModels(findTeams());
@@ -570,7 +585,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
-    TEAM_MEMBERS_FIND("Find team's members", OK, true) {
+    TEAM_MEMBERS_FIND("Find team's members", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return findTeamMembers();
@@ -583,7 +598,7 @@ public enum CallType {
             MyThreadLocal.get().setTeamId((Integer) params[2]);
         }
     },
-    TEAM_GET("Get a Team", OK, true) {
+    TEAM_GET("Get a Team", OK, true, Functionality.CLUB_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getTeam());
@@ -596,7 +611,7 @@ public enum CallType {
             MyThreadLocal.get().setTeamId((Integer) params[2]);
         }
     },
-    TEAM_DELETE("Delete a team", NO_CONTENT, true) {
+    TEAM_DELETE("Delete a team", NO_CONTENT, true, Functionality.CLUB_DELETE) {
         @Override
         public Object call() {
             deleteTeam();
@@ -610,7 +625,7 @@ public enum CallType {
             MyThreadLocal.get().setTeamId((Integer) params[2]);
         }
     },
-    TEAM_UPDATE("Update a licence", OK, true) {
+    TEAM_UPDATE("Update a licence", OK, true, Functionality.CLUB_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateTeam());
@@ -637,10 +652,13 @@ public enum CallType {
 
     private final boolean checkAccessToken;
 
-    CallType(String infoLogMessage, ResponseCode responseCode, boolean checkAccessToken) {
+    private final Functionality functionality;
+
+    CallType(String infoLogMessage, ResponseCode responseCode, boolean checkAccessToken, Functionality functionality) {
         this.infoLogMessage = infoLogMessage;
         this.responseCode = responseCode;
         this.checkAccessToken = checkAccessToken;
+        this.functionality = functionality;
     }
 
     public abstract Object call();
@@ -658,4 +676,9 @@ public enum CallType {
     public boolean isCheckAccessToken() {
         return checkAccessToken;
     }
+
+    public boolean isNotAuthorized(List<Functionality> functionalities) {
+        return functionality != null && !functionalities.contains(functionality);
+    }
+
 }

@@ -6,6 +6,7 @@ import com.boschat.sikb.tables.daos.ClubDao;
 import com.boschat.sikb.tables.daos.FormationtypeDao;
 import com.boschat.sikb.tables.daos.LicencetypeDao;
 import com.boschat.sikb.tables.daos.PersonDao;
+import com.boschat.sikb.tables.daos.ProfiletypeDao;
 import com.boschat.sikb.tables.daos.UserDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,6 +64,8 @@ public class DAOFactory {
     private FormationtypeDao formationtypeDao = null;
 
     private LicencetypeDao licencetypeDao = null;
+
+    private ProfiletypeDao profiletypeDao = null;
 
     private ApplicationDAOExtended applicationDAO = null;
 
@@ -159,6 +162,13 @@ public class DAOFactory {
             licencetypeDao = new LicencetypeDao(configuration);
         }
         return licencetypeDao;
+    }
+
+    public ProfiletypeDao getProfileTypeDAO() {
+        if (profiletypeDao == null) {
+            profiletypeDao = new ProfiletypeDao(configuration);
+        }
+        return profiletypeDao;
     }
 
     public ApplicationDAOExtended getApplicationDAO() {

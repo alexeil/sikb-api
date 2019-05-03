@@ -25,6 +25,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.boschat.sikb.common.configuration.ApplicationProperties.MAIL_ENABLE;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEBUG;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_DEFAULT_RECIPIENT;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.SMTP_HOST;
@@ -108,33 +109,35 @@ public class MailUtils {
         LOGGER.trace("Sending an email with template \"{}\", title \"{}\" TO \"{}\" and with link \"{}\"", template, title, recipient,
             values.entrySet().stream().map(s -> s.getKey() + " " + s.getValue()).collect(Collectors.joining()));
 
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(SMTP_LOGIN.getValue()));
+        if (MAIL_ENABLE.getBooleanValue()) {
+            try {
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(SMTP_LOGIN.getValue()));
 
-            Address[] addresses;
-            if (StringUtils.isNotEmpty(SMTP_DEFAULT_RECIPIENT.getValue())) {
-                addresses = InternetAddress.parse(SMTP_DEFAULT_RECIPIENT.getValue());
-            } else {
-                addresses = InternetAddress.parse(recipient);
+                Address[] addresses;
+                if (StringUtils.isNotEmpty(SMTP_DEFAULT_RECIPIENT.getValue())) {
+                    addresses = InternetAddress.parse(SMTP_DEFAULT_RECIPIENT.getValue());
+                } else {
+                    addresses = InternetAddress.parse(recipient);
+                }
+                message.setRecipients(Message.RecipientType.TO, addresses);
+                message.setSubject(title);
+
+                //HTML mail content
+                MimeMultipart multipart = new MimeMultipart();
+                BodyPart messageBodyPart = new MimeBodyPart();
+                String htmlText = readEmailFromHtml(template, values);
+                messageBodyPart.setContent(htmlText, "text/html");
+
+                multipart.addBodyPart(messageBodyPart);
+                message.setContent(multipart);
+
+                Transport.send(message);
+                LOGGER.trace("email sent !");
+            } catch (Exception e) {
+                LOGGER.trace("email not sent. An error occurred ! ");
+                throw new TechnicalException(EMAIL_ERROR, e);
             }
-            message.setRecipients(Message.RecipientType.TO, addresses);
-            message.setSubject(title);
-
-            //HTML mail content
-            MimeMultipart multipart = new MimeMultipart();
-            BodyPart messageBodyPart = new MimeBodyPart();
-            String htmlText = readEmailFromHtml(template, values);
-            messageBodyPart.setContent(htmlText, "text/html");
-
-            multipart.addBodyPart(messageBodyPart);
-            message.setContent(multipart);
-
-            Transport.send(message);
-            LOGGER.trace("email sent !");
-        } catch (Exception e) {
-            LOGGER.trace("email not sent an error occurred ! ");
-            throw new TechnicalException(EMAIL_ERROR, e);
         }
     }
 

@@ -36,6 +36,7 @@ public class SikbConstants {
 
     public static final String BODY_FIELD_EMAIL = "email";
 
+    public static final String BODY_FIELD_PROFILE = "profile";
     public static final String BODY_FIELD_BOARD = "board";
 
     public static final String BODY_FIELD_PRESIDENT = "president";

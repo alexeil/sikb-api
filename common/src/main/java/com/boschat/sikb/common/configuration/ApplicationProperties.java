@@ -3,6 +3,7 @@ package com.boschat.sikb.common.configuration;
 public enum ApplicationProperties implements IProperties {
     ACTIVATION_TOKEN_EXPIRATION_DAYS("activation.token.expirationDays"),
     RESET_TOKEN_EXPIRATION_DAYS("reset.token.expirationDays"),
+    MAIL_ENABLE("mail.enable"),
     SMTP_HOST("mail.smtp.host"),
     SMTP_PORT("mail.smtp.port"),
     SMTP_LOGIN("mail.smtp.login"),

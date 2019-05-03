@@ -4,6 +4,7 @@ import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.JerseyTestExtension;
 import com.boschat.sikb.model.FormationType;
 import com.boschat.sikb.model.LicenceType;
+import com.boschat.sikb.model.ProfileType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,10 @@ class ConfigurationTest extends AbstractTest {
 
         assertAll("Check formationTypes ",
             () -> assertNotNull(formationTypes, " formationTypes shouldn't be null"),
-            () -> assertEquals(6, formationTypes.size(), " only 2 clubs "));
+            () -> assertEquals(6, formationTypes.size(), " only 6 formationTypes "),
+            () -> assertEquals(1, formationTypes.get(0).getId(), "Incorrect id"),
+            () -> assertEquals("Arbitre Niveau 1", formationTypes.get(0).getName(), "Incorrect Name")
+        );
     }
 
     @Test
@@ -42,6 +46,25 @@ class ConfigurationTest extends AbstractTest {
 
         assertAll("Check licenceTypes ",
             () -> assertNotNull(licenceTypes, " licenceTypes shouldn't be null"),
-            () -> assertEquals(6, licenceTypes.size(), " only 2 licenceTypes "));
+            () -> assertEquals(6, licenceTypes.size(), " only 6 licenceTypes "),
+            () -> assertEquals(1, licenceTypes.get(0).getId(), "Incorrect id"),
+            () -> assertEquals("Sénior Compétition", licenceTypes.get(0).getName(), "Incorrect Name"),
+            () -> assertEquals(true, licenceTypes.get(0).getMedicalCertificateRequired(), "Incorrect medical certificate required")
+        );
+    }
+
+    @Test
+    @DisplayName(" profile types ")
+    void findAllProfileTypes() throws Exception {
+        Response response = profileTypesFind(V1);
+        checkResponse(response, OK);
+        List<ProfileType> profileTypes = getProfileTypes(response);
+
+        assertAll("Check profile Types ",
+            () -> assertNotNull(profileTypes, " profileTypes shouldn't be null"),
+            () -> assertEquals(4, profileTypes.size(), " only 4 profiles "),
+            () -> assertEquals(1, profileTypes.get(0).getId(), "Incorrect id"),
+            () -> assertEquals("Administrator", profileTypes.get(0).getName(), "Incorrect Name")
+        );
     }
 }

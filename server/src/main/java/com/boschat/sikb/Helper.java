@@ -7,6 +7,7 @@ import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.BoardMember;
+import com.boschat.sikb.model.Functionality;
 import com.boschat.sikb.model.Logo;
 import com.boschat.sikb.model.MedicalCertificate;
 import com.boschat.sikb.model.Photo;
@@ -19,6 +20,7 @@ import com.boschat.sikb.tables.pojos.Formationtype;
 import com.boschat.sikb.tables.pojos.Licence;
 import com.boschat.sikb.tables.pojos.Licencetype;
 import com.boschat.sikb.tables.pojos.Person;
+import com.boschat.sikb.tables.pojos.Profiletype;
 import com.boschat.sikb.tables.pojos.Season;
 import com.boschat.sikb.tables.pojos.Team;
 import com.boschat.sikb.tables.pojos.User;
@@ -27,13 +29,17 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jooq.exception.DataAccessException;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.NOT_ENOUGH_RIGHT;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
@@ -43,6 +49,7 @@ import static com.boschat.sikb.utils.CheckUtils.checkRequestHeader;
 import static com.boschat.sikb.utils.JsonUtils.findFormationNeed;
 import static com.boschat.sikb.utils.JsonUtils.findLicenceTypes;
 import static com.boschat.sikb.utils.JsonUtils.jsonNodeToFormations;
+import static com.boschat.sikb.utils.JsonUtils.jsonNodeToProfile;
 
 public class Helper {
 
@@ -59,13 +66,15 @@ public class Helper {
 
             callType.fillContext(params);
 
-            checkAccessToken(callType, accessToken, securityContext);
+            checkAccess(callType, accessToken, securityContext);
             response = buildResponse(callType.getResponseCode(), callType.call());
 
         } catch (FunctionalException e) {
             response = logAndBuildFunctionalErrorResponse(e);
         } catch (TechnicalException e) {
             response = logAndBuildTechnicalExceptionErrorResponse(e, e.getErrorCode());
+        } catch (DataAccessException e) {
+            response = logAndBuildTechnicalExceptionErrorResponse(e, DATABASE_ERROR);
         } catch (Throwable e) {
             response = logAndBuildTechnicalExceptionErrorResponse(e, INTERNAL_ERROR);
         } finally {
@@ -80,7 +89,7 @@ public class Helper {
         return "admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName());
     }
 
-    private static void checkAccessToken(CallType callType, String accessToken, SecurityContext securityContext) {
+    private static void checkAccess(CallType callType, String accessToken, SecurityContext securityContext) {
         if (callType.isCheckAccessToken()) {
             if (!isAdmin(securityContext)) {
                 checkRequestHeader(accessToken, HEADER_ACCESS_TOKEN, null);
@@ -89,6 +98,10 @@ public class Helper {
             if (CollectionUtils.isNotEmpty(users)) {
                 User user = users.get(0);
                 MyThreadLocal.get().setCurrentUser(user);
+
+                if (callType.isNotAuthorized(convertBeanToModel(user).getProfile().getType().getFunctionalities())) {
+                    throw new FunctionalException(NOT_ENOUGH_RIGHT);
+                }
             } else {
                 if (!isAdmin(securityContext)) {
                     throw new FunctionalException(UNAUTHORIZED);
@@ -113,7 +126,7 @@ public class Helper {
         LOGGER.log(errorCode.getLevel(), e.getMessage(), e);
         ZError error = new ZError();
         error.setCode(errorCode.getCode());
-        error.setMessage(e.getMessage());
+        error.setMessage(errorCode.getErrorMessage());
         return buildResponse(errorCode, error);
     }
 
@@ -130,6 +143,10 @@ public class Helper {
     }
 
     public static List<com.boschat.sikb.model.LicenceType> convertLicenceTypesBeansToModels(List<Licencetype> beans) {
+        return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
+    }
+
+    public static List<com.boschat.sikb.model.ProfileType> convertProfileTypesBeansToModels(List<Profiletype> beans) {
         return beans.stream().map(Helper::convertBeanToModel).collect(Collectors.toList());
     }
 
@@ -161,6 +178,16 @@ public class Helper {
         licence.setClubId(bean.getClubid());
         licence.setSeason(bean.getSeason());
         return licence;
+    }
+
+    public static com.boschat.sikb.model.ProfileType convertBeanToModel(Profiletype bean) {
+        com.boschat.sikb.model.ProfileType profileType = new com.boschat.sikb.model.ProfileType();
+        profileType.setId(bean.getId());
+        profileType.setName(bean.getName());
+        profileType.setFunctionalities(Stream.of(bean.getFunctionalities())
+                                             .map(Functionality::fromValue)
+                                             .collect(Collectors.toList()));
+        return profileType;
     }
 
     public static com.boschat.sikb.model.LicenceType convertBeanToModel(Licencetype bean) {
@@ -281,6 +308,7 @@ public class Helper {
         com.boschat.sikb.model.User user = new com.boschat.sikb.model.User();
         user.setId(userBean.getId());
         user.setEmail(userBean.getEmail());
+        user.setProfile(jsonNodeToProfile(userBean.getProfile()));
         return user;
     }
 }

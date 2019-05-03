@@ -21,10 +21,22 @@ CREATE TABLE sikb.user
   "resetToken"                    text,
   "resetTokenExpirationDate"      timestamp,
   "accessToken"                   text,
+  "profile"                       jsonb,
   "enabled"                       boolean default false,
   "creationDate"                  timestamp,
   "modificationDate"              timestamp
 );
+
+
+
+CREATE TABLE sikb.profileType
+(
+  "id"              serial PRIMARY KEY,
+  "name"            text UNIQUE,
+  "functionalities" varchar(20) array
+);
+
+
 
 CREATE TABLE sikb.club
 (

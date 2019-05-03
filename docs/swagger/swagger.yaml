@@ -43,13 +43,13 @@ paths:
   '/users':
     get:
       summary: Find all users
-      description: ''
+      description: 'Require USER_READ right'
       operationId: findUsers
       parameters:
         - $ref: '#/components/parameters/access_token'
       responses:
         200:
-          description: find all users
+          description: find all users.
           content:
             application/json:
               schema:
@@ -68,7 +68,7 @@ paths:
         - users
     post:
       summary: Create a user
-      description: ''
+      description: 'Require USER_CREATE right'
       operationId: createUser
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -87,6 +87,83 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+      tags:
+        - users
+  '/users/{userId}':
+    get:
+      summary: get a user
+      description: 'Require USER_READ right'
+      operationId: getUser
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/userId'
+      responses:
+        200:
+          description: get back a user.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+      tags:
+        - users
+    put:
+      summary: Update a user
+      description: 'Require USER_UPDATE right'
+      operationId: updateUser
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/userId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userForUpdate'
+        required:
+          true
+        description: body
+      responses:
+        201:
+          description: Newly updated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+      tags:
+        - users
+    delete:
+      summary: Delete a user
+      description: 'Require USER_DELETE right'
+      operationId: deleteUser
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+        - $ref: '#/components/parameters/userId'
+      responses:
+        204:
+          description: The user is deleted
         400:
           $ref: "#/components/responses/400"
         401:
@@ -235,87 +312,10 @@ paths:
           $ref: "#/components/responses/500"
       tags:
         - identifications
-  '/users/{userId}':
-    get:
-      summary: get a user
-      description: ''
-      operationId: getUser
-      parameters:
-        - $ref: '#/components/parameters/access_token'
-        - $ref: '#/components/parameters/userId'
-      responses:
-        200:
-          description: get back a user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        404:
-          $ref: "#/components/responses/404"
-        500:
-          $ref: "#/components/responses/500"
-      tags:
-        - users
-    put:
-      summary: Update a user
-      description: ''
-      operationId: updateUser
-      parameters:
-        - $ref: '#/components/parameters/access_token'
-        - $ref: '#/components/parameters/userId'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/userForUpdate'
-        required:
-          true
-        description: body
-      responses:
-        201:
-          description: Newly updated user
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/user'
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        404:
-          $ref: "#/components/responses/404"
-        500:
-          $ref: "#/components/responses/500"
-      tags:
-        - users
-    delete:
-      summary: Delete a user
-      description: ''
-      operationId: deleteUser
-      parameters:
-        - $ref: '#/components/parameters/access_token'
-        - $ref: '#/components/parameters/userId'
-      responses:
-        204:
-          description: The user is deleted
-        400:
-          $ref: "#/components/responses/400"
-        401:
-          $ref: "#/components/responses/401"
-        404:
-          $ref: "#/components/responses/404"
-        500:
-          $ref: "#/components/responses/500"
-      tags:
-        - users
   '/clubs':
     get:
       summary: Find all club
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: findClubs
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -340,7 +340,7 @@ paths:
         - clubs
     post:
       summary: Create a club
-      description: ''
+      description: 'Require CLUB_CREATE right'
       operationId: createClub
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -372,7 +372,7 @@ paths:
   '/clubs/{clubId}':
     get:
       summary: get a club
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: getClubById
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -449,7 +449,7 @@ paths:
   '/clubs/{clubId}/logo':
     post:
       summary: Upload a club's
-      description: ''
+      description: 'Require CLUB_CREATE right'
       operationId: uploadLogo
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -483,11 +483,10 @@ paths:
           $ref: "#/components/responses/500"
       tags:
         - clubs
-
   '/clubs/{clubId}/affiliations':
     get:
       summary: find all club's affiliations
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: findAllClubAffiliations
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -514,7 +513,7 @@ paths:
   '/clubs/{clubId}/seasons/{seasonId}/affiliations':
     post:
       summary: Create the club affiliation for a season
-      description: ''
+      description: 'Require CLUB_CREATE right'
       operationId: createAffiliation
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -547,7 +546,7 @@ paths:
         - affiliations
     get:
       summary: get the club affiliation for a season
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: getAffiliation
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -572,7 +571,7 @@ paths:
         - affiliations
     put:
       summary: Update the club affiliation for a season
-      description: ''
+      description: 'Require CLUB_UPDATE right'
       operationId: UpdateAffiliation
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -605,7 +604,7 @@ paths:
         - affiliations
     delete:
       summary: Delete the club affiliation for a season
-      description: ''
+      description: 'Require CLUB_DELETE right'
       operationId: deleteAffiliation
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -624,11 +623,10 @@ paths:
           $ref: "#/components/responses/500"
       tags:
         - affiliations
-
   '/clubs/{clubId}/seasons/{seasonId}/teams':
     get:
       summary: find all the club's teams
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: findTeams
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -655,7 +653,7 @@ paths:
         - teams
     post:
       summary: Create the club team for a season
-      description: ''
+      description: 'Require CLUB_CREATE right'
       operationId: createTeam
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -689,7 +687,7 @@ paths:
   '/clubs/{clubId}/seasons/{seasonId}/teams/{teamId}':
     get:
       summary: get the club team for a season
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: getTeam
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -715,7 +713,7 @@ paths:
         - teams
     put:
       summary: Update the club team for a season
-      description: ''
+      description: 'Require CLUB_UPDATE right'
       operationId: UpdateTeam
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -749,7 +747,7 @@ paths:
         - teams
     delete:
       summary: Delete the club team for a season
-      description: ''
+      description: 'Require CLUB_DELETE right'
       operationId: deleteTeam
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -773,7 +771,7 @@ paths:
   '/clubs/{clubId}/seasons/{seasonId}/teams/{teamId}/members':
     get:
       summary: get team's member for a season
-      description: ''
+      description: 'Require CLUB_READ right'
       operationId: getTeamMembers
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -803,7 +801,7 @@ paths:
   '/persons':
     get:
       summary: Find all persons
-      description: ''
+      description: 'Require PERSON_READ right'
       operationId: findPersons
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -828,7 +826,7 @@ paths:
         - persons
     post:
       summary: Create a person
-      description: ''
+      description: 'Require PERSON_CREATE right'
       operationId: createPerson
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -861,7 +859,7 @@ paths:
   '/persons/{personId}':
     get:
       summary: get a person
-      description: ''
+      description: 'Require PERSON_READ right'
       operationId: getPerson
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -885,7 +883,7 @@ paths:
         - persons
     put:
       summary: Update a person
-      description: ''
+      description: 'Require PERSON_UPDATE right'
       operationId: updatePerson
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -917,7 +915,7 @@ paths:
         - persons
     delete:
       summary: Delete a person
-      description: ''
+      description: 'Require PERSON_DELETE right'
       operationId: deletePerson
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -939,7 +937,7 @@ paths:
   '/persons/{personId}/medicalCertificate':
     post:
       summary: Upload a person's medical certificate
-      description: ''
+      description: 'Require PERSON_CREATE right'
       operationId: uploadMedicalCertificate
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -977,7 +975,7 @@ paths:
   '/persons/{personId}/photo':
     post:
       summary: Upload a person's photo
-      description: ''
+      description: 'Require PERSON_CREATE right'
       operationId: uploadPhoto
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1016,7 +1014,7 @@ paths:
   '/persons/{personId}/clubs/{clubId}/seasons/{seasonId}/licences':
     get:
       summary: get a person's licences
-      description: ''
+      description: 'Require PERSON_READ right'
       operationId: getLicences
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1044,7 +1042,7 @@ paths:
         - licences
     post:
       summary: Create a person's licence
-      description: ''
+      description: 'Require PERSON_CREATE right'
       operationId: createPersonLicence
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1079,7 +1077,7 @@ paths:
   '/persons/{personId}/clubs/{clubId}/seasons/{seasonId}/licences/{licenceId}':
     put:
       summary: Update a person's licence
-      description: ''
+      description: 'Require PERSON_UPDATE right'
       operationId: updatePersonLicence
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1114,7 +1112,7 @@ paths:
         - licences
     delete:
       summary: Delete a person's licence
-      description: ''
+      description: 'Require PERSON_DELETE right'
       operationId: deletePersonLicence
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1138,7 +1136,7 @@ paths:
   '/seasons':
     get:
       summary: Find all seasons
-      description: ''
+      description: 'No right Required'
       operationId: findSeasons
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1163,7 +1161,7 @@ paths:
         - configurations
     post:
       summary: Create a season
-      description: ''
+      description: 'Require SEASON_CREATE right'
       operationId: createSeason
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1195,7 +1193,7 @@ paths:
   '/seasons/{seasonId}':
     put:
       summary: Update a season
-      description: ''
+      description: 'Require SEASON_UPDATE right'
       operationId: updateSeason
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1227,7 +1225,7 @@ paths:
         - configurations
     delete:
       summary: Delete a season
-      description: ''
+      description: 'Require SEASON_DELETE right'
       operationId: deleteSeason
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1249,7 +1247,7 @@ paths:
   '/formationTypes':
     get:
       summary: Find all formation types
-      description: ''
+      description: 'No right Required'
       operationId: findFormationTypes
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1273,10 +1271,37 @@ paths:
       tags:
         - configurations
 
+  '/profileTypes':
+    get:
+      summary: Find all profile types
+      description: 'No right Required'
+      operationId: findProfileTypes
+      parameters:
+        - $ref: '#/components/parameters/access_token'
+      responses:
+        200:
+          description: find all profile Types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/profileType'
+        400:
+          $ref: "#/components/responses/400"
+        401:
+          $ref: "#/components/responses/401"
+        404:
+          $ref: "#/components/responses/404"
+        500:
+          $ref: "#/components/responses/500"
+      tags:
+        - configurations
+
   '/licenceTypes':
     get:
       summary: Find all licence types
-      description: ''
+      description: 'No right Required'
       operationId: findLicenceTypes
       parameters:
         - $ref: '#/components/parameters/access_token'
@@ -1402,17 +1427,23 @@ components:
       required: false
       in: query
       description: "Token to reset password"
+
   schemas:
     user:
-      allOf:
-        - $ref: '#/components/schemas/userForUpdate'
-        - properties:
-            id:
-              type: integer
-              format: int32
       required:
         - id
         - email
+        - profile
+      properties:
+        id:
+          type: integer
+          format: int32
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        profile:
+          $ref: '#/components/schemas/profile'
 
 
     userForCreation:
@@ -1420,6 +1451,7 @@ components:
         - $ref: '#/components/schemas/userForUpdate'
       required:
         - email
+        - profile
 
     userForUpdate:
       properties:
@@ -1427,6 +1459,79 @@ components:
           type: string
           format: email
           maxLength: 255
+        profile:
+          $ref: '#/components/schemas/profileForCreation'
+
+    profileForCreation:
+      required:
+        - type
+        - clubIds
+      properties:
+        type:
+          $ref: '#/components/schemas/profileTypeForCreation'
+        clubIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+        allClubs:
+          type: boolean
+
+    profile:
+      required:
+        - type
+        - clubIds
+      properties:
+        type:
+          $ref: '#/components/schemas/profileType'
+        clubIds:
+          type: array
+          items:
+            type: integer
+            format: int32
+
+    profileTypeForCreation:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+          maxLength: 255
+
+    profileType:
+      allOf:
+        - $ref: '#/components/schemas/profileTypeForCreation'
+        - properties:
+            functionalities:
+              type: array
+              items:
+                $ref: '#/components/schemas/functionality'
+      required:
+        - functionalities
+
+    functionality:
+      type: string
+      enum:
+        - USER_READ
+        - USER_CREATE
+        - USER_UPDATE
+        - USER_DELETE
+        - CLUB_READ
+        - CLUB_CREATE
+        - CLUB_UPDATE
+        - CLUB_DELETE
+        - PERSON_READ
+        - PERSON_CREATE
+        - PERSON_UPDATE
+        - PERSON_DELETE
+        - SEASON_READ
+        - SEASON_CREATE
+        - SEASON_UPDATE
+        - SEASON_DELETE
 
     formationType:
       required:
@@ -1668,10 +1773,13 @@ components:
     session:
       required:
         - access_token
+        - user
       properties:
         access_token:
           type: string
           maxLength: 255
+        user:
+          $ref: '#/components/schemas/user'
 
     updatePassword:
       required:
