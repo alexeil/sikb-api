@@ -84,7 +84,8 @@ CREATE TABLE sikb.affiliation
   "creationDate"     timestamp,
   "modificationDate" timestamp,
   "season"           varchar(8) REFERENCES sikb.season (id),
-  "clubId"           integer REFERENCES sikb.club (id) ON DELETE CASCADE
+  "clubId"           integer REFERENCES sikb.club (id) ON DELETE CASCADE,
+  CONSTRAINT constraint_name UNIQUE ("clubId", "season")
 );
 
 
@@ -131,7 +132,8 @@ CREATE TABLE sikb.licence
   "clubId"           integer REFERENCES sikb.club (id),
   "personId"         integer REFERENCES sikb.person (id) ON DELETE CASCADE,
   "creationDate"     timestamp,
-  "modificationDate" timestamp
+  "modificationDate" timestamp,
+  CONSTRAINT constraint_name UNIQUE ("clubId", "season", "personId")
 );
 
 CREATE TABLE sikb.formationType

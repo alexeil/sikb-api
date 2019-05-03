@@ -74,7 +74,7 @@ public class Helper {
         } catch (TechnicalException e) {
             response = logAndBuildTechnicalExceptionErrorResponse(e, e.getErrorCode());
         } catch (DataAccessException e) {
-            response = logAndBuildTechnicalExceptionErrorResponse(e, DATABASE_ERROR);
+            response = logAndBuildTechnicalExceptionErrorResponse(e, DATABASE_ERROR, e.getCause().getMessage());
         } catch (Throwable e) {
             response = logAndBuildTechnicalExceptionErrorResponse(e, INTERNAL_ERROR);
         } finally {
@@ -122,11 +122,11 @@ public class Helper {
         return buildResponse(e.getErrorCode(), error);
     }
 
-    private static Response logAndBuildTechnicalExceptionErrorResponse(Throwable e, ResponseCode errorCode) {
+    private static Response logAndBuildTechnicalExceptionErrorResponse(Throwable e, ResponseCode errorCode, String... params) {
         LOGGER.log(errorCode.getLevel(), e.getMessage(), e);
         ZError error = new ZError();
         error.setCode(errorCode.getCode());
-        error.setMessage(errorCode.getErrorMessage());
+        error.setMessage(String.format(errorCode.getErrorMessage(), params));
         return buildResponse(errorCode, error);
     }
 
