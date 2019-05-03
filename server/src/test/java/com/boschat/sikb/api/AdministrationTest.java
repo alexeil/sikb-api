@@ -18,6 +18,7 @@ import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.MISSING_HEADER;
+import static com.boschat.sikb.common.configuration.ResponseCode.NOT_ENOUGH_RIGHT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
@@ -36,8 +37,7 @@ class AdministrationTest extends AbstractTest {
         loadUsers();
     }
 
-    private Response affiliationGetWithCredentials(String basic, String accessToken) {
-        String path = buildPathClubs(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, true, false, null, false, false);
+    private Response sendGetRequest(String path, String basic, String accessToken) {
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
         Invocation.Builder builder = target.request();
         if (basic != null) {
@@ -47,6 +47,14 @@ class AdministrationTest extends AbstractTest {
             builder.header(HEADER_ACCESS_TOKEN, accessToken);
         }
         return builder.get();
+    }
+
+    private Response seasonWithCredentials(String basic, String accessToken) {
+        return sendGetRequest(buildPathConfiguration(V1, null, true, false, false, false), basic, accessToken);
+    }
+
+    private Response affiliationGetWithCredentials(String basic, String accessToken) {
+        return sendGetRequest(buildPathClubs(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, true, false, null, false, false), basic, accessToken);
     }
 
     @Test
@@ -75,6 +83,13 @@ class AdministrationTest extends AbstractTest {
     void website() throws Exception {
         Response response = affiliationGetWithCredentials(basicEncode("website", "website"), USER_DEFAULT_ACCESS_TOKEN);
         checkResponse(response, OK);
+    }
+
+    @Test
+    @DisplayName(" User lacking rights ")
+    void notEnoughRight() throws Exception {
+        Response response = seasonWithCredentials(basicEncode("website", "website"), USER_DEFAULT_ACCESS_TOKEN_CLUB);
+        checkResponse(response, NOT_ENOUGH_RIGHT);
     }
 
     @Test

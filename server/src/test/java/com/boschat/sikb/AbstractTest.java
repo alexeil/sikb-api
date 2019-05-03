@@ -193,6 +193,8 @@ public abstract class AbstractTest {
 
     protected static final String USER_DEFAULT_ACCESS_TOKEN = "YWI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA";
 
+    protected static final String USER_DEFAULT_ACCESS_TOKEN_CLUB = "XXI1MWZmOTYtMDA3OS00Y2M3LWFhYjEtZWU5OTVkYTRhZjkzMjAxOC0wMS0xOFQxMzoxMSswMTowMA";
+
     protected static final Integer USER_DEFAULT_ID = 1;
 
     protected static final String USER_DEFAULT_EMAIL = "myEmail@kin-ball.fr";
@@ -835,7 +837,7 @@ public abstract class AbstractTest {
         return path.toString();
     }
 
-    private String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType,
+    protected String buildPathConfiguration(ApiVersion version, String id, boolean isSeason, boolean isFormationType, boolean isLicenceType,
         boolean isProfileType) {
         StringBuilder path = new StringBuilder("/" + version.getName());
         if (isSeason) {

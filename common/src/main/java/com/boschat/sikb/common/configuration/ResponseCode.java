@@ -30,7 +30,8 @@ public enum ResponseCode {
     FILE_EXTENSION_NOT_AUTHORIZED(INFO, 400, 15, "This content type (%s) of file (%s) is not Authorized"),
 
     UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
-
+    NOT_ENOUGH_RIGHT(INFO, 401, 2, "Not enough right"),
+    
     SERVICE_NOT_FOUND(ERROR, 404, 0, "Service not found"),
     CLUB_NOT_FOUND(INFO, 404, 1, "Club (Id %s) not found"),
     AFFILIATION_NOT_FOUND(INFO, 404, 2, "Affiliation (clubId %s, season %s) not found"),

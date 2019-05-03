@@ -39,6 +39,7 @@ import java.util.stream.Stream;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.DATABASE_ERROR;
 import static com.boschat.sikb.common.configuration.ResponseCode.INTERNAL_ERROR;
+import static com.boschat.sikb.common.configuration.ResponseCode.NOT_ENOUGH_RIGHT;
 import static com.boschat.sikb.common.configuration.ResponseCode.UNAUTHORIZED;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.model.DocumentType.LOGO_TYPE;
@@ -65,7 +66,7 @@ public class Helper {
 
             callType.fillContext(params);
 
-            checkAccessToken(callType, accessToken, securityContext);
+            checkAccess(callType, accessToken, securityContext);
             response = buildResponse(callType.getResponseCode(), callType.call());
 
         } catch (FunctionalException e) {
@@ -88,7 +89,7 @@ public class Helper {
         return "admin".equalsIgnoreCase(securityContext.getUserPrincipal().getName());
     }
 
-    private static void checkAccessToken(CallType callType, String accessToken, SecurityContext securityContext) {
+    private static void checkAccess(CallType callType, String accessToken, SecurityContext securityContext) {
         if (callType.isCheckAccessToken()) {
             if (!isAdmin(securityContext)) {
                 checkRequestHeader(accessToken, HEADER_ACCESS_TOKEN, null);
@@ -97,6 +98,10 @@ public class Helper {
             if (CollectionUtils.isNotEmpty(users)) {
                 User user = users.get(0);
                 MyThreadLocal.get().setCurrentUser(user);
+
+                if (callType.isNotAuthorized(convertBeanToModel(user).getProfile().getType().getFunctionalities())) {
+                    throw new FunctionalException(NOT_ENOUGH_RIGHT);
+                }
             } else {
                 if (!isAdmin(securityContext)) {
                     throw new FunctionalException(UNAUTHORIZED);
