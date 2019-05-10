@@ -53,6 +53,10 @@ script:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 
+before_deploy:
+  - export ELASTIC_BEANSTALK_LABEL=sikb-api-$TRAVIS_TAG
+  #- export ELASTIC_BEANSTALK_DESCRIPTION=https://github.com/alexeil/sikb-api/tree/$(git rev-parse HEAD)
+
 deploy:
   - provider: releases
     prerelease: true
@@ -72,3 +76,4 @@ deploy:
     app: "SIKB-API"
     env: "SikbApi-env-1"
     bucket_name: "elasticbeanstalk-eu-west-3-638996271853"
+    only_create_app_version: false
