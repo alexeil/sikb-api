@@ -29,7 +29,7 @@ public class GenericExceptionMapper implements ExceptionMapper<Throwable> {
         } else if (e instanceof FunctionalException) {
             return logAndBuildResponse(e, ((FunctionalException) e).getErrorCode());
         } else if (e instanceof TechnicalException) {
-            return logAndBuildResponse(e, ((TechnicalException) e).getErrorCode());
+            return logAndBuildResponse(e, ((TechnicalException) e).getErrorCode(), ((TechnicalException) e).getParamsMessage());
         } else {
             return logAndBuildResponse(e, INTERNAL_ERROR, e.getClass().getName());
         }

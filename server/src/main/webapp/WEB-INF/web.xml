@@ -8,7 +8,7 @@
 
 	<context-param>
 		<param-name>log4jConfiguration</param-name>
-		<param-value>file://${env:CONFIG_PATH}/log4j2.xml</param-value>
+		<param-value>${sys:CONFIG_PATH}/log4j2.xml</param-value>
 	</context-param>
 
 	<filter>

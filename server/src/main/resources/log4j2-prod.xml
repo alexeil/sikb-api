@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="FATAL" monitorInterval="30">
 	<Appenders>
-		<RollingFile name="FileAppender" fileName="/opt/sikb-api/current/logs/sikb-logger.log" filePattern="/opt/sikb-api/current/logs/sikb-logger.log-%i.log">
+		<RollingFile name="FileAppender" fileName="/var/log/sikb-api/sikb-logger.log" filePattern="/var/log/sikb-api/sikb-logger-%i.log">
 			<PatternLayout Pattern="%m%n" alwaysWriteExceptions="false"/>
 			<Policies>
 				<OnStartupTriggeringPolicy/>

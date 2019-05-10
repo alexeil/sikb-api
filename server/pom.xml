@@ -355,6 +355,13 @@
 							</includes>
 							<targetPath>swagger-ui</targetPath>
 						</resource>
+						<resource>
+							<directory>${root.basedir}/docs/.ebextensions</directory>
+							<includes>
+								<include>**/*.*</include>
+							</includes>
+							<targetPath>.ebextensions</targetPath>
+						</resource>
 					</webResources>
 				</configuration>
 			</plugin>

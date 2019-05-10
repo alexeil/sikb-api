@@ -76,6 +76,7 @@ public class DAOFactory {
     private DAOFactory() throws Throwable {
         String URL = "jdbc:postgresql://" + POSTGRES_HOST.getValue() + ':' + POSTGRES_PORT.getValue() + "/" + POSTGRES_DB.getValue();
         LOGGER.trace(URL);
+        Class.forName("org.postgresql.Driver");
         Connection connection = DriverManager.getConnection(URL, POSTGRES_USER.getValue(), POSTGRES_PASSWORD.getValue());
         configuration = new DefaultConfiguration().set(connection).set(SQLDialect.POSTGRES);
         configuration.set(new DefaultRecordListenerProvider(new AuditRecordListener()));
@@ -87,7 +88,7 @@ public class DAOFactory {
             try {
                 instance = new DAOFactory();
             } catch (Throwable e) {
-                throw new TechnicalException(DATABASE_ERROR, e);
+                throw new TechnicalException(DATABASE_ERROR, e, e.getMessage());
             }
         }
         return instance;

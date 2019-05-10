@@ -4,8 +4,9 @@ import com.boschat.sikb.common.exceptions.TechnicalException;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.CONFIG_TECH_LOADING_ERROR;
@@ -56,8 +57,7 @@ public class ConfigLoader {
             this.properties = new Properties();
         }
 
-        File f = new File(configDir, configFileFilename);
-        try (FileInputStream fileInputStream = new FileInputStream(f); InputStreamReader is = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8)) {
+        try (InputStream is = getPropertiesInputStream(configDir, configFileFilename)) {
             familyProp.load(is);
         } catch (Throwable t) {
             throw new TechnicalException(CONFIG_TECH_LOADING_ERROR, t, t.getMessage());
@@ -65,6 +65,17 @@ public class ConfigLoader {
 
         checkAnyPropertyMissing(familyProp);
         this.properties.putAll(familyProp);
+    }
+
+    private InputStream getPropertiesInputStream(String configDir, String configFileFilename) throws IOException {
+        InputStream is;
+        if (configDir.contains("http")) {
+            is = new URL(configDir + "/" + configFileFilename).openStream();
+        } else {
+            File f = new File(configDir, configFileFilename);
+            is = new FileInputStream(f);
+        }
+        return is;
     }
 
     public void clear() {
