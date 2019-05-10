@@ -77,7 +77,7 @@ deploy:
     env: "SikbApi-env-1"
     bucket_name: "elasticbeanstalk-eu-west-3-638996271853"
     only_create_app_version: false
-    file: /home/travis/build/alexeil/sikb-api/server/target/*.war
+    zip_file: /home/travis/build/alexeil/sikb-api/server/target/*.war
     skip_cleanup: true
     on:
       tags: true
