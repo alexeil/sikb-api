@@ -77,3 +77,5 @@ deploy:
     env: "SikbApi-env-1"
     bucket_name: "elasticbeanstalk-eu-west-3-638996271853"
     only_create_app_version: false
+    on:
+      tags: true
