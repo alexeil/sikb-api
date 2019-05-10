@@ -6,7 +6,7 @@
 	<groupId>sikb</groupId>
 	<artifactId>sikb-api</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0-RC12</version>
+	<version>1.0.0-RC13</version>
 	<modules>
 		<module>server</module>
 		<module>persistence</module>
