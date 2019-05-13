@@ -31,7 +31,6 @@ import com.boschat.sikb.model.UserForUpdate;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import java.io.InputStream;
-import java.util.List;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.Helper.convertBeansToModels;
@@ -677,8 +676,8 @@ public enum CallType {
         return checkAccessToken;
     }
 
-    public boolean isNotAuthorized(List<Functionality> functionalities) {
-        return functionality != null && !functionalities.contains(functionality);
+    public boolean isNotAuthorized() {
+        return !MyThreadLocal.get().hasCurrentUserRight(functionality);
     }
 
 }

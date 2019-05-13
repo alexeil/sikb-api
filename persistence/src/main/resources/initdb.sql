@@ -81,6 +81,9 @@ CREATE TABLE sikb.affiliation
   "membersNumber"    integer,
   "electedDate"      date,
 
+  "status"           varchar(20),
+  "comment"          text,
+
   "creationDate"     timestamp,
   "modificationDate" timestamp,
   "season"           varchar(8) REFERENCES sikb.season (id),

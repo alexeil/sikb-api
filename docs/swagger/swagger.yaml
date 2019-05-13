@@ -1524,6 +1524,7 @@ components:
         - CLUB_CREATE
         - CLUB_UPDATE
         - CLUB_DELETE
+        - AFFILIATION_VALIDATE
         - PERSON_READ
         - PERSON_CREATE
         - PERSON_UPDATE
@@ -1604,6 +1605,7 @@ components:
         - city
         - email
         - board
+        - status
 
 
     affiliationForCreation:
@@ -1655,6 +1657,11 @@ components:
           maxLength: 255
         board:
           $ref: '#/components/schemas/board'
+        status:
+          $ref: '#/components/schemas/affiliationStatus'
+        comment:
+          type: string
+          maxLength: 5000
 
     teamForCreation:
       allOf:
@@ -1746,6 +1753,18 @@ components:
       enum:
         - MALE
         - FEMALE
+
+    affiliationStatus:
+      description: 'Once an affiliation is created, if the status is not provided then it''s initialized with TO_COMPLETE.
+                    Then available transitions are : 
+                    - TO_COMPLETE ==> SUBMITTED
+                    - SUBMITTED ==> VALIDATED
+                    - SUBMITTED ==> TO_COMPLETE'
+      type: string
+      enum:
+        - TO_COMPLETE
+        - SUBMITTED
+        - VALIDATED
 
     reset:
       required:

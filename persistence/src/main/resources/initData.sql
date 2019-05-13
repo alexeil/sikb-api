@@ -7,14 +7,15 @@ values (3, 'test', 'test', 'test');
 
 INSERT INTO sikb.profileType (id, name, functionalities)
 values (1, 'Administrator',
-        ARRAY [ 'USER_READ' ,'USER_CREATE' ,'USER_UPDATE' ,'USER_DELETE' ,'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'CLUB_DELETE' ,'PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE' ,'SEASON_READ' ,'SEASON_CREATE' ,'SEASON_UPDATE' ,'SEASON_DELETE']);
+        ARRAY [ 'USER_READ' ,'USER_CREATE' ,'USER_UPDATE' ,'USER_DELETE' ,'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'CLUB_DELETE', 'AFFILIATION_VALIDATE' ,'PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE' ,'SEASON_READ' ,'SEASON_CREATE' ,'SEASON_UPDATE' ,'SEASON_DELETE']);
 INSERT INTO sikb.profileType (id, name, functionalities)
 values (2, 'Club', ARRAY [ 'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE']);
 INSERT INTO sikb.profileType (id, name, functionalities)
-values (3, 'Ligue', ARRAY [ 'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE']);
+values (3, 'Ligue',
+        ARRAY [ 'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE','PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE']);
 INSERT INTO sikb.profileType (id, name, functionalities)
 values (4, 'FKBF',
-        ARRAY [ 'USER_READ' ,'USER_CREATE' ,'USER_UPDATE' ,'USER_DELETE' ,'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'CLUB_DELETE' ,'PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE' ,'SEASON_READ' ,'SEASON_CREATE' ,'SEASON_UPDATE' ,'SEASON_DELETE']);
+        ARRAY [ 'USER_READ' ,'USER_CREATE' ,'USER_UPDATE' ,'USER_DELETE' ,'CLUB_READ' ,'CLUB_CREATE' ,'CLUB_UPDATE' ,'CLUB_DELETE' ,'AFFILIATION_VALIDATE','PERSON_READ' ,'PERSON_CREATE' ,'PERSON_UPDATE' ,'PERSON_DELETE' ,'SEASON_READ' ,'SEASON_CREATE' ,'SEASON_UPDATE' ,'SEASON_DELETE']);
 
 INSERT INTO sikb.user (id, email, password, salt, information, "activationToken", "activationTokenExpirationDate", "resetToken", "resetTokenExpirationDate",
                        "accessToken", profile, enabled, "creationDate", "modificationDate")
