@@ -235,6 +235,6 @@ public class Context {
     }
 
     public boolean hasCurrentUserRight(Functionality functionality) {
-        return getCurrentUserFunctionalities().contains(functionality);
+        return functionality == null || getCurrentUserFunctionalities().contains(functionality);
     }
 }

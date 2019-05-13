@@ -94,6 +94,7 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORI
 import static com.boschat.sikb.model.AffiliationStatus.TO_COMPLETE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_VALIDATE;
 import static com.boschat.sikb.model.Functionality.CLUB_CREATE;
 import static com.boschat.sikb.model.Functionality.CLUB_DELETE;
 import static com.boschat.sikb.model.Functionality.CLUB_READ;
@@ -147,7 +148,8 @@ public abstract class AbstractTest {
     protected static final String PROFILE_TYPE_NAME_ADMINISTRATOR = "Administrator";
 
     protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR = Arrays.asList(USER_READ, USER_CREATE, USER_UPDATE, USER_DELETE,
-        CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ, SEASON_CREATE, SEASON_UPDATE,
+        CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, AFFILIATION_VALIDATE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ,
+        SEASON_CREATE, SEASON_UPDATE,
         SEASON_DELETE);
 
     protected static final List<Integer> PROFILE_CLUB_IDS_DEFAULT = Collections.singletonList(1);
