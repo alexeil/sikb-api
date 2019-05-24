@@ -2,6 +2,7 @@ package com.boschat.sikb.context;
 
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
+import com.boschat.sikb.model.AffiliationStatus;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.BoardMember;
 
@@ -58,19 +59,23 @@ public class CreateOrUpdateAffiliationContext {
 
     private String prefectureCity;
 
-    private static CreateOrUpdateAffiliationContext buildContext(AffiliationForUpdate affiliationForCreation) {
-        CreateOrUpdateAffiliationContext createOrUpdateContext = new CreateOrUpdateAffiliationContext();
-        createOrUpdateContext.setPrefectureNumber(affiliationForCreation.getPrefectureNumber());
-        createOrUpdateContext.setPrefectureCity(affiliationForCreation.getPrefectureCity());
-        createOrUpdateContext.setSiretNumber(affiliationForCreation.getSiretNumber());
-        createOrUpdateContext.setAddress(affiliationForCreation.getAddress());
-        createOrUpdateContext.setPostalCode(affiliationForCreation.getPostalCode());
-        createOrUpdateContext.setCity(affiliationForCreation.getCity());
-        createOrUpdateContext.setPhoneNumber(affiliationForCreation.getPhoneNumber());
-        createOrUpdateContext.setEmail(affiliationForCreation.getEmail());
-        createOrUpdateContext.setWebSite(affiliationForCreation.getWebSite());
+    private AffiliationStatus status;
 
-        Board board = affiliationForCreation.getBoard();
+    private String comment;
+
+    private static CreateOrUpdateAffiliationContext buildContext(AffiliationForUpdate affiliation) {
+        CreateOrUpdateAffiliationContext createOrUpdateContext = new CreateOrUpdateAffiliationContext();
+        createOrUpdateContext.setPrefectureNumber(affiliation.getPrefectureNumber());
+        createOrUpdateContext.setPrefectureCity(affiliation.getPrefectureCity());
+        createOrUpdateContext.setSiretNumber(affiliation.getSiretNumber());
+        createOrUpdateContext.setAddress(affiliation.getAddress());
+        createOrUpdateContext.setPostalCode(affiliation.getPostalCode());
+        createOrUpdateContext.setCity(affiliation.getCity());
+        createOrUpdateContext.setPhoneNumber(affiliation.getPhoneNumber());
+        createOrUpdateContext.setEmail(affiliation.getEmail());
+        createOrUpdateContext.setWebSite(affiliation.getWebSite());
+
+        Board board = affiliation.getBoard();
         if (board != null) {
             createOrUpdateContext.setPresident(board.getPresident());
             createOrUpdateContext.setSecretary(board.getSecretary());
@@ -78,6 +83,10 @@ public class CreateOrUpdateAffiliationContext {
             createOrUpdateContext.setMembersNumber(board.getMembersNumber());
             createOrUpdateContext.setElectedDate(board.getElectedDate());
         }
+
+        createOrUpdateContext.setStatus(affiliation.getStatus());
+        createOrUpdateContext.setComment(affiliation.getComment());
+
         return createOrUpdateContext;
     }
 
@@ -223,5 +232,21 @@ public class CreateOrUpdateAffiliationContext {
 
     public void setPrefectureCity(String prefectureCity) {
         this.prefectureCity = prefectureCity;
+    }
+
+    public AffiliationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AffiliationStatus status) {
+        this.status = status;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

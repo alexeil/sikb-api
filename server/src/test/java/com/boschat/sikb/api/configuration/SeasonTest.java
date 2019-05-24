@@ -154,7 +154,7 @@ class SeasonTest extends AbstractTest {
 
             assertAll("Check seasons ",
                 () -> assertNotNull(seasons, " clubs shouldn't be null"),
-                () -> assertEquals(2, seasons.size(), " only 2 clubs "),
+                () -> assertEquals(3, seasons.size(), " only 2 clubs "),
                 () -> checkSeason(seasons.get(0), SEASON_DEFAULT_ID, SEASON_DEFAULT_DESCRIPTION, SEASON_DEFAULT_BEGIN, SEASON_DEFAULT_END),
                 () -> checkSeason(seasons.get(1), "20172018", "Saison 2017/2018", LocalDate.of(2017, 9, 1), LocalDate.of(2018, 8, 31)));
         }

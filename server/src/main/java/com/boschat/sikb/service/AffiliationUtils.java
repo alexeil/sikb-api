@@ -3,6 +3,7 @@ package com.boschat.sikb.service;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.context.CreateOrUpdateAffiliationContext;
 import com.boschat.sikb.context.MyThreadLocal;
+import com.boschat.sikb.model.AffiliationStatus;
 import com.boschat.sikb.model.SeasonWithAffiliation;
 import com.boschat.sikb.persistence.dao.DAOFactory;
 import com.boschat.sikb.tables.pojos.Affiliation;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
+import static com.boschat.sikb.model.AffiliationStatus.TO_COMPLETE;
 import static com.boschat.sikb.service.ClubUtils.checkClubExists;
 import static com.boschat.sikb.service.SeasonUtils.checkSeasonExists;
 
@@ -69,7 +71,7 @@ public class AffiliationUtils {
             checkClubExists();
             affiliationBean.setSeason(MyThreadLocal.get().getSeasonId());
             affiliationBean.setClubid(MyThreadLocal.get().getClubId());
-
+            affiliationBean.setStatus(TO_COMPLETE.toString());
         } else {
             affiliationBean = getAffiliation();
         }
@@ -124,6 +126,18 @@ public class AffiliationUtils {
         }
         if (createContext.getElectedDate() != null) {
             affiliationBean.setElecteddate(createContext.getElectedDate());
+        }
+
+        if (createContext.getStatus() != null) {
+            AffiliationStatus currentStatus = AffiliationStatus.fromValue(affiliationBean.getStatus());
+            currentStatus.checkTransition(createContext.getStatus());
+
+            affiliationBean.setStatus(createContext.getStatus().toString());
+            affiliationBean.setComment(null);
+        }
+
+        if (createContext.getComment() != null) {
+            affiliationBean.setComment(createContext.getComment());
         }
 
         if (isCreation) {

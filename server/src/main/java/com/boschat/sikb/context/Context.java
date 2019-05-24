@@ -3,10 +3,14 @@ package com.boschat.sikb.context;
 import com.boschat.sikb.api.CallType;
 import com.boschat.sikb.model.ConfirmPassword;
 import com.boschat.sikb.model.Credentials;
+import com.boschat.sikb.model.Functionality;
 import com.boschat.sikb.model.Reset;
 import com.boschat.sikb.model.UpdatePassword;
 import com.boschat.sikb.tables.pojos.User;
 
+import java.util.List;
+
+import static com.boschat.sikb.Helper.convertBeanToModel;
 import static com.boschat.sikb.common.configuration.ApplicationProperties.CHECK_QUERY_STRING_SEASON_ID_REGEXP;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_CONFIRM_PASSWORD;
 import static com.boschat.sikb.common.configuration.SikbConstants.BODY_FIELD_UPDATE_PASSWORD;
@@ -39,6 +43,8 @@ public class Context {
     private UpdatePassword updatePassword;
 
     private User currentUser;
+
+    private List<Functionality> currentUserFunctionalities;
 
     private Reset reset;
 
@@ -141,6 +147,7 @@ public class Context {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+        this.currentUserFunctionalities = convertBeanToModel(currentUser).getProfile().getType().getFunctionalities();
     }
 
     public Reset getReset() {
@@ -221,5 +228,13 @@ public class Context {
 
     public void setConfirmPassword(ConfirmPassword confirmPassword) {
         this.confirmPassword = checkRequestBodyField(confirmPassword, BODY_FIELD_CONFIRM_PASSWORD);
+    }
+
+    public List<Functionality> getCurrentUserFunctionalities() {
+        return currentUserFunctionalities;
+    }
+
+    public boolean hasCurrentUserRight(Functionality functionality) {
+        return functionality == null || getCurrentUserFunctionalities().contains(functionality);
     }
 }

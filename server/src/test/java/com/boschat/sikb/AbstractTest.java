@@ -7,6 +7,7 @@ import com.boschat.sikb.common.utils.DateUtils;
 import com.boschat.sikb.model.Affiliation;
 import com.boschat.sikb.model.AffiliationForCreation;
 import com.boschat.sikb.model.AffiliationForUpdate;
+import com.boschat.sikb.model.AffiliationStatus;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.Club;
 import com.boschat.sikb.model.ClubForCreation;
@@ -90,8 +91,10 @@ import static com.boschat.sikb.common.configuration.ResponseCode.NO_CONTENT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_ACCESS_TOKEN;
 import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORIZATION;
+import static com.boschat.sikb.model.AffiliationStatus.TO_COMPLETE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_VALIDATE;
 import static com.boschat.sikb.model.Functionality.CLUB_CREATE;
 import static com.boschat.sikb.model.Functionality.CLUB_DELETE;
 import static com.boschat.sikb.model.Functionality.CLUB_READ;
@@ -145,7 +148,8 @@ public abstract class AbstractTest {
     protected static final String PROFILE_TYPE_NAME_ADMINISTRATOR = "Administrator";
 
     protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR = Arrays.asList(USER_READ, USER_CREATE, USER_UPDATE, USER_DELETE,
-        CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ, SEASON_CREATE, SEASON_UPDATE,
+        CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, AFFILIATION_VALIDATE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ,
+        SEASON_CREATE, SEASON_UPDATE,
         SEASON_DELETE);
 
     protected static final List<Integer> PROFILE_CLUB_IDS_DEFAULT = Collections.singletonList(1);
@@ -158,7 +162,6 @@ public abstract class AbstractTest {
         PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE);
 
     protected static final List<Integer> PROFILE_CLUB_IDS = Collections.singletonList(2);
-    
 
     protected static final String SEASON_DEFAULT_ID = "20182019";
 
@@ -259,6 +262,10 @@ public abstract class AbstractTest {
     protected static final Integer AFFILIATION_DEFAULT_MEMBERS_NUMBER = 7;
 
     protected static final LocalDate AFFILIATION_DEFAULT_ELECTED_DATE = LocalDate.of(2018, 6, 29);
+
+    protected static final AffiliationStatus AFFILIATION_DEFAULT_STATUS = TO_COMPLETE;
+
+    protected static final String AFFILIATION_DEFAULT_COMMENT = "Missing some documents";
 
     public static final String PATH_DOCUMENT_CERTIFICATE = "src/test/resources/documents/certificate.jpg";
 
@@ -872,7 +879,8 @@ public abstract class AbstractTest {
     protected void checkAffiliation(Affiliation affiliation, String prefectureNumber, String prefectureCity, String siretNumber, String address,
         String postalCode, String city, String phoneNumber, String email, String webSite, OffsetDateTime creationDateTime,
         OffsetDateTime modificationDateTime, String president, Sex presidentSex, String secretary, Sex secretarySex,
-        String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate) {
+        String treasurer, Sex treasurerSex, Integer membersNumber, LocalDate electedDate, AffiliationStatus status,
+        String comment) {
         assertAll("Check affiliation " + affiliation.getId(),
             () -> assertNotNull(affiliation, " Affiliation shouldn't be null"),
             () -> assertNotNull(affiliation.getId(), "Id shouldn't be null"),
@@ -886,7 +894,10 @@ public abstract class AbstractTest {
             () -> assertEquals(phoneNumber, affiliation.getPhoneNumber(), " phoneNumber incorrect"),
             () -> assertEquals(email, affiliation.getEmail(), " email incorrect"),
             () -> assertEquals(webSite, affiliation.getWebSite(), " webSite incorrect"),
-            () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate)
+            () -> checkBoard(affiliation.getBoard(), president, presidentSex, secretary, secretarySex, treasurer, treasurerSex, membersNumber, electedDate),
+            () -> assertEquals(status, affiliation.getStatus(), " status incorrect"),
+            () -> assertEquals(comment, affiliation.getComment(), " comment incorrect")
+
         );
     }
 

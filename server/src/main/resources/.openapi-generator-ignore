@@ -9,3 +9,4 @@
 **/LocalDateProvider.java
 **/RFC3339DateFormat.java
 **/OffsetDateTimeProvider.java
+**/AffiliationStatus.java

@@ -5,6 +5,7 @@ import com.boschat.sikb.common.configuration.ResponseCode;
 import com.boschat.sikb.common.exceptions.FunctionalException;
 import com.boschat.sikb.common.exceptions.TechnicalException;
 import com.boschat.sikb.context.MyThreadLocal;
+import com.boschat.sikb.model.AffiliationStatus;
 import com.boschat.sikb.model.Board;
 import com.boschat.sikb.model.BoardMember;
 import com.boschat.sikb.model.Functionality;
@@ -99,7 +100,7 @@ public class Helper {
                 User user = users.get(0);
                 MyThreadLocal.get().setCurrentUser(user);
 
-                if (callType.isNotAuthorized(convertBeanToModel(user).getProfile().getType().getFunctionalities())) {
+                if (callType.isNotAuthorized()) {
                     throw new FunctionalException(NOT_ENOUGH_RIGHT);
                 }
             } else {
@@ -282,6 +283,10 @@ public class Helper {
             board.setElectedDate(affiliationBean.getElecteddate());
             affiliation.setBoard(board);
         }
+
+        affiliation.setStatus(AffiliationStatus.fromValue(affiliationBean.getStatus()));
+        affiliation.setComment(affiliationBean.getComment());
+
         return affiliation;
     }
 

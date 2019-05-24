@@ -28,7 +28,8 @@ public enum ResponseCode {
     SEASON_ALREADY_EXISTS(INFO, 400, 13, "The season %s Already Exists"),
     FILE_EXTENSION_NOT_SUPPORTED(INFO, 400, 14, "This file (%s) extension is not supported"),
     FILE_EXTENSION_NOT_AUTHORIZED(INFO, 400, 15, "This content type (%s) of file (%s) is not Authorized"),
-
+    TRANSITION_FORBIDDEN(INFO, 400, 16, "Transition \"%s\" to \"%s\" forbidden"),
+    
     UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
     NOT_ENOUGH_RIGHT(INFO, 401, 2, "Not enough right"),
     
