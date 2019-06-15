@@ -5,7 +5,7 @@ These APIs are still in progress from a functional point of view and technical f
 
 ## Documentation
 
-You can tryout APIs [here](http://ec2-35-180-42-251.eu-west-3.compute.amazonaws.com:8080/sikb/swagger-ui/).
+You can tryout APIs [here](http://sikb-api.eu-west-3.elasticbeanstalk.com:8080/sikb/swagger-ui/).
 
 You need to set authorization in order to able to use apis. Use : test/test
 

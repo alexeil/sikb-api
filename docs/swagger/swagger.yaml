@@ -13,7 +13,7 @@ info:
   version: v1
 
 servers:
-  - url: http://ec2-35-180-42-251.eu-west-3.compute.amazonaws.com:8080/sikb/api/v1
+  - url: https://sikb-api.eu-west-3.elasticbeanstalk.com/api/v1
     description: AWS URL
   - url: http://localhost:8080/sikb/api/v1
     description: Local URL
