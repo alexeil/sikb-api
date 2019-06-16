@@ -265,7 +265,7 @@ public enum CallType {
             // No additional parameters
         }
     },
-    AFFILIATION_CREATE("Create an affiliation", CREATED, true, Functionality.CLUB_CREATE) {
+    AFFILIATION_CREATE("Create an affiliation", CREATED, true, Functionality.AFFILIATION_CREATE) {
         @Override
         public Object call() {
             return convertBeanToModel(createAffiliation());
@@ -278,7 +278,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForCreation) params[2]));
         }
     },
-    AFFILIATION_FIND("Find all club's affiliations", OK, true, Functionality.CLUB_READ) {
+    AFFILIATION_FIND("Find all club's affiliations", OK, true, Functionality.AFFILIATION_READ) {
         @Override
         public Object call() {
             return findClubAffiliations();
@@ -289,7 +289,7 @@ public enum CallType {
             MyThreadLocal.get().setClubId((Integer) params[0]);
         }
     },
-    AFFILIATION_GET("Get an affiliation", OK, true, Functionality.CLUB_READ) {
+    AFFILIATION_GET("Get an affiliation", OK, true, Functionality.AFFILIATION_READ) {
         @Override
         public Object call() {
             return convertBeanToModel(getAffiliation());
@@ -301,7 +301,7 @@ public enum CallType {
             MyThreadLocal.get().setSeasonId((String) params[1]);
         }
     },
-    AFFILIATION_UPDATE("Update an affiliation", OK, true, Functionality.CLUB_UPDATE) {
+    AFFILIATION_UPDATE("Update an affiliation", OK, true, Functionality.AFFILIATION_UPDATE) {
         @Override
         public Object call() {
             return convertBeanToModel(updateAffiliation());
@@ -314,7 +314,7 @@ public enum CallType {
             MyThreadLocal.get().setCreateOrUpdateAffiliationContext(CreateOrUpdateAffiliationContext.create((AffiliationForUpdate) params[2]));
         }
     },
-    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT, true, Functionality.CLUB_DELETE) {
+    AFFILIATION_DELETE("Delete an affiliation", NO_CONTENT, true, Functionality.AFFILIATION_DELETE) {
         @Override
         public Object call() {
             deleteAffiliation();

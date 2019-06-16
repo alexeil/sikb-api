@@ -94,6 +94,11 @@ import static com.boschat.sikb.common.configuration.SikbConstants.HEADER_AUTHORI
 import static com.boschat.sikb.model.AffiliationStatus.TO_COMPLETE;
 import static com.boschat.sikb.model.DocumentType.MEDICAL_CERTIFICATE_TYPE;
 import static com.boschat.sikb.model.DocumentType.PHOTO_TYPE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_CREATE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_DELETE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_READ;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_REJECT;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_UPDATE;
 import static com.boschat.sikb.model.Functionality.AFFILIATION_VALIDATE;
 import static com.boschat.sikb.model.Functionality.CLUB_CREATE;
 import static com.boschat.sikb.model.Functionality.CLUB_DELETE;
@@ -149,8 +154,8 @@ public abstract class AbstractTest {
 
     protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_ADMINISTRATOR = Arrays.asList(USER_READ, USER_CREATE, USER_UPDATE, USER_DELETE,
         CLUB_READ, CLUB_CREATE, CLUB_UPDATE, CLUB_DELETE, AFFILIATION_VALIDATE, PERSON_READ, PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE, SEASON_READ,
-        SEASON_CREATE, SEASON_UPDATE,
-        SEASON_DELETE);
+        SEASON_CREATE, SEASON_UPDATE, SEASON_DELETE, AFFILIATION_READ, AFFILIATION_CREATE, AFFILIATION_UPDATE, AFFILIATION_DELETE, AFFILIATION_VALIDATE,
+        AFFILIATION_REJECT);
 
     protected static final List<Integer> PROFILE_CLUB_IDS_DEFAULT = Collections.singletonList(1);
 
@@ -158,8 +163,8 @@ public abstract class AbstractTest {
 
     protected static final String PROFILE_TYPE_NAME_CLUB = "Club";
 
-    protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_CLUB = Arrays.asList(CLUB_READ, CLUB_CREATE, CLUB_UPDATE, PERSON_READ,
-        PERSON_CREATE, PERSON_UPDATE, PERSON_DELETE);
+    protected static final List<Functionality> PROFILE_TYPE_FUNCTIONALITIES_CLUB = Arrays.asList(CLUB_READ, CLUB_UPDATE, PERSON_READ, PERSON_CREATE,
+        PERSON_UPDATE, PERSON_DELETE, SEASON_READ, AFFILIATION_READ, AFFILIATION_CREATE, AFFILIATION_UPDATE, AFFILIATION_DELETE);
 
     protected static final List<Integer> PROFILE_CLUB_IDS = Collections.singletonList(2);
 
@@ -531,10 +536,11 @@ public abstract class AbstractTest {
         return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).delete();
     }
 
-    protected Response affiliationUpdate(ApiVersion version, Integer clubId, String season, AffiliationForUpdate affiliationForUpdate) {
+    protected Response affiliationUpdate(ApiVersion version, String currentUserToken, Integer clubId, String season,
+        AffiliationForUpdate affiliationForUpdate) {
         Entity<AffiliationForUpdate> entity = Entity.json(affiliationForUpdate);
         String path = buildPathClubs(version, clubId, season, true, false, null, false, false);
-        return createRequest(path, null, USER_DEFAULT_ACCESS_TOKEN).put(entity);
+        return createRequest(path, null, currentUserToken).put(entity);
     }
 
     protected Response personCreate(ApiVersion version, PersonForCreation personForCreation) {

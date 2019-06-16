@@ -31,7 +31,7 @@ public enum ResponseCode {
     TRANSITION_FORBIDDEN(INFO, 400, 16, "Transition \"%s\" to \"%s\" forbidden"),
     
     UNAUTHORIZED(INFO, 401, 1, "Unauthorized"),
-    NOT_ENOUGH_RIGHT(INFO, 401, 2, "Not enough right"),
+    NOT_ENOUGH_RIGHT(INFO, 401, 2, "Not enough rights"),
     
     SERVICE_NOT_FOUND(ERROR, 404, 0, "Service not found"),
     CLUB_NOT_FOUND(INFO, 404, 1, "Club (Id %s) not found"),

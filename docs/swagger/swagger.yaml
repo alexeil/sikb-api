@@ -1524,7 +1524,12 @@ components:
         - CLUB_CREATE
         - CLUB_UPDATE
         - CLUB_DELETE
+        - AFFILIATION_READ
+        - AFFILIATION_CREATE
+        - AFFILIATION_UPDATE
+        - AFFILIATION_DELETE
         - AFFILIATION_VALIDATE
+        - AFFILIATION_REJECT
         - PERSON_READ
         - PERSON_CREATE
         - PERSON_UPDATE
@@ -1756,10 +1761,7 @@ components:
 
     affiliationStatus:
       description: 'Once an affiliation is created, if the status is not provided then it''s initialized with TO_COMPLETE.
-                    Then available transitions are : 
-                    - TO_COMPLETE ==> SUBMITTED
-                    - SUBMITTED ==> VALIDATED
-                    - SUBMITTED ==> TO_COMPLETE'
+                    Then available transitions are : https://www.draw.io/?lightbox=1&target=blank&highlight=0000ff&layers=1&nav=1&title=Affilation_Workflow.drawio#Uhttps%3A%2F%2Fraw.githubusercontent.com%2Falexeil%2Fsikb-api%2Fmaster%2Fdocs%2Fspecifications%2FAffilation_Workflow.drawio '
       type: string
       enum:
         - TO_COMPLETE

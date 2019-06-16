@@ -2,12 +2,14 @@ package com.boschat.sikb.api;
 
 import com.boschat.sikb.AbstractTest;
 import com.boschat.sikb.JerseyTestExtension;
+import com.boschat.sikb.model.ClubForCreation;
 import com.boschat.sikb.servlet.JacksonJsonProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
@@ -38,6 +40,15 @@ class AdministrationTest extends AbstractTest {
     }
 
     private Response sendGetRequest(String path, String basic, String accessToken) {
+        return sendRequest(path, basic, accessToken).get();
+    }
+
+    private Response sendPostRequest(String path, String basic, String accessToken, Object body) {
+        Entity<Object> entity = Entity.json(body);
+        return sendRequest(path, basic, accessToken).post(entity);
+    }
+
+    private Invocation.Builder sendRequest(String path, String basic, String accessToken) {
         WebTarget target = jerseyTest.target(path).register(JacksonJsonProvider.class);
         Invocation.Builder builder = target.request();
         if (basic != null) {
@@ -46,11 +57,12 @@ class AdministrationTest extends AbstractTest {
         if (accessToken != null) {
             builder.header(HEADER_ACCESS_TOKEN, accessToken);
         }
-        return builder.get();
+        return builder;
     }
 
-    private Response seasonWithCredentials(String basic, String accessToken) {
-        return sendGetRequest(buildPathConfiguration(V1, null, true, false, false, false), basic, accessToken);
+    private Response createClubWithCredentials(String basic, String accessToken) {
+        return sendPostRequest(buildPathClubs(V1, null, null, false, false, null, false, false), basic, accessToken,
+            new ClubForCreation().name("test").shortName("T"));
     }
 
     private Response affiliationGetWithCredentials(String basic, String accessToken) {
@@ -88,7 +100,7 @@ class AdministrationTest extends AbstractTest {
     @Test
     @DisplayName(" User lacking rights ")
     void notEnoughRight() throws Exception {
-        Response response = seasonWithCredentials(basicEncode("website", "website"), USER_DEFAULT_ACCESS_TOKEN_CLUB);
+        Response response = createClubWithCredentials(basicEncode("website", "website"), USER_DEFAULT_ACCESS_TOKEN_CLUB);
         checkResponse(response, NOT_ENOUGH_RIGHT);
     }
 

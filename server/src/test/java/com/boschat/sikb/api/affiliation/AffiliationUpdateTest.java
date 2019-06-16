@@ -18,6 +18,7 @@ import static com.boschat.sikb.PersistenceUtils.loadSeasons;
 import static com.boschat.sikb.PersistenceUtils.loadUsers;
 import static com.boschat.sikb.api.ApiVersion.V1;
 import static com.boschat.sikb.common.configuration.ResponseCode.AFFILIATION_NOT_FOUND;
+import static com.boschat.sikb.common.configuration.ResponseCode.NOT_ENOUGH_RIGHT;
 import static com.boschat.sikb.common.configuration.ResponseCode.OK;
 import static com.boschat.sikb.common.configuration.ResponseCode.TRANSITION_FORBIDDEN;
 import static com.boschat.sikb.model.AffiliationStatus.SUBMITTED;
@@ -41,7 +42,7 @@ class AffiliationUpdateTest extends AbstractTest {
     void defaultAffiliation() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);
         checkAffiliation(affiliation, "New Prefecture Number", AFFILIATION_DEFAULT_PREFECTURE_CITY, AFFILIATION_DEFAULT_SIRET_NUMBER,
@@ -55,7 +56,7 @@ class AffiliationUpdateTest extends AbstractTest {
     @DisplayName(" no field ")
     void noField() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
-        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
 
         checkResponse(response, OK);
         Affiliation affiliation = getAffiliation(response);
@@ -71,7 +72,7 @@ class AffiliationUpdateTest extends AbstractTest {
     void affiliationNotFound() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, 999, SEASON_DEFAULT_ID, affiliationForUpdate);
+        Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, 999, SEASON_DEFAULT_ID, affiliationForUpdate);
         checkResponse(response, AFFILIATION_NOT_FOUND, 999, SEASON_DEFAULT_ID);
     }
 
@@ -80,7 +81,7 @@ class AffiliationUpdateTest extends AbstractTest {
     void seasonNotFound() throws Exception {
         AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
         affiliationForUpdate.setPrefectureNumber("New Prefecture Number");
-        Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, "20002001", affiliationForUpdate);
+        Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, "20002001", affiliationForUpdate);
         checkResponse(response, AFFILIATION_NOT_FOUND, CLUB_DEFAULT_ID, "20002001");
     }
 
@@ -92,7 +93,7 @@ class AffiliationUpdateTest extends AbstractTest {
         void submit() throws Exception {
             AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
             affiliationForUpdate.setStatus(SUBMITTED);
-            Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
 
             checkResponse(response, OK);
             Affiliation affiliation = getAffiliation(response);
@@ -104,11 +105,11 @@ class AffiliationUpdateTest extends AbstractTest {
         }
 
         @Test
-        @DisplayName(" status SUBMITTED to VALIDATED ")
+        @DisplayName(" Validate ! (status SUBMITTED to VALIDATED) ")
         void validate() throws Exception {
             AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
             affiliationForUpdate.setStatus(VALIDATED);
-            Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
 
             checkResponse(response, OK);
             Affiliation affiliation = getAffiliation(response);
@@ -121,12 +122,22 @@ class AffiliationUpdateTest extends AbstractTest {
         }
 
         @Test
-        @DisplayName(" status SUBMITTED to TO_COMPLETE ")
+        @DisplayName(" Validate ! (status SUBMITTED to VALIDATED - with not enough Rights) ")
+        void validateNotEnoughRight() throws Exception {
+            AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
+            affiliationForUpdate.setStatus(VALIDATED);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN_CLUB, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
+
+            checkResponse(response, NOT_ENOUGH_RIGHT);
+        }
+
+        @Test
+        @DisplayName(" Rejected ! (status SUBMITTED to TO_COMPLETE) ")
         void reject() throws Exception {
             AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
             affiliationForUpdate.setStatus(TO_COMPLETE);
             affiliationForUpdate.setComment("Need banking information");
-            Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
 
             checkResponse(response, OK);
             Affiliation affiliation = getAffiliation(response);
@@ -138,11 +149,22 @@ class AffiliationUpdateTest extends AbstractTest {
         }
 
         @Test
+        @DisplayName(" Rejected ! ( SUBMITTED to TO_COMPLETE - not enough right)")
+        void rejectWithNotEnoughRight() throws Exception {
+            AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
+            affiliationForUpdate.setStatus(TO_COMPLETE);
+            affiliationForUpdate.setComment("Need banking information");
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN_CLUB, CLUB_DEFAULT_ID, "20162017", affiliationForUpdate);
+
+            checkResponse(response, NOT_ENOUGH_RIGHT);
+        }
+
+        @Test
         @DisplayName(" status VALIDATED to TO_COMPLETE ")
         void incorrectStatusChangeFromValidated() throws Exception {
             AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
             affiliationForUpdate.setStatus(TO_COMPLETE);
-            Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, "20172018", affiliationForUpdate);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, "20172018", affiliationForUpdate);
 
             checkResponse(response, TRANSITION_FORBIDDEN, VALIDATED, TO_COMPLETE);
         }
@@ -152,7 +174,7 @@ class AffiliationUpdateTest extends AbstractTest {
         void forbiddenTransition() throws Exception {
             AffiliationForUpdate affiliationForUpdate = new AffiliationForUpdate();
             affiliationForUpdate.setStatus(VALIDATED);
-            Response response = affiliationUpdate(V1, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
+            Response response = affiliationUpdate(V1, USER_DEFAULT_ACCESS_TOKEN, CLUB_DEFAULT_ID, SEASON_DEFAULT_ID, affiliationForUpdate);
 
             checkResponse(response, TRANSITION_FORBIDDEN, TO_COMPLETE, VALIDATED);
         }

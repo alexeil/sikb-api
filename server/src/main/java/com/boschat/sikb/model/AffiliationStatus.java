@@ -10,6 +10,8 @@ import java.util.List;
 
 import static com.boschat.sikb.common.configuration.ResponseCode.NOT_ENOUGH_RIGHT;
 import static com.boschat.sikb.common.configuration.ResponseCode.TRANSITION_FORBIDDEN;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_CREATE;
+import static com.boschat.sikb.model.Functionality.AFFILIATION_REJECT;
 import static com.boschat.sikb.model.Functionality.AFFILIATION_VALIDATE;
 
 /**
@@ -17,9 +19,9 @@ import static com.boschat.sikb.model.Functionality.AFFILIATION_VALIDATE;
  */
 public enum AffiliationStatus {
 
-    TO_COMPLETE(Collections.singletonList("SUBMITTED"), null),
+    TO_COMPLETE(Collections.singletonList("SUBMITTED"), AFFILIATION_REJECT),
 
-    SUBMITTED(Arrays.asList("VALIDATED", "TO_COMPLETE"), null),
+    SUBMITTED(Arrays.asList("VALIDATED", "TO_COMPLETE"), AFFILIATION_CREATE),
 
     VALIDATED(null, AFFILIATION_VALIDATE);
 
@@ -48,7 +50,7 @@ public enum AffiliationStatus {
     }
 
     public void checkTransition(AffiliationStatus status) {
-        if (VALIDATED.equals(status) && !MyThreadLocal.get().hasCurrentUserRight(status.requiredFunctionality)) {
+        if (!MyThreadLocal.get().hasCurrentUserRight(status.requiredFunctionality)) {
             throw new FunctionalException(NOT_ENOUGH_RIGHT);
         }
         if (nextStatus == null || !nextStatus.contains(status.toString())) {

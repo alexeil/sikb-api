@@ -69,11 +69,11 @@ Voici la matrice des gestion des droits :
 
 * Un club ne peut être créé que par un administrateur
 * A sa création seul le nom du club est renseigné
-* un club peux modifier l'ensemble de ses informations (cf [swagger](http://sikb-api.eu-west-3.elasticbeanstalk.com:8080/sikb/swagger-ui/#/clubs/updateClub))
+* un club peux modifier l'ensemble de ses informations (cf [swagger](https://sikb-api.eu-west-3.elasticbeanstalk.com/swagger-ui/#/clubs/updateClub))
 
 ### Gestion simplifiée des (ré) affiliations
 
-* Lors de sa première année le club peux s'affilier de devra remplir l'ensemble des champs requis (cf [swagger](http://sikb-api.eu-west-3.elasticbeanstalk.com:8080/sikb/swagger-ui/#/affiliations/createAffiliation))
+* Lors de sa première année le club peux s'affilier de devra remplir l'ensemble des champs requis (cf [swagger](https://sikb-api.eu-west-3.elasticbeanstalk.com/swagger-ui/#/affiliations/createAffiliation))
 * lors des années suivantes, il pourra se ré-affilier et l'ensemble des champs sera déjà pré rempli. Il aura donc juste à mettre à jour si nécessaire.
 
 ### Gestion des actions/formation effectuer dans l'année
