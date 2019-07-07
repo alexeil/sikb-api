@@ -59,7 +59,7 @@
 		<migbase64.version>2.2</migbase64.version>
 		<jooq.version>3.11.11</jooq.version>
 		<postgresql.version>42.2.5</postgresql.version>
-		<junit.version>5.4.2</junit.version>
+		<junit.version>5.5.0</junit.version>
 		<jacoco-plugin.version>0.8.3</jacoco-plugin.version>
 		<bcprov-jdk15on.version>1.61</bcprov-jdk15on.version>
 		<mail.version>1.4.7</mail.version>
