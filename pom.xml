@@ -21,6 +21,7 @@
 
 	<properties>
 		<application.code>sikb-api</application.code>
+		<java-version>11</java-version>
 		<root.basedir>${basedir}</root.basedir>
 
 		<local.server.port>8889</local.server.port>
@@ -28,8 +29,8 @@
 		<local.server.stop-port>9999</local.server.stop-port>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>${java-version}</maven.compiler.source>
+		<maven.compiler.target>${java-version}</maven.compiler.target>
 
 		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
 		<maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>

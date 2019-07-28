@@ -19,6 +19,11 @@
 		<ignoreVersion type="regex">.*-trajano-\d+</ignoreVersion>
 		<ignoreVersion type="regex">.*-android</ignoreVersion>
 		<ignoreVersion type="regex">.*-M\d+</ignoreVersion>
+		<ignoreVersion type="regex">.*.jre5</ignoreVersion>
+		<ignoreVersion type="regex">.*.jre6</ignoreVersion>
+		<ignoreVersion type="regex">.*.jre7</ignoreVersion>
+
+
 	</ignoreVersions>
 
 	<rules>

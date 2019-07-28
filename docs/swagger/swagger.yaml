@@ -15,7 +15,7 @@ info:
 servers:
   - url: https://sikb-api.eu-west-3.elasticbeanstalk.com/api/v1
     description: AWS URL
-  - url: http://localhost:8080/sikb/api/v1
+  - url: http://localhost:8081/sikb/api/v1
     description: Local URL
 
 security:
