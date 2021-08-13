@@ -62,7 +62,7 @@
 		<postgresql.version>42.2.6</postgresql.version>
 		<junit.version>5.5.1</junit.version>
 		<jacoco-plugin.version>0.8.4</jacoco-plugin.version>
-		<bcprov-jdk15on.version>1.62</bcprov-jdk15on.version>
+		<bcprov-jdk15on.version>1.67</bcprov-jdk15on.version>
 		<mail.version>1.4.7</mail.version>
 		<commons-collections4.version>4.4</commons-collections4.version>
 		<subethasmtp.version>3.1.7</subethasmtp.version>
