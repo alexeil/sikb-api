@@ -56,7 +56,7 @@
 		<jersey-server.version>2.29</jersey-server.version>
 		<jackson.version>2.9.9</jackson.version>
 		<openapi-generator-maven-plugin-version>3.3.4</openapi-generator-maven-plugin-version>
-		<log4j.version>2.12.0</log4j.version>
+		<log4j.version>2.15.0</log4j.version>
 		<migbase64.version>2.2</migbase64.version>
 		<jooq.version>3.11.11</jooq.version>
 		<postgresql.version>42.2.6</postgresql.version>
